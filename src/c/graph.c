@@ -2,9 +2,12 @@
 #include "list.h"
 #include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
+#include "sdl.h"
+
 
 struct s_vertex {
-	void* data;
+	const void* data;
 
 	list vertices;
 };
@@ -16,6 +19,20 @@ struct s_graph {
 
 	list collection;
 };
+
+vertex graph_findVertex(list l ,const void* data) {
+	list_it it =list_it_create(l);
+	while (! list_it_end(it)) {
+		vertex v =list_it_get(it);
+		if (v->data ==data)
+			return v;
+
+		list_it_next(it);
+	}
+	list_it_destroy(&it);
+
+	return NULL;
+}
 
 graph graph_create() {
 	graph born =malloc(sizeof(struct s_graph));
@@ -40,8 +57,9 @@ void graph_destroy(graph* g) {
 	free(*g);
 }
 
-void graph_insertVertex(graph g ,void* data) {
-	/* assert(! graph_findVertex(g ,data)); */
+void graph_insertVertex(graph g ,const void* data) {
+	assert(! graph_findVertex(g->collection ,data));
+
 	vertex v =malloc(sizeof(struct s_vertex));
 	v->data =data;
 	v->vertices =list_create();
@@ -50,4 +68,31 @@ void graph_insertVertex(graph g ,void* data) {
 	g->nbVertex++;
 }
 
+void graph_insertEdge(graph g ,const void* data ,const void* data2) {
+	vertex v =graph_findVertex(g->collection ,data);
+	vertex v2 =graph_findVertex(g->collection ,data2);
 
+	assert(v);
+	assert(v2);
+
+	assert(! graph_findVertex(v->vertices ,v2));
+	assert(! graph_findVertex(v2->vertices ,v));
+
+	list_pushBack(v->vertices ,v2);
+	list_pushBack(v2->vertices ,v);
+}
+
+void graph_print(graph g) {
+	(void)g;
+	printf("je vais faire un fucking truc avec la SDL pour voir les liens et tout entre les sommets etc\n");
+	sdl s =sdl_create();
+
+	sdl_pause();
+	sdl_destroy(&s);
+	/* vertex v; */
+	/* sdl_addRec(s ,v->data); */
+	/* sdl_addRec(s ,v2->data); */
+	/* sdl_link(s ,v->data ,v2->data); */
+	/* sdl_display(s); */
+	/* sdl_destroy(s); */
+}

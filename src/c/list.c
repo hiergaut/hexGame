@@ -231,3 +231,36 @@ void list_testBench() {
 
 
 
+struct s_list_it {
+	list l;
+	node begin;
+	node cur;
+};
+
+list_it list_it_create(list l) {
+	list_it it =malloc(sizeof(struct s_list_it));
+
+	it->l =l;
+	it->begin =l->sentinel->next;
+	it->cur =it->begin;
+
+	return it;
+}
+
+void list_it_next(list_it it) {
+	it->cur =it->cur->next;
+}
+
+bool list_it_end(list_it it) {
+	return it->cur ==it->l->sentinel;
+}
+
+void* list_it_get(list_it it) {
+	return it->cur->el;
+}
+
+void list_it_destroy(list_it* it) {
+	free(*it);
+	*it =NULL;
+}
+

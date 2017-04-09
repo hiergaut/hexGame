@@ -32,4 +32,12 @@ void list_clean(list l);
 void list_testBench();
 
 
+
+typedef struct s_list_it* list_it;
+list_it list_it_create(list l);
+void list_it_next(list_it it);
+bool list_it_end(list_it it);
+void* list_it_get(list_it it);
+void list_it_destroy(list_it* it);
+
 #endif
