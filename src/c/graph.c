@@ -83,9 +83,15 @@ void graph_insertEdge(graph g ,const void* data ,const void* data2) {
 }
 
 void graph_print(graph g) {
-	(void)g;
+	list l =g->collection;
+	vertex v;
 	printf("je vais faire un fucking truc avec la SDL pour voir les liens et tout entre les sommets etc\n");
 	sdl s =sdl_create();
+
+	v =list_front(l);
+	sdl_newObject(s ,v->data);
+	sdl_newObject(s ,v);
+	sdl_newObject(s ,s);
 
 	sdl_pause();
 	sdl_destroy(&s);
