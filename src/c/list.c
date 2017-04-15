@@ -230,7 +230,6 @@ void list_testBench() {
 }
 
 
-
 struct s_list_it {
 	list l;
 	node begin;

@@ -45,7 +45,7 @@ void plateau_destroy(plateau* p) {
 void plateau_print(plateau p) {
 	for (unsigned i =0 ;i <p->line ;i++) {
 		for (unsigned j =0 ;j <p->column ;j++) {
-			printf("%14p" ,p->square[i][j]);
+			printf("%15p" ,p->square[i][j]);
 		}
 		printf("\n");
 	}
@@ -59,3 +59,15 @@ void plateau_insert(plateau p ,unsigned line ,unsigned column ,void* square) {
 	p->square[line][column] =square;
 	p->density++;
 }
+
+void* plateau_get(plateau p ,unsigned line ,unsigned column) {
+	return p->square[line][column];
+}
+/* void plateau_map(plateau p ,void (*process)(void* data)) { */
+/* 	for (unsigned i =0 ;i <p->line ;i++) { */
+/* 		for (unsigned j =0 ;j <p->column ;j++) { */
+/* 			process(p->square[i][j]); */
+/* 		} */
+/* 	} */
+/* } */
+/*  */
