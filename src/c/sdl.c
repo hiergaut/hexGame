@@ -49,7 +49,8 @@ sdl sdl_create() {
 	sdl s =malloc(sizeof(struct s_sdl));
 	s->object =list_create();
 	/* s->police =TTF_OpenFont("font.ttf" ,20); */
-	screen =SDL_SetVideoMode(SCREEN_WIDTH ,SCREEN_HEIGHT ,32 ,SDL_HWSURFACE| SDL_FULLSCREEN);
+	screen =SDL_SetVideoMode(SCREEN_WIDTH ,SCREEN_HEIGHT ,32 ,SDL_HWSURFACE);
+	/* screen =SDL_SetVideoMode(SCREEN_WIDTH ,SCREEN_HEIGHT ,32 ,SDL_HWSURFACE| SDL_FULLSCREEN); */
 	SDL_FillRect(screen ,NULL ,SDL_MapRGB(screen->format ,SCREEN_FONT_COLOR));
 	SDL_Flip(screen);
 
