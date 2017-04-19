@@ -28,16 +28,8 @@ public class Board {
 	}
     }
 
-    void display() {
-	System.out.print(p1.getEdge() + "\\" + p2.getEdge());
-
-	for (int i = 1; i <= this.size - 2 ; i++) {
-	    System.out.print(" " + p2.getEdge());
-	}
-
-	System.out.print(" " + p2.getEdge() + "\\" + p1.getEdge() + "\n");
-
-
+    public void display() {
+	display_edges();
 	for (int i = 0; i < this.size; i++) {
 	    for (int j =0; j <= i; j++)
 		System.out.print(" ");
@@ -54,12 +46,14 @@ public class Board {
 	for (int i = 0; i <= this.size; i++) {
 	    System.out.print(" ");
 	}
-	System.out.print(p1.getEdge() + "\\" + p2.getEdge());
+	display_edges();
+    }
 
+    private void display_edges() {
+	System.out.print(p1.getEdge() + "\\" + p2.getEdge());
 	for (int i = 1; i <= this.size - 2 ; i++) {
 	    System.out.print(" " + p2.getEdge());
 	}
-
 	System.out.print(" " + p2.getEdge() + "\\" + p1.getEdge() + "\n");
     }
 }
