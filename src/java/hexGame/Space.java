@@ -1,8 +1,10 @@
-class Case {
+package hexGame;
+
+public class Space {
 	protected boolean empty;
 	protected boolean leftPlayer;
 
-	Case() {
+	Space() {
 		this.empty =true;
 	}
 
