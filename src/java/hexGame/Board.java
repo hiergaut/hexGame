@@ -2,7 +2,7 @@ package hexGame;
 
 public class Board {
     protected int size;
-    protected Space[][] s;
+    protected Square[][] s;
     protected Player p1;
     protected Player p2;
 
@@ -14,7 +14,7 @@ public class Board {
      */
     public Board(int size, Player p1, Player p2) {
 	this.size  = size;
-	this.s = new Space[size][size];
+	this.s = new Square[size][size];
 	this.p1 = p1;
 	this.p2 = p2;
 	this.init();
@@ -23,7 +23,7 @@ public class Board {
     private void init() {
 	for (int i = 0; i <this.size; i++) {
 	    for (int j = 0; j < this.size; j++) {
-		s[i][j] = new Space();
+		s[i][j] = new Square();
 	    }
 	}
     }
