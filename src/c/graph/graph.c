@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
-/* #include "sdl.h" */
 
 
 struct s_vertex {
@@ -24,8 +23,10 @@ vertex findVertex(list l, const void* data) {
     list_it it =list_it_create(l);
     while (! list_it_end(it)) {
 	vertex v =list_it_get(it);
-	if (v->data ==data)
+	if (v->data ==data) {
+	    list_it_destroy(&it);
 	    return v;
+	}
 
 	list_it_next(it);
     }
@@ -49,7 +50,7 @@ void graph_destroy(graph* g) {
     list l =(*g)->collection;
     while (! list_empty(l)) {
 	vertex v =list_back(l);
-	list_destroy(&v->vertices);
+	list_destroy(&(v->vertices));
 	free(v);
 	list_popBack(l);
     }
@@ -68,6 +69,7 @@ void graph_insertVertex(graph g, const void* data) {
     g->nbVertex++;
 }
 
+
 void graph_insertEdge(graph g, const void* data, const void* data2) {
     vertex v =findVertex(g->collection, data);
     vertex v2 =findVertex(g->collection, data2);
@@ -77,6 +79,8 @@ void graph_insertEdge(graph g, const void* data, const void* data2) {
 
     assert(! findVertex(v->vertices, v2));
     assert(! findVertex(v2->vertices, v));
+
+    /* printf("link %p <-> %p\n" ,(void*)v ,(void*)v2); */
 
     list_pushBack(v->vertices, v2);
     list_pushBack(v2->vertices, v);
@@ -90,14 +94,19 @@ void printColor(const void* ptr) {
 	color =7;
     else if (color <8)
 	color =31 +color -2;
+    /* else if (color <15) */
     else
 	color =41 +color -8;
+    /* else { */
+	/* printf("\x1B[%d;3m%p\x1B[0m ", color -15, ptr); */
+	/* return; */
+    /* } */
 
     printf("\x1B[%dm%p\x1B[0m ", color, ptr);
 }
 
-void printList(void* v) {
-    printColor(((vertex)v)->data);
+void printVertex(void* v) {
+    printColor((vertex)v);
 }
 
 
@@ -105,8 +114,9 @@ void graph_print(graph g) {
     list_it it =list_it_create(g->collection);
     while (! list_it_end(it)) {
 	vertex v =list_it_get(it);
-	printColor(v->data);
-	list_map(v->vertices, printList);
+	printColor(v);
+	printf("%d " ,list_getSize(v->vertices));
+	list_map(v->vertices, printVertex);
 	printf("\n");
 
 	list_it_next(it);
@@ -134,4 +144,23 @@ void graph_print(graph g) {
     /* sdl_link(s, v->data, v2->data); */
     /* sdl_display(s); */
     /* sdl_destroy(s); */
+}
+
+void graph_testBench() {
+    graph g =graph_create();
+
+    int tab[50];
+    for (int i =0; i <20 ;i++) {
+	tab[i] =rand() %100;
+	graph_insertVertex(g, &tab[i]);
+    }
+
+    graph_insertEdge(g, &tab[0], &tab[1]);
+    graph_insertEdge(g, &tab[0], &tab[3]);
+    graph_insertEdge(g, &tab[2], &tab[3]);
+    graph_insertEdge(g, &tab[5], &tab[3]);
+    
+    graph_print(g);
+
+    graph_destroy(&g);
 }

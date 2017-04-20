@@ -224,6 +224,8 @@ void list_testBench() {
     list_testBench_aff(l);
     list_pushBack(l, &tab[3]);
     list_testBench_aff(l);
+    list_pushBack(l, &tab[3]);
+    list_testBench_aff(l);
 
     list_destroy(&l);
     printf("\n\n");
@@ -261,5 +263,9 @@ void* list_it_get(list_it it) {
 void list_it_destroy(list_it* it) {
     free(*it);
     *it =NULL;
+}
+
+unsigned list_getSize(list l) {
+    return l->size;
 }
 

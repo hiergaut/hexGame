@@ -40,4 +40,6 @@ bool list_it_end(list_it it);
 void* list_it_get(list_it it);
 void list_it_destroy(list_it* it);
 
+unsigned list_getSize(list l);
+
 #endif
