@@ -2,16 +2,16 @@
 #define __IHM__
 
 struct s_pos {
-	int x;
-	int y;
+    int x;
+    int y;
 };
 typedef struct s_pos pos;
 
 struct s_ihm {
-	int plateauSize;
-	pos top;
-	int caseHeight;
-	int caseSide;
+    int plateauSize;
+    pos top;
+    int caseHeight;
+    int caseSide;
 };
 typedef struct s_ihm ihm;
 
