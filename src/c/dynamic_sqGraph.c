@@ -24,12 +24,12 @@ struct s_sqGraph {
     unsigned column;
 };
 
-void sqGraph_link(vertex a ,vertex b) {
-    list_pushBack(a->edges ,b);
-    list_pushBack(b->edges ,a);
+void sqGraph_link(vertex a, vertex b) {
+    list_pushBack(a->edges, b);
+    list_pushBack(b->edges, a);
 }
 
-sqGraph sqGraph_create(unsigned line ,unsigned column) {
+sqGraph sqGraph_create(unsigned line, unsigned column) {
     sqGraph born =malloc(sizeof(struct s_sqGraph));
 
     born->matrice =malloc(sizeof(struct s_vertex*) *line);
@@ -42,23 +42,23 @@ sqGraph sqGraph_create(unsigned line ,unsigned column) {
 	    new->edges =list_create();
 
 	    if (i ==0)
-		sqGraph_link(new ,&born->up);
+		sqGraph_link(new, &born->up);
 	    else
-		sqGraph_link(new ,born->matrice[i -1][j]);
+		sqGraph_link(new, born->matrice[i -1][j]);
 
 	    if (i ==(line -1))
-		sqGraph_link(new ,&born->down);
+		sqGraph_link(new, &born->down);
 
 	    if (j ==0)
-		sqGraph_link(new ,&born->left);
+		sqGraph_link(new, &born->left);
 	    else
-		sqGraph_link(new ,born->matrice[i][j -1]);
+		sqGraph_link(new, born->matrice[i][j -1]);
 
 	    if (j ==(column -1))
-		sqGraph_link(new ,&born->right);
+		sqGraph_link(new, &born->right);
 
 	    if (j !=(column -1) && i !=0)
-		sqGraph_link(new ,born->matrice[i -1][j +1]);
+		sqGraph_link(new, born->matrice[i -1][j +1]);
 	}
     }
 

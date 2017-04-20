@@ -12,7 +12,7 @@ struct s_plateau {
     void*** square;
 };
 
-plateau plateau_create(unsigned line ,unsigned column) {
+plateau plateau_create(unsigned line, unsigned column) {
     plateau born =malloc(sizeof(struct s_plateau));
 
     born->line =line;
@@ -45,13 +45,13 @@ void plateau_destroy(plateau* p) {
 void plateau_print(plateau p) {
     for (unsigned i =0 ;i <p->line ;i++) {
 	for (unsigned j =0 ;j <p->column ;j++) {
-	    printf("%15p" ,p->square[i][j]);
+	    printf("%15p", p->square[i][j]);
 	}
 	printf("\n");
     }
 }
 
-void plateau_insert(plateau p ,unsigned line ,unsigned column ,void* square) {
+void plateau_insert(plateau p, unsigned line, unsigned column, void* square) {
     assert(line <p->line);
     assert(column <p->column);
     assert(! p->square[line][column]);
@@ -60,10 +60,10 @@ void plateau_insert(plateau p ,unsigned line ,unsigned column ,void* square) {
     p->density++;
 }
 
-void* plateau_get(plateau p ,unsigned line ,unsigned column) {
+void* plateau_get(plateau p, unsigned line, unsigned column) {
     return p->square[line][column];
 }
-/* void plateau_map(plateau p ,void (*process)(void* data)) { */
+/* void plateau_map(plateau p, void (*process)(void* data)) { */
 /* 	for (unsigned i =0 ;i <p->line ;i++) { */
 /* 		for (unsigned j =0 ;j <p->column ;j++) { */
 /* 			process(p->square[i][j]); */
