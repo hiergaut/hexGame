@@ -9,18 +9,18 @@ extern "C" {
 #endif
 /*
  * Class:     InterfaceAvecC
- * Method:    createPlateau
+ * Method:    newGame
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_createPlateau
+JNIEXPORT void JNICALL Java_InterfaceAvecC_newGame
   (JNIEnv *, jclass, jint);
 
 /*
  * Class:     InterfaceAvecC
- * Method:    destroyPlateau
+ * Method:    endGame
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_destroyPlateau
+JNIEXPORT void JNICALL Java_InterfaceAvecC_endGame
   (JNIEnv *, jclass);
 
 #ifdef __cplusplus
