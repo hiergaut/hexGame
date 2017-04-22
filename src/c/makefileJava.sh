@@ -11,3 +11,6 @@ gcc -shared -o lib$f.so *.o
 
 javac *.java
 java -Djava.library.path=. Main
+
+rm *.o
+rm *.class

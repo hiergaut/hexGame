@@ -2,6 +2,7 @@
 #include "plateau.h"
 #include "graph.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 struct s_interface {
     plateau p;
