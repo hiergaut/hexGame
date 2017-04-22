@@ -3,6 +3,7 @@ public class InterfaceAvecC {
     static {
 	System.loadLibrary("InterfaceAvecC");
     }
+
     /**
      * create a graph of plateau, and group of player's pawn
      * @param sizeOfPlateau describe the side of plateau, including width and height
@@ -18,6 +19,7 @@ public class InterfaceAvecC {
      * permit to place a pawn
      * @param line of plateau to insert pawn
      * @param column of plateau to insert pawn
+     * @return true if permit to take a place (empty case)
      */
     public static native boolean permission(int line, int column);
 
@@ -55,5 +57,4 @@ public class InterfaceAvecC {
      * program will be interrupted
      */
     public static native void undo();
-
 }
