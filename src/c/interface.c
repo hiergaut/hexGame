@@ -39,4 +39,29 @@ void interface_destroy(interface* i) {
     *i =NULL;
 }
 
+bool interface_legalityPawn(unsigned line, unsigned column) {
+    (void)line;
+    (void)column;
+    return true;
+}
 
+void interface_placePawn(bool black, unsigned line, unsigned column) {
+    (void)black;
+    (void)line;
+    (void)column;
+}
+
+int interface_winner() {
+    return 1;
+}
+
+int interface_saveGame() {
+    return 0;
+}
+
+void interface_restoreGame(int idGame) {
+    (void)idGame;
+}
+
+void interface_undo() {
+}

@@ -23,6 +23,54 @@ JNIEXPORT void JNICALL Java_InterfaceAvecC_newGame
 JNIEXPORT void JNICALL Java_InterfaceAvecC_endGame
   (JNIEnv *, jclass);
 
+/*
+ * Class:     InterfaceAvecC
+ * Method:    permission
+ * Signature: (II)Z
+ */
+JNIEXPORT jboolean JNICALL Java_InterfaceAvecC_permission
+  (JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     InterfaceAvecC
+ * Method:    setPawn
+ * Signature: (ZII)V
+ */
+JNIEXPORT void JNICALL Java_InterfaceAvecC_setPawn
+  (JNIEnv *, jclass, jboolean, jint, jint);
+
+/*
+ * Class:     InterfaceAvecC
+ * Method:    hasAWinner
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_InterfaceAvecC_hasAWinner
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     InterfaceAvecC
+ * Method:    saveGame
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_InterfaceAvecC_saveGame
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     InterfaceAvecC
+ * Method:    restoreGame
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_InterfaceAvecC_restoreGame
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     InterfaceAvecC
+ * Method:    undo
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_InterfaceAvecC_undo
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif
