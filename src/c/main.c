@@ -1,23 +1,33 @@
-#include "plateau.h"
-#include <stdio.h>
-#include "graph.h"
-#include "sdl.h"
-#include <math.h>
-#include "ihm.h"
+/* #include "plateau.h" */
+/* #include <stdio.h> */
+/* #include "graph.h" */
+/* #include "sdl.h" */
+/* #include <math.h> */
+/* #include "ihm.h" */
 /* #include "SDL/SDL.h" */
 /* #include <unistd.h> */
 /* #include <wait.h> */
 /* #include <stdlib.h> */
+#include "interface.h"
 
 int main() {
-    plateau p =plateau_create(5, 5);
-    graph g =graph_create();
-    sdl s =sdl_create();
 
-    sdl_pictureFont(s, "./tableFont.jpg");
+    interface i =interface_create(5);
 
-    ihm m =ihm_create(5);
-    ihm_printPlateauOnly(m);
+
+    interface_destroy(&i);
+    
+
+
+
+    /* plateau p =plateau_create(5, 5); */
+    /* graph g =graph_create(); */
+    /* sdl s =sdl_create(); */
+    /*  */
+    /* sdl_pictureFont(s, "./tableFont.jpg"); */
+    /*  */
+    /* ihm m =ihm_create(5); */
+    /* ihm_printPlateauOnly(m); */
     /* unsigned tab[25]; */
     /* for (unsigned i =0 ;i <5 ;i++) { */
     /* 	for (unsigned j =0 ;j <5 ;j++) { */
@@ -107,7 +117,7 @@ int main() {
     /*  */
     /* 	} */
     /* } */
-    sdl_pause();
+    /* sdl_pause(); */
     /* graph_print(g); */
 
     /* int pid =fork(); */
@@ -125,9 +135,9 @@ int main() {
     /* wait(NULL); */
     /* wait(NULL); */
 
-    plateau_destroy(&p);
-    graph_destroy(&g);
-    sdl_destroy(&s);
+    /* plateau_destroy(&p); */
+    /* graph_destroy(&g); */
+    /* sdl_destroy(&s); */
 
 
     return 0;
