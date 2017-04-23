@@ -45,10 +45,16 @@ bool interface_legalityPawn(unsigned line, unsigned column) {
     return true;
 }
 
-void interface_placePawn(bool black, unsigned line, unsigned column) {
-    (void)black;
+void interface_placePawn(int colorPawn, unsigned line, unsigned column) {
+    (void)colorPawn;
     (void)line;
     (void)column;
+}
+
+int interface_getPawn(unsigned line, unsigned column) {
+    (void)line;
+    (void)column;
+    return 1;
 }
 
 int interface_winner() {
@@ -63,5 +69,25 @@ void interface_restoreGame(int idGame) {
     (void)idGame;
 }
 
+void interface_displayHistory() {
+    printf("History of previous game\n");
+}
+
 void interface_undo() {
+}
+
+void interface_displayGraphGame(interface i) {
+    /* plateau_print(i->p); */
+    graph_print(i->g);
+}
+
+void interface_displayPlateau(interface i) {
+    plateau_print(i->p);
+}
+
+void interface_displayGroup(interface i, int color) {
+    if (color ==1)
+	graph_print(i->black);
+    else
+	graph_print(i->white);
 }

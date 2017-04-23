@@ -4,6 +4,10 @@ public class InterfaceAvecC {
 	System.loadLibrary("InterfaceAvecC");
     }
 
+    public final static int BLACK_PAWN =1;
+    public final static int WHITE_PAWN =2;
+    public final static int EMPTY_PAWN =0;
+
     /**
      * create a graph of plateau, and group of player's pawn
      * @param sizeOfPlateau describe the side of plateau, including width and height
@@ -25,11 +29,18 @@ public class InterfaceAvecC {
 
     /**
      * place a pawn black or white in plateau's square
-     * @param blackPawn black piece if true obviously
+     * @param colorPawn use final variable BLACK_PAWN, WHITE_PAWN, EMPTY_PAWN
      * @param line plateau's line
      * @param column plateau's column
      */
-    public static native void setPawn(boolean blackPawn, int line, int column);
+    public static native void setPawn(int colorPawn, int line, int column);
+
+    /**
+     * return color of a specific case, 0 if empty, 1 if Black, 2 if White
+     * @param line plateau's line
+     * @param column plateau's column
+     */
+    public static native int getPawn(int line, int column);
 
     /**
      * looks for the winner
@@ -52,9 +63,33 @@ public class InterfaceAvecC {
     public static native void restoreGame(int idGame);
 
     /**
+     * display history database, help for restoration
+     */
+    public static native void displayHistoryGame();
+
+    /**
      * if a player make a wrong shot, he can resume game, one pawn a time
      * undo if an empty plateau, assume your consequence, 
      * program will be interrupted
      */
     public static native void undo();
+
+    /**
+     * display graph implement in C
+     */
+    public static native void displayGraphGame();
+
+    /**
+     * display plateau implement in C, just for debuging and this plateau is
+     * a duty to create plateau's graph, and for write plateau in a text file
+     * for database save
+     */
+    public static native void displayPlateau();
+
+    /**
+     * display group of each player specify
+     * @param colorPlayer you can use WHITE_PAWN, BLACK_PAWN
+     * but not EMPTY_PAWN because no group for empty color (empty case)
+     */
+    public static native void displayGroup(int colorPlayer);
 }

@@ -7,6 +7,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef InterfaceAvecC_BLACK_PAWN
+#define InterfaceAvecC_BLACK_PAWN 1L
+#undef InterfaceAvecC_WHITE_PAWN
+#define InterfaceAvecC_WHITE_PAWN 2L
+#undef InterfaceAvecC_EMPTY_PAWN
+#define InterfaceAvecC_EMPTY_PAWN 0L
 /*
  * Class:     InterfaceAvecC
  * Method:    newGame
@@ -34,10 +40,18 @@ JNIEXPORT jboolean JNICALL Java_InterfaceAvecC_permission
 /*
  * Class:     InterfaceAvecC
  * Method:    setPawn
- * Signature: (ZII)V
+ * Signature: (III)V
  */
 JNIEXPORT void JNICALL Java_InterfaceAvecC_setPawn
-  (JNIEnv *, jclass, jboolean, jint, jint);
+  (JNIEnv *, jclass, jint, jint, jint);
+
+/*
+ * Class:     InterfaceAvecC
+ * Method:    getPawn
+ * Signature: (II)I
+ */
+JNIEXPORT jint JNICALL Java_InterfaceAvecC_getPawn
+  (JNIEnv *, jclass, jint, jint);
 
 /*
  * Class:     InterfaceAvecC
@@ -65,11 +79,43 @@ JNIEXPORT void JNICALL Java_InterfaceAvecC_restoreGame
 
 /*
  * Class:     InterfaceAvecC
+ * Method:    displayHistoryGame
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_InterfaceAvecC_displayHistoryGame
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     InterfaceAvecC
  * Method:    undo
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_InterfaceAvecC_undo
   (JNIEnv *, jclass);
+
+/*
+ * Class:     InterfaceAvecC
+ * Method:    displayGraphGame
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_InterfaceAvecC_displayGraphGame
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     InterfaceAvecC
+ * Method:    displayPlateau
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_InterfaceAvecC_displayPlateau
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     InterfaceAvecC
+ * Method:    displayGroup
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_InterfaceAvecC_displayGroup
+  (JNIEnv *, jclass, jint);
 
 #ifdef __cplusplus
 }

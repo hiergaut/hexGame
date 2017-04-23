@@ -1,5 +1,13 @@
 #! /bin/sh -e
 
+os=$(cat /etc/os-release | head -n1 | awk -F\" '{print $2}')
+if [ "$os" != "Arch Linux" ]
+then
+    echo "Pas touche, Amine"
+    exit 1
+fi
+
+
 f="InterfaceAvecC"
 
 javac $f.java
