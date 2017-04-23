@@ -1,1 +1,1 @@
-../src/c/InterfaceAvecC.java
+../src/c/interfaceAvecJava/InterfaceAvecC.java

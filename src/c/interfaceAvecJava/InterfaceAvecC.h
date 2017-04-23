@@ -7,12 +7,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef InterfaceAvecC_EMPTY_PAWN
+#define InterfaceAvecC_EMPTY_PAWN 0L
 #undef InterfaceAvecC_BLACK_PAWN
 #define InterfaceAvecC_BLACK_PAWN 1L
 #undef InterfaceAvecC_WHITE_PAWN
 #define InterfaceAvecC_WHITE_PAWN 2L
-#undef InterfaceAvecC_EMPTY_PAWN
-#define InterfaceAvecC_EMPTY_PAWN 0L
 /*
  * Class:     InterfaceAvecC
  * Method:    newGame
