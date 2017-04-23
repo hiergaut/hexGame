@@ -2,7 +2,7 @@
 public class Main {
     public static void main(String args[]) {
 
-	InterfaceAvecC.newGame(5);
+	InterfaceAvecC.newGame(6);
 
 	if (InterfaceAvecC.permission(2, 4))
 	    System.out.println("Oh yeah");
