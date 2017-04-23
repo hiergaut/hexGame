@@ -4,9 +4,10 @@ public class InterfaceAvecC {
 	System.loadLibrary("InterfaceAvecC");
     }
 
+    public final static int EMPTY_PAWN =0;
+
     public final static int BLACK_PAWN =1;
     public final static int WHITE_PAWN =2;
-    public final static int EMPTY_PAWN =0;
 
     /**
      * create a graph of plateau, and group of player's pawn
@@ -28,8 +29,8 @@ public class InterfaceAvecC {
     public static native boolean permission(int line, int column);
 
     /**
-     * place a pawn black or white in plateau's square
-     * @param colorPawn use final variable BLACK_PAWN, WHITE_PAWN, EMPTY_PAWN
+     * place a pawn black, white, or empty place in plateau's square
+     * @param colorPawn use constant variable BLACK_PAWN, WHITE_PAWN, EMPTY_PAWN
      * @param line plateau's line
      * @param column plateau's column
      */
