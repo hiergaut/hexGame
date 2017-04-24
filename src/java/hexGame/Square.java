@@ -1,17 +1,27 @@
 package hexGame;
 
 public class Square {
-    protected boolean empty;
-    protected boolean leftPlayer;
+    protected boolean isEmpty;
+    protected char currPawn;
 
-    Square() {
-	this.empty = true;
+    public Square() {
+	this.isEmpty = true;
+	this.currPawn = '.';
     }
 
-    public String toString() {
-	if (this.empty) {
-	    return ".";
-	}
-	return "a";
+    public void setIsEmpty(boolean b) {
+	isEmpty = b;
     }
+
+    public char getPawn() {
+	return currPawn;
+    }
+
+    public void setPawn(char pawn) {
+	currPawn = pawn;
+	isEmpty = false;
+    }
+
+
+
 }
