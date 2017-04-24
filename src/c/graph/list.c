@@ -30,7 +30,7 @@ list list_create() {
     return l;
 }
 
-void list_pushBack(list l ,void* el) {
+void list_pushBack(list l, void* el) {
     node new =malloc(sizeof(struct s_node));
 
     new->el =el;
@@ -43,7 +43,7 @@ void list_pushBack(list l ,void* el) {
     l->size++;
 }
 
-void list_pushFront(list l ,void* el) {
+void list_pushFront(list l, void* el) {
     node new =malloc(sizeof(struct s_node));
 
     new->el =el;
@@ -80,7 +80,7 @@ void list_popFront(list l) {
     free(del);
 }
 
-void list_insertAt(list l ,unsigned level ,void* el) {
+void list_insertAt(list l, unsigned level, void* el) {
     assert(level <=l->size);
 
     node cur=l->sentinel->next;
@@ -97,7 +97,7 @@ void list_insertAt(list l ,unsigned level ,void* el) {
     l->size++;
 }
 
-void list_removeAt(list l ,unsigned level) {
+void list_removeAt(list l, unsigned level) {
     assert(level <l->size);
 
     node cur =l->sentinel->next;
@@ -110,7 +110,7 @@ void list_removeAt(list l ,unsigned level) {
     free(cur);
 }
 
-void* list_ith(list l ,unsigned level) {
+void* list_ith(list l, unsigned level) {
     node cur =l->sentinel->next;
     while (level--) cur =cur->next;
 
@@ -133,7 +133,7 @@ bool list_empty(list l) {
     return ! l->size;
 }
 
-void list_map(list l ,void (*process)(void*)) {
+void list_map(list l, void (*process)(void*)) {
     node cur=l->sentinel->next;
 
     while (cur !=l->sentinel) {
@@ -142,20 +142,20 @@ void list_map(list l ,void (*process)(void*)) {
     }
 }
 
-void list_reduce(list l ,void(*process)(void* ,void*) ,void* user_data) {
+void list_reduce(list l, void(*process)(void*, void*), void* user_data) {
     node cur=l->sentinel->next;
 
     while (cur !=l->sentinel) {
-	process(cur->el ,user_data);
+	process(cur->el, user_data);
 	cur =cur->next;
     }
 }
 
-void list_reduce2(list l ,void(*process)(void* ,void* ,void*) ,void* user_data ,void* user_data2) {
+void list_reduce2(list l, void(*process)(void*, void*, void*), void* user_data, void* user_data2) {
     node cur=l->sentinel->next;
 
     while (cur !=l->sentinel) {
-	process(cur->el ,user_data ,user_data2);
+	process(cur->el, user_data, user_data2);
 	cur =cur->next;
     }
 }
@@ -179,23 +179,23 @@ void list_clean(list l) {
     }
 }
 
-void list_translate(void* el ,void* l2) {
-    list_pushBack(l2 ,el);
+void list_translate(void* el, void* l2) {
+    list_pushBack(l2, el);
 }
 
-void list_copy(list l ,list l2) {
+void list_copy(list l, list l2) {
     list_clean(l2);
-    list_reduce(l ,list_translate ,l2);
+    list_reduce(l, list_translate, l2);
 }
 
 
 
 void list_testBench_print(const void* n) {
-    printf("%d " ,*(int*)(unsigned long)n);
+    printf("%d ", *(int*)(unsigned long)n);
 }
 
 void list_testBench_aff(list l) {
-    list_map(l ,(void (*)(void*))list_testBench_print);
+    list_map(l, (void (*)(void*))list_testBench_print);
     printf("\n");
 }
 
@@ -210,11 +210,11 @@ void list_testBench() {
 	tab[i] =rand() %100;
     }
 
-    list_pushBack(l ,&tab[0]);
+    list_pushBack(l, &tab[0]);
     list_testBench_aff(l);
-    list_pushBack(l ,&tab[1]);
+    list_pushBack(l, &tab[1]);
     list_testBench_aff(l);
-    list_pushBack(l ,&tab[2]);
+    list_pushBack(l, &tab[2]);
     list_testBench_aff(l);
     list_popBack(l);
     list_testBench_aff(l);
@@ -222,7 +222,9 @@ void list_testBench() {
     list_testBench_aff(l);
     list_popBack(l);
     list_testBench_aff(l);
-    list_pushBack(l ,&tab[3]);
+    list_pushBack(l, &tab[3]);
+    list_testBench_aff(l);
+    list_pushBack(l, &tab[3]);
     list_testBench_aff(l);
 
     list_destroy(&l);
@@ -261,5 +263,9 @@ void* list_it_get(list_it it) {
 void list_it_destroy(list_it* it) {
     free(*it);
     *it =NULL;
+}
+
+unsigned list_getSize(list l) {
+    return l->size;
 }
 
