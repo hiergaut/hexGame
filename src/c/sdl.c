@@ -65,7 +65,7 @@ SDL_Surface* sdl_newSurface(int width, int height, int x, int y, const char* str
     pos.y =(short)(y -25);
     pos.x =(short)(x +su->w /2 -text->w /2);
     SDL_BlitSurface(text, NULL, screen, &pos);
-    SDL_FreeSurface(text);
+    /* SDL_FreeSurface(text); */
 
     SDL_Flip(screen);
     return su;
