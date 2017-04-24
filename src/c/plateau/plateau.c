@@ -42,13 +42,41 @@ void plateau_destroy(plateau* p) {
     *p =NULL;
 }
 
+void printColor2(const void* ptr) {
+    int color;
+    if (ptr ==NULL)
+	color =0;
+    else
+	color =*(const int*)ptr %15;
+
+    if (color ==0)
+	color =0;
+    else if (color ==1)
+	color =7;
+    else if (color <8)
+	color =31 +color -2;
+    /* else if (color <15) */
+    else
+	color =41 +color -8;
+    /* else { */
+	/* printf("\x1B[%d;3m%p\x1B[0m ", color -15, ptr); */
+	/* return; */
+    /* } */
+
+    printf("\x1B[%dm%9p\x1B[0m ", color, ptr);
+}
+
 void plateau_print(plateau p) {
     for (unsigned i =0 ;i <p->line ;i++) {
 	for (unsigned j =0 ;j <p->column ;j++) {
-	    printf("%15p", p->square[i][j]);
+	    /* printf("%15p", p->square[i][j]); */
+	    printColor2(&p->square[i][j]);
+	    printColor2(p->square[i][j]);
+	    printf("  ");
 	}
 	printf("\n");
     }
+    printf("\n");
 }
 
 void plateau_insert(plateau p, unsigned line, unsigned column, void* square) {
@@ -62,6 +90,18 @@ void plateau_insert(plateau p, unsigned line, unsigned column, void* square) {
 
 void* plateau_get(plateau p, unsigned line, unsigned column) {
     return p->square[line][column];
+}
+
+void* plateau_getPtr(plateau p, unsigned line, unsigned column) {
+    return &p->square[line][column];
+}
+
+int plateau_getNbLine(plateau p) {
+    return (int)p->line;
+}
+
+int plateau_getNbColumn(plateau p) {
+    return (int)p->column;
 }
 /* void plateau_map(plateau p, void (*process)(void* data)) { */
 /* 	for (unsigned i =0 ;i <p->line ;i++) { */

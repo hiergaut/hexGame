@@ -2,6 +2,11 @@
 #define __INTERFACE__
 
 #include <stdbool.h>
+#include "graph.h"
+#include <SDL/SDL.h>
+
+#define interface_BLACK_PAWN 1
+#define interface_WHITE_PAWN 2
 
 typedef struct s_interface* interface;
 
@@ -9,7 +14,7 @@ interface interface_create(unsigned side);
 void interface_destroy(interface* i);
 
 bool interface_legalityPawn(unsigned line, unsigned column);
-void interface_placePawn(int colorPawn, unsigned line, unsigned column);
+void interface_placePawn(interface i, int colorPawn, unsigned line, unsigned column);
 int interface_getPawn(unsigned line, unsigned column);
 int interface_winner();
 
@@ -18,9 +23,10 @@ void interface_restoreGame(int idGame);
 void interface_displayHistory();
 void interface_undo();
 
-void interface_displayGraphGame(interface i);
+void interface_displayGraph(interface i, graph g, SDL_Surface* area);
 void interface_displayPlateau(interface i);
 void interface_displayGroup(interface i, int color);
 
+void interface_majScreen(interface i);
 
 #endif

@@ -1,23 +1,48 @@
-#include "plateau.h"
-#include <stdio.h>
-#include "graph.h"
-#include "sdl.h"
-#include <math.h>
-#include "ihm.h"
-/* #include "SDL/SDL.h" */
+/* #include "plateau.h" */
+/* #include <stdio.h> */
+/* #include "graph.h" */
+/* #include "sdl.h" */
+/* #include <math.h> */
+/* #include "ihm.h" */
+/* #include <SDL/SDL.h> */
 /* #include <unistd.h> */
 /* #include <wait.h> */
 /* #include <stdlib.h> */
+#include "interface.h"
+#include <stdio.h>
+#include "sdl.h"
 
 int main() {
-    plateau p =plateau_create(5, 5);
-    graph g =graph_create();
-    sdl s =sdl_create();
 
-    sdl_pictureFont(s, "./tableFont.jpg");
+    interface i =interface_create(5);
 
-    ihm m =ihm_create(5);
-    ihm_printPlateauOnly(m);
+    interface_placePawn(i, interface_BLACK_PAWN, 2, 2);
+    interface_placePawn(i, interface_WHITE_PAWN, 3, 2);
+    interface_placePawn(i, interface_BLACK_PAWN, 1, 4);
+    interface_placePawn(i, interface_WHITE_PAWN, 3, 3);
+    interface_placePawn(i, interface_BLACK_PAWN, 1, 1);
+    interface_placePawn(i, interface_WHITE_PAWN, 0, 0);
+
+    /* interface_displayPlateau(i); */
+    /*  */
+    /* interface_displayGraphGame(i); */
+    /*  */
+    /* interface_displayGroup(i, interface_BLACK); */
+    /* interface_displayGroup(i, interface_WHITE); */
+
+    sdl_pause();
+    interface_destroy(&i);
+
+
+
+    /* plateau p =plateau_create(5, 5); */
+    /* graph g =graph_create(); */
+    /* sdl s =sdl_create(); */
+    /*  */
+    /* sdl_pictureFont(s, "./tableFont.jpg"); */
+    /*  */
+    /* ihm m =ihm_create(5); */
+    /* ihm_printPlateauOnly(m); */
     /* unsigned tab[25]; */
     /* for (unsigned i =0 ;i <5 ;i++) { */
     /* 	for (unsigned j =0 ;j <5 ;j++) { */
@@ -107,7 +132,7 @@ int main() {
     /*  */
     /* 	} */
     /* } */
-    sdl_pause();
+    /* sdl_pause(); */
     /* graph_print(g); */
 
     /* int pid =fork(); */
@@ -125,9 +150,9 @@ int main() {
     /* wait(NULL); */
     /* wait(NULL); */
 
-    plateau_destroy(&p);
-    graph_destroy(&g);
-    sdl_destroy(&s);
+    /* plateau_destroy(&p); */
+    /* graph_destroy(&g); */
+    /* sdl_destroy(&s); */
 
 
     return 0;

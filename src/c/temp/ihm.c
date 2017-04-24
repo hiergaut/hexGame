@@ -12,8 +12,15 @@ ihm ihm_create(int size) {
     born.caseHeight =80;
     born.caseSide =(int)(born.caseHeight /sqrt(3));
 
+    born.s =sdl_create();
+
     return born;
 }
+
+void ihm_destroy(ihm ih) {
+    sdl_destroy(&ih.s);
+}
+    
 
 pos ihm_casePos(ihm m, int i, int j) {
     pos p;

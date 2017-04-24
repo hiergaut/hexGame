@@ -21,7 +21,7 @@ Java_InterfaceAvecC_permission(JNIEnv *env, jclass c1, jint line, jint column) {
 
 JNIEXPORT void JNICALL 
 Java_InterfaceAvecC_setPawn(JNIEnv *env, jclass c1, jint colorPawn, jint line, jint column) {
-    interface_placePawn(colorPawn, line, column);
+    interface_placePawn(global_interface, colorPawn, line, column);
 }
 
 JNIEXPORT jint JNICALL 
@@ -56,7 +56,7 @@ Java_InterfaceAvecC_undo(JNIEnv *env, jclass c1) {
 
 JNIEXPORT void JNICALL 
 Java_InterfaceAvecC_displayGraphGame(JNIEnv *env, jclass c1) {
-    interface_displayGraphGame(global_interface);
+    /* interface_displayGraph(global_interface, global_interface->g, ); */
 }
 
 JNIEXPORT void 

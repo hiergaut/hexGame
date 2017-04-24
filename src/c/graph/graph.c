@@ -6,11 +6,10 @@
 
 
 struct s_vertex {
-    const void* data;
+    void* data;
 
     list vertices;
 };
-typedef struct s_vertex* vertex;
 
 struct s_graph {
     unsigned nbVertex;
@@ -19,7 +18,7 @@ struct s_graph {
     list collection;
 };
 
-vertex findVertex(list l, const void* data) {
+vertex graph_findVertex(list l, const void* data) {
     list_it it =list_it_create(l);
     while (! list_it_end(it)) {
 	vertex v =list_it_get(it);
@@ -58,8 +57,8 @@ void graph_destroy(graph* g) {
     free(*g);
 }
 
-void graph_insertVertex(graph g, const void* data) {
-    assert(! findVertex(g->collection, data));
+void graph_insertVertex(graph g, void* data) {
+    assert(! graph_findVertex(g->collection, data));
 
     vertex v =malloc(sizeof(struct s_vertex));
     v->data =data;
@@ -71,14 +70,14 @@ void graph_insertVertex(graph g, const void* data) {
 
 
 void graph_insertEdge(graph g, const void* data, const void* data2) {
-    vertex v =findVertex(g->collection, data);
-    vertex v2 =findVertex(g->collection, data2);
+    vertex v =graph_findVertex(g->collection, data);
+    vertex v2 =graph_findVertex(g->collection, data2);
 
     assert(v);
     assert(v2);
 
-    assert(! findVertex(v->vertices, v2));
-    assert(! findVertex(v2->vertices, v));
+    assert(! graph_findVertex(v->vertices, v2));
+    assert(! graph_findVertex(v2->vertices, v));
 
     /* printf("link %p <-> %p\n" ,(void*)v ,(void*)v2); */
 
@@ -87,7 +86,12 @@ void graph_insertEdge(graph g, const void* data, const void* data2) {
 }
 
 void printColor(const void* ptr) {
-    int color =*(const int*)ptr %15;
+    int color;
+    if (ptr ==NULL)
+	color =0;
+    else
+	color =*(const int*)ptr %15;
+
     if (color ==0)
 	color =0;
     else if (color ==1)
@@ -107,6 +111,7 @@ void printColor(const void* ptr) {
 
 void printVertex(void* v) {
     printColor((vertex)v);
+    printColor(((vertex)v)->data);
 }
 
 
@@ -122,6 +127,7 @@ void graph_print(graph g) {
 	list_it_next(it);
     }
     list_it_destroy(&it);
+    printf("\n");
 
 
     /* list l =g->collection; */
@@ -163,4 +169,16 @@ void graph_testBench() {
     graph_print(g);
 
     graph_destroy(&g);
+}
+
+list graph_getCollection(graph g) {
+    return g->collection;
+}
+
+void* graph_getData(vertex v) {
+    return v->data;
+}
+
+list graph_getVertices(vertex v) {
+    return v->vertices;
 }

@@ -22,84 +22,118 @@
 #define FONT_GREEN 0xA0
 #define FONT_BLUE 0xA0
 
-TTF_Font *police =NULL;
-
-void sdl_create(int width, int height, const char* str) {
-    SDL_Init(SDL_INIT_VIDEO);
-    TTF_Init();
-    /* TTF_Init(); */
-    SDL_WM_SetCaption(str, NULL);
 
 
-    screen =SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE);
-    police =TTF_OpenFont("Roboto-Regular.ttf", 20);
-    /* TTF_SetFontStyle(police, TTF_STYLE_UNDERLINE); */
-    /* screen =SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_HWSURFACE| SDL_FULLSCREEN); */
-    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, SCREEN_FONT_COLOR));
-    SDL_Flip(screen);
-}
+struct s_sdl {
+    list object;
+    /* TTF_Font* police; */
+};
 
-void sdl_quit() {
-    TTF_CloseFont(police);
-    TTF_Quit();
-    /* SDL_VideoQuit(); */
-    SDL_Quit();
-}
-
-SDL_Surface* sdl_newSurface(int width, int height, int x, int y, const char* str) {
-    SDL_Surface* su =SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, 32, 0, 0, 0 ,0);
-    SDL_FillRect(su, NULL, SDL_WHITE); 
-    /* SDL_Rect pos; */
-    /* pos.x =(short)x; */
-    /* pos.y =(short)y; */
-    /* SDL_SetClipRect(su, &pos); */
-    su->clip_rect.x =(short)x;
-    su->clip_rect.y =(short)y;
-    /* sdl_rectangle(screen, x -1 , y -1, x +su->w +1, y +su->h +1, SDL_BLACK); */
-    SDL_BlitSurface(su, NULL, screen, &su->clip_rect);
-
-    SDL_Surface* text;
-    SDL_Color blackColor ={0, 0, 0, 0};
-    text = TTF_RenderText_Blended(police, str, blackColor);
+struct s_object {
+    SDL_Surface* area;
     SDL_Rect pos;
-    pos.y =(short)(y -25);
-    pos.x =(short)(x +su->w /2 -text->w /2);
-    SDL_BlitSurface(text, NULL, screen, &pos);
-    /* SDL_FreeSurface(text); */
-
-    SDL_Flip(screen);
-    return su;
-}
+    SDL_Rect middlePos;
+    const void* data;
+    /* SDL_Surface* text; */
+};
+typedef struct s_object* object;
 
 SDL_Surface* sdl_getScreen() {
     return screen;
 }
 
-void sdl_clean(SDL_Surface* area) {
-    Uint32* pixel =(Uint32*)(area->pixels);
-    for (int l =0; l <area->h; l++) {
-	for (int c =0; c< area->w; c++) {
-	    *(pixel +l *area->w +c) =SDL_WHITE;
-	}
-    }
-    /* SDL_FillRect(area, NULL, SDL_WHITE); */
-    /* SDL_BlitSurface(area, NULL, screen, &area->clip_rect); */
-    /* SDL_Flip(screen); */
+sdl sdl_create() {
+    /* srand((unsigned)time(NULL)); */
+    SDL_Init(SDL_INIT_VIDEO);
+    /* TTF_Init(); */
+    SDL_WM_SetCaption("HexGame", NULL);
+
+
+    sdl s =malloc(sizeof(struct s_sdl));
+    s->object =list_create();
+    /* s->police =TTF_OpenFont("font.ttf", 20); */
+    screen =SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_HWSURFACE);
+    /* screen =SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_HWSURFACE| SDL_FULLSCREEN); */
+    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, SCREEN_FONT_COLOR));
+    SDL_Flip(screen);
+
+
+
+
+    return s;
 }
 
-
-/* void sdl_pictureFont(sdl s, const char* file) { */
-/*     (void)s; */
-/*     SDL_Rect pos; */
-/*     pos.x =0; */
-/*     pos.y =0; */
-/*     SDL_Surface* font = IMG_Load(file); */
-/*     SDL_BlitSurface(font, NULL, screen, &pos); */
-/* } */
+void sdl_pictureFont(sdl s, const char* file) {
+    (void)s;
+    SDL_Rect pos;
+    pos.x =0;
+    pos.y =0;
+    SDL_Surface* font = IMG_Load(file);
+    SDL_BlitSurface(font, NULL, screen, &pos);
+}
 
 void genPos(SDL_Rect* pos) {
     pos->x =(short)(rand() %(SCREEN_WIDTH -OBJ_WIDTH));
     pos->y =(short)(rand() %(SCREEN_HEIGHT -OBJ_HEIGHT));
+}
+
+void majMiddlePos(object o) {
+    o->middlePos.x =(short)(o->pos.x +OBJ_WIDTH /2);
+    o->middlePos.y =(short)(o->pos.y +OBJ_HEIGHT /2);
+}
+
+object object_create(const void* data) {
+    object o =malloc(sizeof(struct s_object));
+
+    o->area =SDL_CreateRGBSurface(SDL_HWSURFACE, OBJ_WIDTH, OBJ_HEIGHT, 32, 0, 0, 0, 0);
+    genPos(&o->pos);
+    o->data =data;
+    majMiddlePos(o);
+
+    int key =*(const int*)data;
+    key =(int)pow(key, 2) %256;
+    unsigned char key2 =(unsigned char)key;
+    key =(int)pow(key, 3) %256;
+    unsigned char key3 =(unsigned char)key;
+    key =(int)pow(key, 4) %256;
+    unsigned char key4 =(unsigned char)key;
+    /* printf("%d %d %d\n", key2, key3, key4); */
+
+    SDL_FillRect(o->area, NULL, SDL_MapRGB(screen->format, key2, key3, key4));
+    /* SDL_BlitSurface(o->area, NULL, screen, &o->pos); */
+
+
+    /* char str[30]; */
+    /* sprintf(str, "%p", o->data); */
+    /* SDL_Color black ={FONT_RED, FONT_GREEN, FONT_BLUE, 0}; */
+    /* o->text =TTF_RenderText_Blended(s->police, str, black); */
+    /* SDL_BlitSurface(o->text, NULL, s->screen, &o->pos); */
+
+    SDL_Flip(screen);
+    return o;
+}
+
+void object_destroy(object* o) {
+    SDL_FreeSurface((*o)->area);
+    free(*o);
+    *o =NULL;
+}
+
+void sdl_destroy(sdl* s) {
+    list l =((*s)->object);
+    object o;
+    while (! list_empty(l)) {
+	o =list_back(l);
+	object_destroy(&o);
+	list_popBack(l);
+    }
+
+    TTF_Quit();
+    SDL_VideoQuit();
+    SDL_Quit();
+
+    free(*s);
+    *s =NULL;
 }
 
 
@@ -122,19 +156,27 @@ void sdl_pause() {
     }
 }
 
-void putpixel(SDL_Surface* area, int xe, int ye, Uint32 c) { 
+void sdl_newObject(sdl s, const void* data) {
+    object o =object_create(data);
+    list_pushBack(s->object, o);
+}
+
+void putpixel(SDL_Surface* area, int xe, int ye, Uint32 c) 
+{ 
     Uint32 * numerocase; 
     numerocase= (Uint32 *)(area->pixels)+xe+ye*area->w;    
     *numerocase=c; 
 } 
 
-Uint32 getpixel(SDL_Surface* area, int xe, int ye) { 
+Uint32 getpixel(SDL_Surface* area, int xe, int ye) 
+{ 
     Uint32 * numerocase; 
     numerocase= (Uint32 *)(area->pixels)+xe+ye*area->w;   
     return (*numerocase); 
 } 
 
-void sdl_lineSimple(SDL_Surface* area, int x0,int y0, int x1,int y1, Uint32 c) { 
+void lineSimple(SDL_Surface* area, int x0,int y0, int x1,int y1, Uint32 c) 
+{ 
     int dx,dy,x,y,residu,absdx,absdy,stepx,stepy,i; 
     dx=x1-x0; 
     dy=y1-y0;  
@@ -253,6 +295,53 @@ void line(SDL_Surface* area, int x0,int y0, int x1,int y1, Uint32 c) {
 	} 
 } 
 
+object search(sdl s, void* data) {
+    list_it it =list_it_create(s->object);
+    object o;
+    while (! list_it_end(it)) {
+	o =list_it_get(it);
+	if (o->data ==data) {
+	    list_it_destroy(&it);
+	    return o;
+	}
+
+	list_it_next(it);
+    }
+    list_it_destroy(&it);
+    return NULL;
+}
+
+void sdl_link(sdl s, void* data, void* data2) {
+    object o =search(s, data);
+    object o2 =search(s, data2);
+
+    line(screen, o->middlePos.x, o->middlePos.y, o2->middlePos.x, o2->middlePos.y, SDL_BLACK);
+    SDL_BlitSurface(o->area, NULL, screen, &o->pos);
+    SDL_BlitSurface(o2->area, NULL, screen, &o2->pos);
+    SDL_Flip(screen);
+}
+
+void sdl_setPos(sdl s, void* data, int dx, int dy, void* data2) {
+    object o =search(s, data);
+    object o2 =search(s, data2);
+
+    o2->pos.x =(short)(o->pos.x +dx);
+    o2->pos.y =(short)(o->pos.y +dy);
+    majMiddlePos(o2);
+    SDL_BlitSurface(o2->area, NULL, screen, &o2->pos);
+    SDL_Flip(screen);
+}
+
+void sdl_setPosByOrigin(sdl s, void* data, int dx, int dy) {
+    object o =search(s, data);
+
+    o->pos.x =(short)(dx);
+    o->pos.y =(short)(dy);
+    majMiddlePos(o);
+    SDL_BlitSurface(o->area, NULL, screen, &o->pos);
+    SDL_Flip(screen);
+}
+
 void sdl_hexagone(SDL_Surface* area, int x, int y, int h) {
     int c =(int)(h /sqrt(3));
 
@@ -271,13 +360,15 @@ void sdl_hexagone(SDL_Surface* area, int x, int y, int h) {
     SDL_Flip(screen);
 }
 
+
 void sdl_line(SDL_Surface* area, int x, int y, int x2, int y2) {
     line(area, x, y, x2, y2, SDL_BLACK);
     /* lineScale(area, x, y, x2, y2, SDL_BLACK); */
     SDL_Flip(screen);
 }
 
-void sdl_floodfill(SDL_Surface* area, int x, int y, Uint32 cr, Uint32 cb) {   
+void sdl_floodfill(SDL_Surface* area, int x, int y, Uint32 cr, Uint32 cb) 
+{   
     int xg,xd,xx; 
     if (getpixel(area, x,y) !=cb && getpixel(area, x,y) !=cr) { 
 	putpixel(area, x,y,cr); 
@@ -305,169 +396,6 @@ void sdl_floodfill(SDL_Surface* area, int x, int y, Uint32 cr, Uint32 cb) {
 Uint32 sdl_color(unsigned char r, unsigned char g, unsigned char b) {
     return SDL_MapRGB(screen->format, r, g, b);
 }
-
-void sdl_rectangle(SDL_Surface* area, int x1,int y1, int x2, int y2, Uint32 c) { 
-	line(area, x1,y1,x2,y1,c);
-	line(area, x1,y2,x2,y2,c);
-	line(area, x1,y1,x1,y2,c);
-	line(area, x2,y2,x2,y1,c); 
-} 
-
-void sdl_square(SDL_Surface* area, int x, int y, int side, Uint32 c) {
-    sdl_rectangle(area, x, y, x +side, y +side, c);
-}
-
-void sdl_squareFill(SDL_Surface* area, int x, int y, int side, Uint32 c, Uint32 fill) {
-    sdl_square(area, x, y, side, c);
-    sdl_floodfill(area, x +1, y +1, fill, c);
-}
-
-Uint32 sdl_uniqColorData(void* data) {
-    /* int key =data; */
-    long key =(long)data %10000;
-    /* printf("data =%p\n", data); */
-    /* printf("key =%ld\n" ,key); */
-
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-
-    r =(unsigned char)(key *13);
-    g =(unsigned char)(key *47);
-    b =(unsigned char)(key *97);
-
-    return SDL_MapRGB(screen->format, r, g, b);
-}
-
-void sdl_circle(SDL_Surface* area, int xo, int yo, int R, Uint32 c) { 
-    int x, y, F, F1, F2,newx,newy; 
-    x=xo; 
-    y=yo+R; 
-    F=0; 
-    if (x<area->w && x>=0 && y>=0 && y<area->h) 
-	putpixel(area, x,y,c); 
-    if (x<area->w && x>=0 && 2*yo-y>=0 && 2*yo-y<area->h)
-	putpixel (area, x,2*yo-y, c); 
-    while( y>yo) 
-    { 
-	F1=F+2*(x-xo)+1; 
-	F2=F-2*(y-yo)+1; 
-	if ( abs(F1)<abs(F2)) { 
-	    x+=1; F=F1;
-	} 
-	else {
-	    y-=1; 
-	    F=F2;
-	} 
-	if (x<area->w && x>=0 && y>=0 && y<area->h) 
-	    putpixel(area, x,y,c); 
-
-	newx=2*xo-x ; newy=2*yo-y ; 
-	if (x<area->w && x>=0 && newy>=0 && newy<area->h) 
-	    putpixel(area, x, newy,c); 
-	if (newx<area->w && newx>=0 && y>=0 && y<area->h) 
-	    putpixel(area, newx,y,c); 
-	if (newx<area->w && newx>=0 && newy>=0 && newy<area->h) 
-	    putpixel(area, newx, newy, c); 
-    } 
-    if (xo+R<area->w && xo+R>=0) 
-	putpixel(area, xo+R,yo,c); 
-    if (xo-R<area->w && xo-R>=0) 
-	putpixel(area, xo-R,yo, c); 
-} 
-
-
-/* void majMiddlePos(object o) { */
-/*     o->middlePos.x =(short)(o->pos.x +OBJ_WIDTH /2); */
-/*     o->middlePos.y =(short)(o->pos.y +OBJ_HEIGHT /2); */
-/* } */
-/*  */
-/* object object_create(const void* data) { */
-/*     object o =malloc(sizeof(struct s_object)); */
-/*  */
-/*     o->area =SDL_CreateRGBSurface(SDL_HWSURFACE, OBJ_WIDTH, OBJ_HEIGHT, 32, 0, 0, 0, 0); */
-/*     genPos(&o->pos); */
-/*     o->data =data; */
-/*     majMiddlePos(o); */
-/*  */
-/*     int key =*(const int*)data; */
-/*     key =(int)pow(key, 2) %256; */
-/*     unsigned char key2 =(unsigned char)key; */
-/*     key =(int)pow(key, 3) %256; */
-/*     unsigned char key3 =(unsigned char)key; */
-/*     key =(int)pow(key, 4) %256; */
-/*     unsigned char key4 =(unsigned char)key; */
-/*     #<{(| printf("%d %d %d\n", key2, key3, key4); |)}># */
-/*  */
-/*     SDL_FillRect(o->area, NULL, SDL_MapRGB(screen->format, key2, key3, key4)); */
-/*     #<{(| SDL_BlitSurface(o->area, NULL, screen, &o->pos); |)}># */
-/*  */
-/*  */
-/*     #<{(| char str[30]; |)}># */
-/*     #<{(| sprintf(str, "%p", o->data); |)}># */
-/*     #<{(| SDL_Color black ={FONT_RED, FONT_GREEN, FONT_BLUE, 0}; |)}># */
-/*     #<{(| o->text =TTF_RenderText_Blended(s->police, str, black); |)}># */
-/*     #<{(| SDL_BlitSurface(o->text, NULL, s->screen, &o->pos); |)}># */
-/*  */
-/*     SDL_Flip(screen); */
-/*     return o; */
-/* } */
-
-/* #<{(|  |)}># */
-/* void object_destroy(object* o) { */
-/*     SDL_FreeSurface((*o)->area); */
-/*     free(*o); */
-/*     *o =NULL; */
-/* } */
-
-
-/* object search(sdl s, void* data) { */
-/*     list_it it =list_it_create(s->object); */
-/*     object o; */
-/*     while (! list_it_end(it)) { */
-/* 	o =list_it_get(it); */
-/* 	if (o->data ==data) { */
-/* 	    list_it_destroy(&it); */
-/* 	    return o; */
-/* 	} */
-/*  */
-/* 	list_it_next(it); */
-/*     } */
-/*     list_it_destroy(&it); */
-/*     return NULL; */
-/* } */
-
-/* void sdl_link(sdl s, void* data, void* data2) { */
-/*     object o =search(s, data); */
-/*     object o2 =search(s, data2); */
-/*  */
-/*     line(screen, o->middlePos.x, o->middlePos.y, o2->middlePos.x, o2->middlePos.y, SDL_BLACK); */
-/*     SDL_BlitSurface(o->area, NULL, screen, &o->pos); */
-/*     SDL_BlitSurface(o2->area, NULL, screen, &o2->pos); */
-/*     SDL_Flip(screen); */
-/* } */
-/*  */
-/* void sdl_setPos(sdl s, void* data, int dx, int dy, void* data2) { */
-/*     object o =search(s, data); */
-/*     object o2 =search(s, data2); */
-/*  */
-/*     o2->pos.x =(short)(o->pos.x +dx); */
-/*     o2->pos.y =(short)(o->pos.y +dy); */
-/*     majMiddlePos(o2); */
-/*     SDL_BlitSurface(o2->area, NULL, screen, &o2->pos); */
-/*     SDL_Flip(screen); */
-/* } */
-/*  */
-/* void sdl_setPosByOrigin(sdl s, void* data, int dx, int dy) { */
-/*     object o =search(s, data); */
-/*  */
-/*     o->pos.x =(short)(dx); */
-/*     o->pos.y =(short)(dy); */
-/*     majMiddlePos(o); */
-/*     SDL_BlitSurface(o->area, NULL, screen, &o->pos); */
-/*     SDL_Flip(screen); */
-/* } */
-
 
 /* void pause(void)  */
 /* {  */
@@ -501,6 +429,30 @@ void sdl_circle(SDL_Surface* area, int xo, int yo, int R, Uint32 c) {
 /* 		}  */
 /* 	}  */
 /* }  */
+/* void circle(SDL_Surface* screen,  int xo, int yo, int R, Uint32 c)  */
+/* {  */
+/* 	int x, y, F, F1, F2,newx,newy;  */
+/* 	x=xo; y=yo+R; F=0;  */
+/* 	if (x<800 && x>=0 && y>=0 && y<600) putpixel(screen, x,y,c);  */
+/* 	if (x<800 && x>=0 && 2*yo-y>=0 && 2*yo-y<600) */
+/* 		putpixel (screen, x,2*yo-y, c);  */
+/* 	while( y>yo)  */
+/* 	{  */
+/* 		F1=F+2*(x-xo)+1; F2=F-2*(y-yo)+1;  */
+/* 		if ( abs(F1)<abs(F2))  { x+=1; F=F1;}  */
+/* 		else {y-=1; F=F2;}  */
+/* 		if (x<800 && x>=0 && y>=0 && y<600) putpixel(screen, x,y,c);  */
+/* 		newx=2*xo-x ; newy=2*yo-y ;  */
+/* 		if (x<800 && x>=0 && newy>=0 && newy<600) putpixel(screen, x, newy,c);  */
+/* 		if (newx<800 && newx>=0 && y>=0 && y<600) putpixel(screen, newx,y,c);  */
+/* 		if (newx<800 && newx>=0 && newy>=0 && newy<600)  */
+/* 			putpixel(screen, newx, newy, c);  */
+/* 	}  */
+/* 	if (xo+R<800 && xo+R>=0)  */
+/* 		putpixel(screen, xo+R,yo,c);  */
+/* 	if (xo-R<800 && xo-R>=0)  */
+/* 		putpixel(screen, xo-R,yo, c);  */
+/* }  */
 /* void filldisc( int xo, int yo, int R, Uint32 c)  */
 /* {  */
 /* 	int x, y, F, F1, F2,newx,newy,xx;  */
@@ -526,6 +478,12 @@ void sdl_circle(SDL_Surface* area, int xo, int yo, int R, Uint32 c) {
 /* 		pixel(xo+R,yo,c);  */
 /* 	if (xo-R<800 && xo-R>=0&& y>=0 && y<600) put */
 /* 		pixel(xo-R,yo, c);  */
+/* }  */
+/* void rectangle(int x1,int y1, int x2, int y2, Uint3 */
+/* 		2 c)  */
+/* {  */
+/* 	line(x1,y1,x2,y1,c);line(x1,y2,x2,y2,c);line(x1 */
+/* 			,y1,x1,y2,c);line(x2,y2,x2,y1,c);  */
 /* }  */
 /* void arrow(int x1, int y1, int x2, int y2, Uint32 c */
 /* 		)  */

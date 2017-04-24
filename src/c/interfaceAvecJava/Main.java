@@ -1,9 +1,15 @@
+// import java.util.Scanner;
 
 public class Main {
     public static void main(String args[]) {
 
 	InterfaceAvecC.newGame(6);
+	InterfaceAvecC.setPawn(InterfaceAvecC.BLACK_PAWN, 2, 2);
+	InterfaceAvecC.setPawn(InterfaceAvecC.WHITE_PAWN, 3, 2);
 
+	// Scanner reader = new Scanner(System.in);  // Reading from System.in
+	// System.out.println("Enter a number: ");
+	// int n = reader.nextInt(); // Scans the next token of the input as an int.
 	if (InterfaceAvecC.permission(2, 4))
 	    System.out.println("Oh yeah");
 

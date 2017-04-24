@@ -265,6 +265,11 @@ void list_it_destroy(list_it* it) {
     *it =NULL;
 }
 
+void list_it_restart(list_it it) {
+    it->cur =it->begin;
+}
+
+
 unsigned list_getSize(list l) {
     return l->size;
 }

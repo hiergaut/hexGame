@@ -1,6 +1,8 @@
 #ifndef __IHM__
 #define __IHM__
 
+#include "sdl.h"
+
 struct s_pos {
     int x;
     int y;
@@ -12,10 +14,13 @@ struct s_ihm {
     pos top;
     int caseHeight;
     int caseSide;
+
+    sdl s;
 };
 typedef struct s_ihm ihm;
 
 ihm ihm_create(int size);
+void ihm_destroy(ihm ih);
 void ihm_printPlateauOnly(ihm m);
 
 
