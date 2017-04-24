@@ -1,24 +1,24 @@
 package hexGame;
 
+import java.util.Scanner;
+
 class Player {
     protected String name;
     protected char pawn;
     protected char edge;
     protected int round = 0;
     protected int move_number = 0;
-    protected String lastMove;
+    protected String lastMove = " - - - ";
+    protected boolean isStarting = true;
 
     /**
      * Constructor of Player Class
-     * @param name, the name of the player
      * @param pawn, the pawn the player will use
      * @param edge, the edges the player need to link to win
      */
-    public Player(String name, char pawn, char edge) {
-	this.name = name;
+    public Player(char pawn, char edge) {
 	this.pawn = pawn;
 	this.edge = edge;
-	this.lastMove = getName() + " started the game";
     }
 
     /**
@@ -27,6 +27,14 @@ class Player {
      */
     public String getName() {
 	return this.name;
+    }
+
+    /**
+     * Sets the name of the player
+     * @param n, the new name of the player
+     */
+    public void setName(String name) {
+	this.name = name;
     }
 
     /**
@@ -50,8 +58,16 @@ class Player {
      * @return the current round
      */
     public int getRound() {
-	return this.round;
+	return round;
     } 
+
+    /**
+     * Increment the round number
+     * @return the new round
+     */
+    public void incRound() {
+	++round;
+    }
 
     /**
      * Getter for the number of moves the player has made
@@ -67,6 +83,39 @@ class Player {
      */
     public String getLastMove() {
 	return this.lastMove;
+    }
+
+    /**
+     * Getter the starting status
+     * @return if the player is starting
+     */
+    public boolean getStartingStatus() {
+	return this.isStarting;
+    }
+
+    /**
+     * Switch the starting status
+     */
+    public void switchStarting() {
+	isStarting = isStarting ? false : true;
+    }
+
+    /**
+     * The player play his turn
+     * @param b, the board of which the player plays
+     * @param s, the scanner for I/O
+     */
+    public void play(Board b, Scanner s) {
+	System.out.println();
+	System.out.println("Ou posez le pion ?");
+	int i,j;
+	i = (s.nextInt() - 1) % b.getSize() ;
+	j = (s.nextInt() - 1) % b.getSize() ;
+
+	b.squares[i][j].setIsEmpty(false);
+	b.squares[i][j].setPawn(this.getPawn());
+	lastMove = "row " + (i + 1) + " col " + (j + 1);
+	incRound();
     }
     
 
