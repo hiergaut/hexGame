@@ -4,19 +4,31 @@
 /* #include "sdl.h" */
 /* #include <math.h> */
 /* #include "ihm.h" */
-/* #include "SDL/SDL.h" */
+/* #include <SDL/SDL.h> */
 /* #include <unistd.h> */
 /* #include <wait.h> */
 /* #include <stdlib.h> */
 #include "interface.h"
+#include <stdio.h>
+#include "sdl.h"
 
 int main() {
 
     interface i =interface_create(5);
 
+    /* interface_placePawn(i, interface_BLACK_PAWN, 2, 2); */
+    /* interface_placePawn(i, interface_WHITE_PAWN, 3, 2); */
+    /* interface_placePawn(i, interface_BLACK_PAWN, 1, 2); */
 
+    /* interface_displayPlateau(i); */
+    /*  */
+    /* interface_displayGraphGame(i); */
+    /*  */
+    /* interface_displayGroup(i, interface_BLACK); */
+    /* interface_displayGroup(i, interface_WHITE); */
+
+    sdl_pause();
     interface_destroy(&i);
-    
 
 
 

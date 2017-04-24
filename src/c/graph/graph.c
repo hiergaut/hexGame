@@ -87,7 +87,12 @@ void graph_insertEdge(graph g, const void* data, const void* data2) {
 }
 
 void printColor(const void* ptr) {
-    int color =*(const int*)ptr %15;
+    int color;
+    if (ptr ==NULL)
+	color =0;
+    else
+	color =*(const int*)ptr %15;
+
     if (color ==0)
 	color =0;
     else if (color ==1)
@@ -107,6 +112,7 @@ void printColor(const void* ptr) {
 
 void printVertex(void* v) {
     printColor((vertex)v);
+    printColor(((vertex)v)->data);
 }
 
 
