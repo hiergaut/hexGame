@@ -16,9 +16,12 @@ int main() {
 
     interface i =interface_create(5);
 
-    /* interface_placePawn(i, interface_BLACK_PAWN, 2, 2); */
-    /* interface_placePawn(i, interface_WHITE_PAWN, 3, 2); */
-    /* interface_placePawn(i, interface_BLACK_PAWN, 1, 2); */
+    interface_placePawn(i, interface_BLACK_PAWN, 2, 2);
+    interface_placePawn(i, interface_WHITE_PAWN, 3, 2);
+    interface_placePawn(i, interface_BLACK_PAWN, 1, 4);
+    interface_placePawn(i, interface_WHITE_PAWN, 3, 3);
+    interface_placePawn(i, interface_BLACK_PAWN, 1, 1);
+    interface_placePawn(i, interface_WHITE_PAWN, 0, 0);
 
     /* interface_displayPlateau(i); */
     /*  */
