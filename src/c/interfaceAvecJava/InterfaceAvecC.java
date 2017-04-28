@@ -4,7 +4,7 @@ public class InterfaceAvecC {
 	System.loadLibrary("InterfaceAvecC");
     }
 
-    public final static int EMPTY_PAWN =0;
+    public final static int NO_PAWN =0;
 
     public final static int BLACK_PAWN =1;
     public final static int WHITE_PAWN =2;
@@ -75,22 +75,4 @@ public class InterfaceAvecC {
      */
     public static native void undo();
 
-    /**
-     * display graph implement in C
-     */
-    public static native void displayGraphGame();
-
-    /**
-     * display plateau implement in C, just for debuging and this plateau is
-     * a duty to create plateau's graph, and for write plateau in a text file
-     * for database save
-     */
-    public static native void displayPlateau();
-
-    /**
-     * display group of each player specify
-     * @param colorPlayer you can use WHITE_PAWN, BLACK_PAWN
-     * but not EMPTY_PAWN because no group for empty color (empty case)
-     */
-    public static native void displayGroup(int colorPlayer);
 }

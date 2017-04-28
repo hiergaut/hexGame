@@ -7,8 +7,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#undef InterfaceAvecC_EMPTY_PAWN
-#define InterfaceAvecC_EMPTY_PAWN 0L
+#undef InterfaceAvecC_NO_PAWN
+#define InterfaceAvecC_NO_PAWN 0L
 #undef InterfaceAvecC_BLACK_PAWN
 #define InterfaceAvecC_BLACK_PAWN 1L
 #undef InterfaceAvecC_WHITE_PAWN
@@ -92,30 +92,6 @@ JNIEXPORT void JNICALL Java_InterfaceAvecC_displayHistoryGame
  */
 JNIEXPORT void JNICALL Java_InterfaceAvecC_undo
   (JNIEnv *, jclass);
-
-/*
- * Class:     InterfaceAvecC
- * Method:    displayGraphGame
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_displayGraphGame
-  (JNIEnv *, jclass);
-
-/*
- * Class:     InterfaceAvecC
- * Method:    displayPlateau
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_displayPlateau
-  (JNIEnv *, jclass);
-
-/*
- * Class:     InterfaceAvecC
- * Method:    displayGroup
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_displayGroup
-  (JNIEnv *, jclass, jint);
 
 #ifdef __cplusplus
 }

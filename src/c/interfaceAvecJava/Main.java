@@ -25,9 +25,9 @@ public class Main {
 	InterfaceAvecC.displayHistoryGame();
 	InterfaceAvecC.getPawn(3, 5);
 
-	InterfaceAvecC.displayGraphGame();
-	InterfaceAvecC.displayPlateau();
-	InterfaceAvecC.displayGroup(InterfaceAvecC.BLACK_PAWN);
+	// InterfaceAvecC.displayGraphGame();
+	// InterfaceAvecC.displayPlateau();
+	// InterfaceAvecC.displayGroup(InterfaceAvecC.BLACK_PAWN);
 
 	InterfaceAvecC.endGame();
 
