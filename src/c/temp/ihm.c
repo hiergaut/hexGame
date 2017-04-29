@@ -20,7 +20,7 @@ ihm ihm_create(int size) {
 void ihm_destroy(ihm ih) {
     sdl_destroy(&ih.s);
 }
-    
+
 
 pos ihm_casePos(ihm m, int i, int j) {
     pos p;
@@ -33,12 +33,12 @@ pos ihm_casePos(ihm m, int i, int j) {
 void ihm_printPlateauOnly(ihm m) {
     pos p;
     for (int i =0 ;i <m.plateauSize ;i++) {
-	for (int j =0 ;j <m.plateauSize ;j++) {
-	    p =ihm_casePos(m, j, i);
-	    sdl_hexagone(sdl_getScreen(), p.x, p.y, m.caseHeight);
-	    /* sdl_floodfill(sdl_getScreen(), p.x, p.y, sdl_color(211, 181, 129), SDL_BLACK); */
-	    sdl_floodfill(sdl_getScreen(), p.x, p.y, sdl_color(211, 181, 129), SDL_BLACK);
-	}
+        for (int j =0 ;j <m.plateauSize ;j++) {
+            p =ihm_casePos(m, j, i);
+            sdl_hexagone(sdl_getScreen(), p.x, p.y, m.caseHeight);
+            /* sdl_floodfill(sdl_getScreen(), p.x, p.y, sdl_color(211, 181, 129), SDL_BLACK); */
+            sdl_floodfill(sdl_getScreen(), p.x, p.y, sdl_color(211, 181, 129), SDL_BLACK);
+        }
     }
 
     p =ihm_casePos(m, 0, 0);
@@ -48,26 +48,26 @@ void ihm_printPlateauOnly(ihm m) {
 
     int marge =20;
     sdl_line(sdl_getScreen(), p.x, 
-	    p.y -m.caseHeight /2 -(int)(m.caseSide /(2 *sqrt(3))) -(int)(marge /sqrt(3)), 
-	    p2.x -(m.caseSide) *2 -marge, p2.y);
+            p.y -m.caseHeight /2 -(int)(m.caseSide /(2 *sqrt(3))) -(int)(marge /sqrt(3)), 
+            p2.x -(m.caseSide) *2 -marge, p2.y);
     sdl_line(sdl_getScreen(), p.x, 
-	    p.y -m.caseHeight /2 -(int)(m.caseSide /(2 *sqrt(3))) -(int)(marge /sqrt(3)), 
-	    p4.x +(m.caseSide) *2 +marge, p4.y);
+            p.y -m.caseHeight /2 -(int)(m.caseSide /(2 *sqrt(3))) -(int)(marge /sqrt(3)), 
+            p4.x +(m.caseSide) *2 +marge, p4.y);
     sdl_line(sdl_getScreen(), p3.x, 
-	    p3.y +m.caseHeight /2 +(int)(m.caseSide /(2 *sqrt(3))) +(int)(marge /sqrt(3)), 
-	    p4.x +(m.caseSide) *2 +marge, p4.y);
+            p3.y +m.caseHeight /2 +(int)(m.caseSide /(2 *sqrt(3))) +(int)(marge /sqrt(3)), 
+            p4.x +(m.caseSide) *2 +marge, p4.y);
     sdl_line(sdl_getScreen(), p3.x, 
-	    p3.y +m.caseHeight /2 +(int)(m.caseSide /(2 *sqrt(3))) +(int)(marge /sqrt(3)), 
-	    p2.x -(m.caseSide) *2 -marge, p2.y);
+            p3.y +m.caseHeight /2 +(int)(m.caseSide /(2 *sqrt(3))) +(int)(marge /sqrt(3)), 
+            p2.x -(m.caseSide) *2 -marge, p2.y);
 
     sdl_line(sdl_getScreen(), p.x, p.y -m.caseHeight /2, 
-	    p.x, p.y -m.caseHeight /2 -(int)(m.caseSide /(2 *sqrt(3))) -(int)(marge /sqrt(3))); 
+            p.x, p.y -m.caseHeight /2 -(int)(m.caseSide /(2 *sqrt(3))) -(int)(marge /sqrt(3))); 
     sdl_line(sdl_getScreen(), p3.x, p3.y +m.caseHeight /2, 
-	    p3.x, p3.y +m.caseHeight /2 +(int)(m.caseSide /(2 *sqrt(3))) +(int)(marge /sqrt(3))); 
+            p3.x, p3.y +m.caseHeight /2 +(int)(m.caseSide /(2 *sqrt(3))) +(int)(marge /sqrt(3))); 
     sdl_line(sdl_getScreen(), p2.x -(m.caseSide), p2.y, 
-	    p2.x -(m.caseSide) *2 -marge, p2.y);
+            p2.x -(m.caseSide) *2 -marge, p2.y);
     sdl_line(sdl_getScreen(), p4.x +(m.caseSide), p4.y, 
-	    p4.x +(m.caseSide) *2 +marge, p4.y);
+            p4.x +(m.caseSide) *2 +marge, p4.y);
 
 
     sdl_floodfill(sdl_getScreen(), p.x +1, p.y -m.caseHeight /2 -1, SDL_BLACK, SDL_BLACK);

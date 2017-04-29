@@ -16,12 +16,33 @@ int main() {
 
     interface i =interface_create(5);
 
-    interface_placePawn(i, interface_BLACK_PAWN, 2, 2);
-    interface_placePawn(i, interface_WHITE_PAWN, 3, 2);
-    interface_placePawn(i, interface_BLACK_PAWN, 1, 4);
-    interface_placePawn(i, interface_WHITE_PAWN, 3, 3);
-    interface_placePawn(i, interface_BLACK_PAWN, 1, 1);
-    interface_placePawn(i, interface_WHITE_PAWN, 0, 0);
+    interface_ihm(i);
+    /* int continuer =1; */
+    /* SDL_Event event; */
+    /* while (continuer) { */
+	/* SDL_WaitEvent(&event); */
+    /*  */
+	/* switch (event.type) { */
+	/*     case SDL_QUIT: */
+	/* 	continuer =0; */
+	/* 	break; */
+    /*  */
+	/*     case SDL_KEYDOWN: */
+	/* 	if (event.key.keysym.sym ==SDLK_q) */
+	/* 	    continuer =0; */
+	/* 	break; */
+    /*  */
+	/*     default: */
+	/* 	break; */
+	/* } */
+    /* } */
+
+    /* interface_placePawn(i, interface_BLACK_PAWN, 2, 2); */
+    /* interface_placePawn(i, interface_WHITE_PAWN, 3, 2); */
+    /* interface_placePawn(i, interface_BLACK_PAWN, 1, 4); */
+    /* interface_placePawn(i, interface_WHITE_PAWN, 3, 3); */
+    /* interface_placePawn(i, interface_BLACK_PAWN, 1, 1); */
+    /* interface_placePawn(i, interface_WHITE_PAWN, 0, 0); */
 
     /* interface_displayPlateau(i); */
     /*  */
@@ -30,7 +51,7 @@ int main() {
     /* interface_displayGroup(i, interface_BLACK); */
     /* interface_displayGroup(i, interface_WHITE); */
 
-    sdl_pause();
+    /* sdl_pause(); */
     interface_destroy(&i);
 
 

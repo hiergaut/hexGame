@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "sdl.h"
 #include <assert.h>
+#include <math.h>
 /* #include "ihm.h" */
 
 void interface_drawPlateau(plateau p);
@@ -31,6 +32,12 @@ struct s_interface {
     SDL_Surface* surface_graph;
     SDL_Surface* surface_blackGroup;
     SDL_Surface* surface_whiteGroup;
+    SDL_Surface* surface_ihm;
+
+    graph reduceGraph;
+    SDL_Surface* surface_reduceGraph;
+
+    list casePlayed;
 };
 
 
@@ -46,28 +53,28 @@ interface interface_create(unsigned side) {
     graph_insertVertex(i->g, &i->blackSide1);
     graph_insertVertex(i->g, &i->blackSide2);
     for (unsigned l =0; l <side; l++) {
-	for (unsigned c =0; c <side; c++) {
-	    graph_insertVertex(i->g, plateau_getPtr(i->p, l, c));
+        for (unsigned c =0; c <side; c++) {
+            graph_insertVertex(i->g, plateau_getPtr(i->p, l, c));
 
-	    if (l ==0)
-		graph_insertEdge(i->g, &i->blackSide1, plateau_getPtr(i->p, l, c));
-	    else
-		graph_insertEdge(i->g, plateau_getPtr(i->p, l -1, c), plateau_getPtr(i->p, l, c));
-	    
-	    if (c ==0)
-		graph_insertEdge(i->g, &i->whiteSide1, plateau_getPtr(i->p, l, c));
-	    else
-		graph_insertEdge(i->g, plateau_getPtr(i->p, l, c -1), plateau_getPtr(i->p, l, c));
+            if (l ==0)
+                graph_insertEdge(i->g, &i->blackSide1, plateau_getPtr(i->p, l, c));
+            else
+                graph_insertEdge(i->g, plateau_getPtr(i->p, l -1, c), plateau_getPtr(i->p, l, c));
 
-	    if (l ==side -1)
-		graph_insertEdge(i->g, &i->blackSide2, plateau_getPtr(i->p, l, c));
+            if (c ==0)
+                graph_insertEdge(i->g, &i->whiteSide1, plateau_getPtr(i->p, l, c));
+            else
+                graph_insertEdge(i->g, plateau_getPtr(i->p, l, c -1), plateau_getPtr(i->p, l, c));
 
-	    if (c ==side -1)
-		graph_insertEdge(i->g, &i->whiteSide2, plateau_getPtr(i->p, l, c));
+            if (l ==side -1)
+                graph_insertEdge(i->g, &i->blackSide2, plateau_getPtr(i->p, l, c));
 
-	    if (l !=0 && c !=side -1)
-		graph_insertEdge(i->g, plateau_getPtr(i->p, l, c), plateau_getPtr(i->p, l -1, c +1));
-	}
+            if (c ==side -1)
+                graph_insertEdge(i->g, &i->whiteSide2, plateau_getPtr(i->p, l, c));
+
+            if (l !=0 && c !=side -1)
+                graph_insertEdge(i->g, plateau_getPtr(i->p, l, c), plateau_getPtr(i->p, l -1, c +1));
+        }
     }
 
     i->blackGroup =graph_create();
@@ -78,24 +85,34 @@ interface interface_create(unsigned side) {
     graph_insertVertex(i->whiteGroup, &i->whiteSide1);
     graph_insertVertex(i->whiteGroup, &i->whiteSide2);
 
-    int width =800;
-    int height =600;
-    int dec =10;
+    int width =1600;
+    int height =900;
+    int dec =5;
     sdl_create(width, height, "HegGame");
     int margin =30;
-    int wBox =(width -3 *margin) /2;
-    int hBox =(height -3 *margin) /2;
-    i->surface_plateau =sdl_newSurface(wBox, hBox, margin, margin +dec, "plateau");
-    interface_displayPlateau(i);
+    int wBox =(width -4 *margin) /3;
+    int hBox =(height -4 *margin) /3;
 
-    i->surface_graph =sdl_newSurface(wBox, hBox, 2 *margin +wBox, margin +dec, "graph");
-    interface_displayGraph(i, i->g, i->surface_graph);
+    i->casePlayed =list_create();
 
-    i->surface_blackGroup =sdl_newSurface(wBox, hBox, margin, 2 *margin +hBox +dec, "blackGroup");
+    i->surface_ihm =sdl_newSurface(2 *wBox +margin, 2 *hBox +margin, margin, margin +dec, "ihm");
+    interface_displayIhm(i);
+
+    i->surface_blackGroup =sdl_newSurface(wBox, hBox, margin, 3 *margin +2 *hBox +dec, "blackGroup");
     interface_displayGraph(i, i->blackGroup, i->surface_blackGroup);
 
-    i->surface_whiteGroup =sdl_newSurface(wBox, hBox, 2 *margin +wBox, 2 *margin +hBox +dec, "whiteGroup");
+    i->surface_plateau =sdl_newSurface(wBox, hBox, 3 *margin +2 *wBox, margin +dec, "plateau");
+    interface_displayPlateau(i);
+
+    i->surface_graph =sdl_newSurface(wBox, hBox, 3 *margin +2 *wBox, 2 *margin +hBox +dec, "graph");
+    interface_displayGraph(i, i->g, i->surface_graph);
+
+    i->surface_whiteGroup =sdl_newSurface(wBox, hBox, 2 *margin +wBox, 3 *margin +2 *hBox +dec, "whiteGroup");
     interface_displayGraph(i, i->whiteGroup, i->surface_whiteGroup);
+
+    i->reduceGraph =graph_create();
+    i->surface_reduceGraph =sdl_newSurface(wBox, hBox, 3 *margin +2 *wBox, 3 *margin +2 *hBox +dec, "reduceGraph");
+    /* interface_displayGraph(i, i->whiteGroup, i->surface_whiteGroup); */
     /* interface_drawPlateau(i->s, i->p); */
 
     return i;
@@ -112,8 +129,14 @@ void interface_destroy(interface* i) {
     SDL_FreeSurface((*i)->surface_graph);
     SDL_FreeSurface((*i)->surface_blackGroup);
     SDL_FreeSurface((*i)->surface_whiteGroup);
-    sdl_quit();
+    SDL_FreeSurface((*i)->surface_ihm);
 
+    graph_destroy(&(*i)->reduceGraph);
+    SDL_FreeSurface((*i)->surface_reduceGraph);
+
+    list_destroy(&((*i)->casePlayed));
+
+    sdl_quit();
     free(*i);
     *i =NULL;
 }
@@ -129,20 +152,20 @@ void interface_placePawn(interface i, int colorPawn, unsigned line, unsigned col
     assert(data);
     graph group;
     switch (colorPawn) {
-	case interface_BLACK_PAWN:
-	    plateau_insert(i->p, line, column, &i->blackPawn); 
-	    group =i->blackGroup;
-	    /* graph_insertVertex(i->blackGroup, data); */
-	    break;
+        case interface_BLACK_PAWN:
+            plateau_insert(i->p, line, column, &i->blackPawn); 
+            group =i->blackGroup;
+            /* graph_insertVertex(i->blackGroup, data); */
+            break;
 
-	case interface_WHITE_PAWN:
-	    plateau_insert(i->p, line, column, &i->whitePawn);
-	    group =i->whiteGroup;
-	    /* graph_insertVertex(i->whiteGroup, data); */
-	    break;
+        case interface_WHITE_PAWN:
+            plateau_insert(i->p, line, column, &i->whitePawn);
+            group =i->whiteGroup;
+            /* graph_insertVertex(i->whiteGroup, data); */
+            break;
 
-	default:
-	    break;
+        default:
+            break;
     }
 
     graph_insertVertex(group, data);
@@ -155,23 +178,21 @@ void interface_placePawn(interface i, int colorPawn, unsigned line, unsigned col
 
     list_it it_vertices =list_it_create(graph_getVertices(vGraph));
     while (! list_it_end(it_vertices)) {
-	vertex vGraphVertices =list_it_get(it_vertices);
+        vertex vGraphVertices =list_it_get(it_vertices);
 
-	void* caseCur =graph_getData(vGraphVertices);
+        void* caseCur =graph_getData(vGraphVertices);
 
-	if (graph_findVertex(graph_getCollection(group), caseCur)) {
-	    graph_insertEdge(group, data, caseCur);
-	}
+        if (graph_findVertex(graph_getCollection(group), caseCur)) {
+            graph_insertEdge(group, data, caseCur);
+        }
 
-	list_it_next(it_vertices);
+        list_it_next(it_vertices);
     }
     list_it_destroy(&it_vertices);
 
-    interface_majScreen(i);
+    list_pushBack(i->casePlayed, data);
 
-    (void)colorPawn;
-    (void)line;
-    (void)column;
+    interface_majScreen(i);
 }
 
 int interface_getPawn(unsigned line, unsigned column) {
@@ -203,52 +224,52 @@ SDL_Rect interface_graphCase(interface i, SDL_Surface* area, void* data, int mar
     SDL_Rect pos;
 
     if (data ==&i->whiteSide1) {
-	/* sdl_squareFill(area, 0, area->h /2 -caseSize /2, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
-	pos.x =(short)(0);
-	pos.y =(short)(area->h /2 -caseSize /2);
-	return pos;
+        /* sdl_squareFill(area, 0, area->h /2 -caseSize /2, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
+        pos.x =(short)(0);
+        pos.y =(short)(area->h /2 -caseSize /2);
+        return pos;
     }
     if (data ==&i->whiteSide2) {
-	/* sdl_squareFill(area, area->w -caseSize, area->h /2 -caseSize /2, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
-	pos.x =(short)((area->w -1) -caseSize);
-	pos.y =(short)(area->h /2 -caseSize /2);
-	return pos;
+        /* sdl_squareFill(area, area->w -caseSize, area->h /2 -caseSize /2, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
+        pos.x =(short)((area->w -1) -caseSize);
+        pos.y =(short)(area->h /2 -caseSize /2);
+        return pos;
     }
     if (data ==&i->blackSide1) {
-	pos.x =(short)(area->w /2 -caseSize /2);
-	pos.y =(short)(0);
-	/* sdl_squareFill(area, area->w /2 -caseSize /2, 0, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
-	return pos;
+        pos.x =(short)(area->w /2 -caseSize /2);
+        pos.y =(short)(0);
+        /* sdl_squareFill(area, area->w /2 -caseSize /2, 0, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
+        return pos;
     }
     if (data ==&i->blackSide2) {
-	/* sdl_squareFill(area, area->w /2 -caseSize /2, area->h -caseSize, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
-	pos.x =(short)(area->w /2 -caseSize /2);
-	pos.y =(short)((area->h -1) -caseSize);
-	return pos;
+        /* sdl_squareFill(area, area->w /2 -caseSize /2, area->h -caseSize, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
+        pos.x =(short)(area->w /2 -caseSize /2);
+        pos.y =(short)((area->h -1) -caseSize);
+        return pos;
     }
 
     /* int x; */
     /* int y; */
     for (int l =0; l <line; l++) {
-	for (int c =0; c <column; c++) {
-	    if (plateau_getPtr(i->p, (unsigned)l, (unsigned)c) ==data) {
-		pos.x =(short)(marginX +c *(2 *caseSize) +l *caseSize);
-		pos.y =(short)(marginY +l *(2 *caseSize));
-		/* sdl_squareFill(area, x, y, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
+        for (int c =0; c <column; c++) {
+            if (plateau_getPtr(i->p, (unsigned)l, (unsigned)c) ==data) {
+                pos.x =(short)(marginX +c *(2 *caseSize) +l *caseSize);
+                pos.y =(short)(marginY +l *(2 *caseSize));
+                /* sdl_squareFill(area, x, y, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
                 /*  */
-		/* SDL_BlitSurface(area, NULL, screen, &area->clip_rect); */
-		/* SDL_Flip(screen); */
-		return pos;
-	    }
-	}
+                /* SDL_BlitSurface(area, NULL, screen, &area->clip_rect); */
+                /* SDL_Flip(screen); */
+                return pos;
+            }
+        }
     }
     assert(0);
 }
 
 void interface_displayGraph(interface i, graph g, SDL_Surface* area) {
     /* graph_print(i->g); */
-    sdl_clean(area);
-    graph_print(g);
+    sdl_clean(area, SDL_WHITE);
+    /* graph_print(g); */
 
     int line =plateau_getNbLine(i->p);
     int column =plateau_getNbColumn(i->p);
@@ -261,15 +282,15 @@ void interface_displayGraph(interface i, graph g, SDL_Surface* area) {
 
     /* SDL_Surface* area =i->surface_graph; */
     if (area->w >area->h) {
-	caseSize =area->h /(3 +2 *line);
-	boxW =caseSize *(2 *column -1 +line);
-	marginX =(area->w -boxW) /2;
-	marginY =2 *caseSize;
+        caseSize =area->h /(3 +2 *line);
+        boxW =caseSize *(2 *column -1 +line);
+        marginX =(area->w -boxW) /2;
+        marginY =2 *caseSize;
     }
     else {
-	caseSize =area->w /(line *2);
-	marginX =(area->w -caseSize *line) /2;
-	marginY =(area->h -area->w) /2;
+        caseSize =area->w /(line *2);
+        marginX =(area->w -caseSize *line) /2;
+        marginY =(area->h -area->w) /2;
     }
 
     /* list collection =graph_getCollection(i->g); */
@@ -278,37 +299,37 @@ void interface_displayGraph(interface i, graph g, SDL_Surface* area) {
     void* data;
     SDL_Rect pos, pos2;
     while (! list_it_end(it_collection)) {
-	vertex v =list_it_get(it_collection);
+        vertex v =list_it_get(it_collection);
 
-	data =graph_getData(v);
-	pos =interface_graphCase(i, area, data, marginX, marginY, caseSize, line, column);
+        data =graph_getData(v);
+        pos =interface_graphCase(i, area, data, marginX, marginY, caseSize, line, column);
 
-	list_it it_vertices =list_it_create(graph_getVertices(v));
-	while (! list_it_end(it_vertices)) {
-	    vertex v2 =list_it_get(it_vertices);
-	    data =graph_getData(v2);
+        list_it it_vertices =list_it_create(graph_getVertices(v));
+        while (! list_it_end(it_vertices)) {
+            vertex v2 =list_it_get(it_vertices);
+            data =graph_getData(v2);
 
-	    pos2 =interface_graphCase(i, area, data, marginX, marginY, caseSize, line, column);
-	    sdl_lineSimple(area, pos.x +caseSize /2, pos.y +caseSize /2, pos2.x +caseSize /2, pos2.y +caseSize /2, SDL_RED);
+            pos2 =interface_graphCase(i, area, data, marginX, marginY, caseSize, line, column);
+            sdl_lineSimple(area, pos.x +caseSize /2, pos.y +caseSize /2, pos2.x +caseSize /2, pos2.y +caseSize /2, SDL_RED);
 
-	    list_it_next(it_vertices);
-	}
-	list_it_destroy(&it_vertices);
+            list_it_next(it_vertices);
+        }
+        list_it_destroy(&it_vertices);
 
 
-	list_it_next(it_collection);
+        list_it_next(it_collection);
     }
-    
+
     list_it_restart(it_collection);
     while (! list_it_end(it_collection)) {
-	vertex v =list_it_get(it_collection);
+        vertex v =list_it_get(it_collection);
 
-	data =graph_getData(v);
-	pos =interface_graphCase(i, area, data, marginX, marginY, caseSize, line, column);
+        data =graph_getData(v);
+        pos =interface_graphCase(i, area, data, marginX, marginY, caseSize, line, column);
 
-	sdl_squareFill(area, pos.x, pos.y, caseSize, SDL_BLACK, sdl_uniqColorData(data));
+        sdl_squareFill(area, pos.x, pos.y, caseSize, SDL_BLACK, sdl_uniqColorData(data));
 
-	list_it_next(it_collection);
+        list_it_next(it_collection);
     }
 
     list_it_destroy(&it_collection);
@@ -318,9 +339,9 @@ void interface_displayGraph(interface i, graph g, SDL_Surface* area) {
 }
 
 void interface_displayPlateau(interface i) {
-    sdl_clean(i->surface_plateau);
+    sdl_clean(i->surface_plateau, SDL_WHITE);
 
-    plateau_print(i->p);
+    /* plateau_print(i->p); */
     int line =plateau_getNbLine(i->p);
     int column =plateau_getNbColumn(i->p);
     assert(line ==column);
@@ -330,32 +351,31 @@ void interface_displayPlateau(interface i) {
     int marginY;
     SDL_Surface* area =i->surface_plateau;
     if (area->w >area->h) {
-	caseSize =(area->h -1) /line;
-	marginX =(area->w -area->h) /2;
-	marginY =(area->h -caseSize *line) /2;
+        caseSize =(area->h -1) /line;
+        marginX =(area->w -area->h) /2;
+        marginY =(area->h -caseSize *line) /2;
     }
     else {
-	caseSize =area->w /line;
-	marginX =(area->w -caseSize *line) /2;
-	marginY =(area->h -area->w) /2;
+        caseSize =area->w /line;
+        marginX =(area->w -caseSize *line) /2;
+        marginY =(area->h -area->w) /2;
     }
 
     int x;
     int y;
     void* data;
     for (int l =0; l <line; l++) {
-	for (int c =0; c <column; c++) {
-	    x =marginX +c *caseSize;
-	    y =marginY +l *caseSize;
-	    data =plateau_getPtr(i->p, (unsigned)l, (unsigned)c);
-	    (void)data;
-	    sdl_square(area, x, y, caseSize, SDL_BLACK);
-	    sdl_floodfill(area, x +1, y +1, sdl_uniqColorData(data), SDL_BLACK);
-	    sdl_circle(area, x +caseSize /2, y +caseSize /2, caseSize /3, SDL_WHITE);
+        for (int c =0; c <column; c++) {
+            x =marginX +c *caseSize;
+            y =marginY +l *caseSize;
+            data =plateau_getPtr(i->p, (unsigned)l, (unsigned)c);
+            sdl_square(area, x, y, caseSize, SDL_BLACK);
+            sdl_floodfill(area, x +1, y +1, sdl_uniqColorData(data), SDL_BLACK);
+            sdl_circle(area, x +caseSize /2, y +caseSize /2, caseSize /3, SDL_WHITE);
 
-	    data =plateau_get(i->p, (unsigned)l, (unsigned)c);
-	    sdl_floodfill(area, x +caseSize /2, y +caseSize /2, sdl_uniqColorData(data), SDL_WHITE);
-	}
+            data =plateau_get(i->p, (unsigned)l, (unsigned)c);
+            sdl_floodfill(area, x +caseSize /2, y +caseSize /2, sdl_uniqColorData(data), SDL_WHITE);
+        }
     }
     SDL_BlitSurface(area, NULL, screen, &area->clip_rect);
     SDL_Flip(screen);
@@ -363,23 +383,203 @@ void interface_displayPlateau(interface i) {
 
 void interface_displayGroup(interface i, int color) {
     if (color ==interface_BLACK_PAWN)
-	graph_print(i->blackGroup);
+        graph_print(i->blackGroup);
     else
-	graph_print(i->whiteGroup);
+        graph_print(i->whiteGroup);
 }
 
 void interface_majScreen(interface i) {
     /* sdl_clean(i->surface_graph); */
     /* sdl_pause(); */
+    interface_displayIhm(i);
     interface_displayPlateau(i);
     interface_displayGraph(i, i->g, i->surface_graph);
     interface_displayGraph(i, i->blackGroup, i->surface_blackGroup);
     interface_displayGraph(i, i->whiteGroup, i->surface_whiteGroup);
 
     /* interface_drawPlateau(i->s, i->p); */
-
 }
 
-/* void interface_drawPlateau(plateau p) { */
-/*  */
-/* } */
+SDL_Rect interface_ihmCasePos(interface i, int l, int c) {
+    SDL_Surface* area =i->surface_ihm;
+
+    int line =plateau_getNbLine(i->p);
+    int column =plateau_getNbColumn(i->p);
+    assert(line ==column);
+
+    int caseHeight =area->h /(line +1);
+    int caseSide =(int)(caseHeight /sqrt(3));
+
+    int topX =area->w /2;
+    int topY =caseHeight;
+    SDL_Rect pos;
+    pos.x =(short)(topX +(3 *caseSide *(c -l)) /2);
+    pos.y =(short)(topY +(caseHeight *(l +c)) /2);
+
+    return pos;
+}
+
+SDL_Rect sdl_whichCase(interface i, SDL_Rect pos) {
+    SDL_Surface* area =i->surface_ihm;
+    SDL_Rect posCase;
+    if (pos.x >area->clip_rect.x && pos.x <area->clip_rect.x +area->w
+            && pos.y >area->clip_rect.y && pos.y <area->clip_rect.y +area->h) {
+
+        pos.x =(short)(pos.x -area->clip_rect.x);
+        pos.y =(short)(pos.y -area->clip_rect.y);
+
+        int line =plateau_getNbLine(i->p);
+        int column =plateau_getNbColumn(i->p);
+        int sizeCase =(area->h /(line +1)) /3;
+        assert(line ==column);
+        for (short l=0; l <line; l++) {
+            for (short c=0; c <line; c++) {
+                posCase =interface_ihmCasePos(i, l, c);
+                if (pos.x >posCase.x -sizeCase && pos.x <posCase.x +sizeCase
+                        && pos.y >posCase.y -sizeCase && pos.y <posCase.y +sizeCase) {
+                    pos.x =c;
+                    pos.y =l;
+                    return pos;
+                }
+            }
+        }
+    }
+    pos.x =-1;
+    pos.y =-1;
+    return pos;
+}
+
+void interface_ihm(interface i) {
+
+    int continuer =1;
+    SDL_Event event;
+    SDL_Rect pos;
+    SDL_Rect square;
+    while (continuer) {
+        SDL_WaitEvent(&event);
+
+        switch (event.type) {
+            case SDL_QUIT:
+                continuer =0;
+                break;
+
+            case SDL_KEYDOWN:
+                if (event.key.keysym.sym ==SDLK_q)
+                    continuer =0;
+                break;
+
+            case SDL_MOUSEBUTTONDOWN:
+                switch (event.button.button) {
+                    case SDL_BUTTON_RIGHT:
+                    case SDL_BUTTON_LEFT:
+                        pos.x =(short)event.button.x;
+                        pos.y =(short)event.button.y;
+                        square =sdl_whichCase(i, pos);
+
+                        if (square.y !=-1) {
+                            if (event.button.button ==SDL_BUTTON_RIGHT)
+                                interface_placePawn(i, interface_BLACK_PAWN, (unsigned)square.y, (unsigned)square.x);
+                            else
+                                interface_placePawn(i, interface_WHITE_PAWN, (unsigned)square.y, (unsigned)square.x);
+                        }
+                        break;
+
+                    case SDL_BUTTON_WHEELDOWN:
+                        interface_undo();
+
+
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+
+void interface_displayIhm(interface i) {
+    SDL_Surface* area =i->surface_ihm;
+    sdl_clean(area, sdl_color(1, 1, 1));
+    /* sdl_floodfill(area, 0, 0, sdl_color(1, 1, 1), SDL_BLACK); */
+    /* sdl_pictureFont(area, "tableFont.jpg"); */
+
+    int line =plateau_getNbLine(i->p);
+    int column =plateau_getNbColumn(i->p);
+    assert(line ==column);
+
+    int caseHeight =area->h /(line +1);
+    int caseSize =(int)(caseHeight /sqrt(3));
+
+    int x;
+    int y;
+    int topX =area->w /2;
+    int topY =caseHeight;
+    void* data;
+    for (int l =0 ;l <line ;l++) {
+        for (int c =0 ;c <line ;c++) {
+            x =topX +(3 *caseSize *(c -l)) /2;
+            y =topY +(caseHeight *(l +c)) /2;
+            sdl_hexagone(area, x, y, caseHeight);
+            sdl_floodfill(area, x, y, sdl_color(211, 181, 129), SDL_BLACK);
+
+            if (! list_empty(i->casePlayed) 
+                    && plateau_getPtr(i->p, (unsigned)l, (unsigned)c) ==list_back(i->casePlayed))
+                sdl_floodfill(area, x, y, sdl_color(0xDA, 0xA5, 0x20), SDL_BLACK);
+
+
+            data =plateau_get(i->p, (unsigned)l, (unsigned)c);
+            if (data) {
+                if (data ==&i->blackPawn) {
+                    sdl_disk(area, x, y, caseHeight /3, SDL_BLACK);
+                }
+                else {
+                    sdl_disk(area, x, y, caseHeight /3, SDL_WHITE);
+                }
+            }
+        }
+    }
+    
+    SDL_Rect top =interface_ihmCasePos(i, 0, 0);
+    SDL_Rect right =interface_ihmCasePos(i, 0, column -1);
+    SDL_Rect down =interface_ihmCasePos(i, line -1, column -1);
+    SDL_Rect left =interface_ihmCasePos(i, line -1, 0);
+    int marge =20;
+
+    sdl_line(area, top.x, top.y -caseHeight /2 -(int)(caseSize /(2 *sqrt(3))) -(int)(marge /sqrt(3)), 
+            left.x -(caseSize) *2 -marge, left.y);
+
+    sdl_line(area, top.x, top.y -caseHeight /2 -(int)(caseSize /(2 *sqrt(3))) -(int)(marge /sqrt(3)), 
+            right.x +(caseSize) *2 +marge, right.y);
+
+    sdl_line(area, down.x, down.y +caseHeight /2 +(int)(caseSize /(2 *sqrt(3))) +(int)(marge /sqrt(3)), 
+            right.x +(caseSize) *2 +marge, right.y);
+
+    sdl_line(area, down.x, down.y +caseHeight /2 +(int)(caseSize /(2 *sqrt(3))) +(int)(marge /sqrt(3)), 
+            left.x -(caseSize) *2 -marge, left.y);
+
+    sdl_line(area, top.x, top.y -caseHeight /2, 
+            top.x, top.y -caseHeight /2 -(int)(caseSize /(2 *sqrt(3))) -(int)(marge /sqrt(3))); 
+
+    sdl_line(area, down.x, down.y +caseHeight /2, 
+            down.x, down.y +caseHeight /2 +(int)(caseSize /(2 *sqrt(3))) +(int)(marge /sqrt(3))); 
+
+    sdl_line(area, left.x -caseSize, left.y, 
+            left.x -(caseSize *2) -marge, left.y);
+
+    sdl_line(area, right.x +caseSize, right.y, 
+            right.x +(caseSize *2) +marge, right.y);
+
+    sdl_floodfill(area, top.x +1, top.y -caseHeight /2 -1, SDL_BLACK, SDL_BLACK);
+    sdl_floodfill(area, top.x -1, top.y -caseHeight /2 -1, SDL_WHITE, SDL_BLACK);
+    sdl_floodfill(area, down.x +1, down.y +caseHeight /2 +1, SDL_WHITE, SDL_BLACK);
+    sdl_floodfill(area, down.x -1, down.y +caseHeight /2 +1, SDL_BLACK, SDL_BLACK);
+    sdl_floodfill(area, 0, 0, SDL_YELLOW, SDL_BLACK);
+
+    SDL_BlitSurface(area, NULL, screen, &area->clip_rect);
+    SDL_Flip(screen);
+}

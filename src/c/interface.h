@@ -28,5 +28,7 @@ void interface_displayPlateau(interface i);
 void interface_displayGroup(interface i, int color);
 
 void interface_majScreen(interface i);
+void interface_ihm(interface i);
+void interface_displayIhm(interface i);
 
 #endif
