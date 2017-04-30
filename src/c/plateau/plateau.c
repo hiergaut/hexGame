@@ -82,10 +82,16 @@ void plateau_print(plateau p) {
 void plateau_insert(plateau p, unsigned line, unsigned column, void* square) {
     assert(line <p->line);
     assert(column <p->column);
-    assert(! p->square[line][column]);
+    assert(!(p->square[line][column] && square));
 
+    if (p->square[line][column]) {
+        if (square ==NULL)
+            p->density--;
+    else
+        if (square !=NULL)
+            p->density++;
+    }
     p->square[line][column] =square;
-    p->density++;
 }
 
 void* plateau_get(plateau p, unsigned line, unsigned column) {

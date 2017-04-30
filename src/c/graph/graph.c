@@ -48,10 +48,10 @@ graph graph_create() {
 void graph_destroy(graph* g) {
     list l =(*g)->collection;
     while (! list_empty(l)) {
-	vertex v =list_back(l);
-	list_destroy(&(v->vertices));
-	free(v);
-	list_popBack(l);
+        vertex v =list_back(l);
+        list_destroy(&(v->vertices));
+        free(v);
+        list_popBack(l);
     }
     list_destroy(&(*g)->collection);
     free(*g);
@@ -68,6 +68,23 @@ void graph_insertVertex(graph g, void* data) {
     g->nbVertex++;
 }
 
+void graph_delVertex(graph g, void* data) {
+    vertex v =graph_findVertex(g->collection, data);
+    assert(v);
+
+    vertex neighbour;
+    while (! list_empty(v->vertices)) {
+        neighbour =list_back(v->vertices);
+
+        graph_unlink(v, neighbour);
+
+        /* list_popBack(v->vertices); */
+    }
+    list_destroy(&(v->vertices));
+
+    list_remove(g->collection, v);
+    free(v);
+}
 
 void graph_insertEdge(graph g, const void* data, const void* data2) {
     vertex v =graph_findVertex(g->collection, data);
@@ -76,13 +93,24 @@ void graph_insertEdge(graph g, const void* data, const void* data2) {
     assert(v);
     assert(v2);
 
-    assert(! graph_findVertex(v->vertices, v2));
-    assert(! graph_findVertex(v2->vertices, v));
+    assert(! graph_findVertex(v->vertices, v2->data));
+    assert(! graph_findVertex(v2->vertices, v->data));
 
     /* printf("link %p <-> %p\n" ,(void*)v ,(void*)v2); */
 
     list_pushBack(v->vertices, v2);
     list_pushBack(v2->vertices, v);
+}
+
+void graph_unlink(vertex v, vertex v2) {
+    assert(v);
+    assert(v2);
+
+    assert(graph_findVertex(v->vertices, v2->data));
+    assert(graph_findVertex(v2->vertices, v->data));
+
+    list_remove(v->vertices, v2);
+    list_remove(v2->vertices, v);
 }
 
 void printColor(const void* ptr) {

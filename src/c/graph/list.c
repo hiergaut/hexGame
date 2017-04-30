@@ -110,6 +110,23 @@ void list_removeAt(list l, unsigned level) {
     free(cur);
 }
 
+void list_remove(list l, void* el) {
+    assert(el);
+
+    node cur =l->sentinel->next;
+    while (cur !=l->sentinel) {
+        if (cur->el ==el) {
+            cur->prev->next =cur->next;
+            cur->next->prev =cur->prev;
+            l->size--;
+            free(cur);
+            return;
+        }
+        cur =cur->next;
+    }
+    assert(0);
+}
+
 void* list_ith(list l, unsigned level) {
     node cur =l->sentinel->next;
     while (level--) cur =cur->next;
@@ -122,6 +139,7 @@ void* list_front(list l) {
 }
 
 void* list_back(list l) {
+    assert(! list_empty(l));
     return l->sentinel->prev->el;
 }
 
@@ -175,7 +193,7 @@ void list_destroy(list* l) {
 
 void list_clean(list l) {
     while (! list_empty(l)) {
-	list_popBack(l);
+        list_popBack(l);
     }
 }
 

@@ -38,6 +38,9 @@ struct s_interface {
     SDL_Surface* surface_reduceGraph;
 
     list casePlayed;
+    list caseRedo;
+    list caseRedoColor;
+    int redoActive;
 };
 
 
@@ -72,8 +75,8 @@ interface interface_create(unsigned side) {
             if (c ==side -1)
                 graph_insertEdge(i->g, &i->whiteSide2, plateau_getPtr(i->p, l, c));
 
-            if (l !=0 && c !=side -1)
-                graph_insertEdge(i->g, plateau_getPtr(i->p, l, c), plateau_getPtr(i->p, l -1, c +1));
+            if (l !=0 && c !=0)
+                graph_insertEdge(i->g, plateau_getPtr(i->p, l, c), plateau_getPtr(i->p, l -1, c -1));
         }
     }
 
@@ -94,6 +97,8 @@ interface interface_create(unsigned side) {
     int hBox =(height -4 *margin) /3;
 
     i->casePlayed =list_create();
+    i->caseRedo =list_create();
+    i->caseRedoColor =list_create();
 
     i->surface_ihm =sdl_newSurface(2 *wBox +margin, 2 *hBox +margin, margin, margin +dec, "ihm");
     interface_displayIhm(i);
@@ -114,6 +119,7 @@ interface interface_create(unsigned side) {
     i->surface_reduceGraph =sdl_newSurface(wBox, hBox, 3 *margin +2 *wBox, 3 *margin +2 *hBox +dec, "reduceGraph");
     /* interface_displayGraph(i, i->whiteGroup, i->surface_whiteGroup); */
     /* interface_drawPlateau(i->s, i->p); */
+    i->redoActive =0;
 
     return i;
 }
@@ -135,6 +141,8 @@ void interface_destroy(interface* i) {
     SDL_FreeSurface((*i)->surface_reduceGraph);
 
     list_destroy(&((*i)->casePlayed));
+    list_destroy(&((*i)->caseRedo));
+    list_destroy(&((*i)->caseRedoColor));
 
     sdl_quit();
     free(*i);
@@ -192,12 +200,27 @@ void interface_placePawn(interface i, int colorPawn, unsigned line, unsigned col
 
     list_pushBack(i->casePlayed, data);
 
-    interface_majScreen(i);
+    if (!list_empty(i->caseRedo) && !i->redoActive) {
+        list_clean(i->caseRedo);
+        list_clean(i->caseRedoColor);
+    }
+
+    i->redoActive =0;
+
+
+    /* interface_majScreen(i); */
 }
 
-int interface_getPawn(unsigned line, unsigned column) {
-    (void)line;
-    (void)column;
+int interface_getPawn(interface i, unsigned line, unsigned column) {
+    void* pawn =plateau_get(i->p, line, column);
+    if (pawn ==&i->blackPawn)
+        return interface_BLACK_PAWN;
+    else if (pawn ==&i->whitePawn)
+        return interface_WHITE_PAWN;
+    else if (pawn ==NULL)
+        return 0;
+    else
+        assert(0);
     return 1;
 }
 
@@ -217,7 +240,72 @@ void interface_displayHistory() {
     printf("History of previous game\n");
 }
 
-void interface_undo() {
+void interface_undo(interface i) {
+    if (list_empty(i->casePlayed))
+        return;
+
+    void* data =list_back(i->casePlayed);
+    void* pawn;
+    for (unsigned l =0; l <i->size; l++) {
+        for (unsigned c =0; c <i->size; c++) {
+            if (plateau_getPtr(i->p, l, c) ==data) {
+                pawn =plateau_get(i->p, l, c);
+                plateau_insert(i->p, l, c, NULL);
+                goto next;
+            }
+        }
+    }
+    return;
+
+    graph group;
+    next:
+    if (pawn ==&i->whitePawn) {
+        group =i->whiteGroup;
+        list_pushBack(i->caseRedoColor, &i->whitePawn);
+    }
+    else if (pawn ==&i->blackPawn) {
+        group =i->blackGroup;
+        list_pushBack(i->caseRedoColor, &i->blackPawn);
+    }
+    else
+        assert(0);
+
+    graph_delVertex(group, data);
+    /* vertex v =graph_findVertex(graph_getCollection(group), data); */
+    /* graph_delVertex(v); */
+
+    list_pushBack(i->caseRedo, list_back(i->casePlayed));
+    list_popBack(i->casePlayed);
+    return;
+}
+
+void interface_redo(interface i) {
+    assert(list_size(i->caseRedo) ==list_size(i->caseRedoColor));
+    i->redoActive =1;
+    if (list_empty(i->caseRedo))
+        return;
+
+    void* data =list_back(i->caseRedo);
+    void* pawn =list_back(i->caseRedoColor);
+    for (unsigned l =0; l <i->size; l++) {
+        for (unsigned c =0; c <i->size; c++) {
+            if (plateau_getPtr(i->p, l, c) ==data) {
+                if (pawn ==&i->whitePawn) {
+                    interface_placePawn(i, interface_WHITE_PAWN, l, c);
+                }
+                else if (pawn ==&i->blackPawn) {
+                    interface_placePawn(i, interface_BLACK_PAWN, l, c);
+                }
+                else
+                    assert(0);
+
+                list_popBack(i->caseRedo);
+                list_popBack(i->caseRedoColor);
+                return;
+            }
+        }
+    }
+    assert(0);
 }
 
 SDL_Rect interface_graphCase(interface i, SDL_Surface* area, void* data, int marginX, int marginY, int caseSize, int line, int column) {
@@ -253,7 +341,7 @@ SDL_Rect interface_graphCase(interface i, SDL_Surface* area, void* data, int mar
     for (int l =0; l <line; l++) {
         for (int c =0; c <column; c++) {
             if (plateau_getPtr(i->p, (unsigned)l, (unsigned)c) ==data) {
-                pos.x =(short)(marginX +c *(2 *caseSize) +l *caseSize);
+                pos.x =(short)(marginX +c *(2 *caseSize) -l *caseSize +(line -1) *caseSize);
                 pos.y =(short)(marginY +l *(2 *caseSize));
                 /* sdl_squareFill(area, x, y, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
                 /*  */
@@ -450,11 +538,18 @@ SDL_Rect sdl_whichCase(interface i, SDL_Rect pos) {
 }
 
 void interface_ihm(interface i) {
-
     int continuer =1;
+    int caseHeight =i->surface_ihm->h /((int)i->size +1);
+    int rayPawn =caseHeight /3;
     SDL_Event event;
-    SDL_Rect pos;
+    SDL_Rect posCase;
     SDL_Rect square;
+    SDL_Surface* pawn =SDL_CreateRGBSurface(SDL_HWSURFACE, 2 *rayPawn +2, 2 *rayPawn +2, 32, 0, 0, 0, 0);
+    SDL_FillRect(pawn, NULL, SDL_RED);
+    sdl_disk(pawn, rayPawn +1, rayPawn +1, rayPawn, SDL_WHITE);
+    SDL_Rect posPawn;
+    int mouseDown;
+    int color;
     while (continuer) {
         SDL_WaitEvent(&event);
 
@@ -469,36 +564,104 @@ void interface_ihm(interface i) {
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
+                sdl_floodfill(pawn, rayPawn, rayPawn, SDL_WHITE, SDL_RED);
                 switch (event.button.button) {
                     case SDL_BUTTON_RIGHT:
+                        sdl_floodfill(pawn, rayPawn, rayPawn, SDL_BLACK, SDL_RED);
                     case SDL_BUTTON_LEFT:
-                        pos.x =(short)event.button.x;
-                        pos.y =(short)event.button.y;
-                        square =sdl_whichCase(i, pos);
+                        posCase.x =(short)event.button.x;
+                        posCase.y =(short)event.button.y;
+                        square =sdl_whichCase(i, posCase);
 
                         if (square.y !=-1) {
-                            if (event.button.button ==SDL_BUTTON_RIGHT)
-                                interface_placePawn(i, interface_BLACK_PAWN, (unsigned)square.y, (unsigned)square.x);
-                            else
-                                interface_placePawn(i, interface_WHITE_PAWN, (unsigned)square.y, (unsigned)square.x);
+                            if ((color =interface_getPawn(i, (unsigned)square.y, (unsigned)square.x)) !=0) {
+                                if (plateau_getPtr(i->p, (unsigned)square.y, (unsigned)square.x)
+                                        ==list_back(i->casePlayed)) {
+
+                                    if (color ==interface_BLACK_PAWN)
+                                        sdl_floodfill(pawn, rayPawn, rayPawn, SDL_BLACK, SDL_RED);
+                                    else if (color ==interface_WHITE_PAWN)
+                                        sdl_floodfill(pawn, rayPawn, rayPawn, SDL_WHITE, SDL_RED);
+                                    else
+                                        assert(0);
+
+                                    interface_undo(i);
+                                }
+                                else
+                                    color =0;
+                            }
                         }
+                        interface_majScreen(i);
+                        /* posPawn.x =(short)event.button.x; */
+                        /* posPawn.y =(short)event.button.y; */
+                        /* SDL_BlitSurface(pawn, NULL, screen, &posPawn); */
+                        /* SDL_Flip(screen); */
+
+                        mouseDown =1;
+                        SDL_ShowCursor(SDL_DISABLE);
+                        while (mouseDown) {
+                            SDL_WaitEvent(&event);
+
+                            switch (event.type) {
+                                case SDL_MOUSEBUTTONUP:
+                                    mouseDown =0;
+                                    break;
+
+                                case SDL_MOUSEMOTION:
+                                    posPawn.x =(short)(event.motion.x -rayPawn +1);
+                                    posPawn.y =(short)(event.motion.y -rayPawn +1);
+                                    SDL_BlitSurface(i->surface_ihm, NULL, screen, &i->surface_ihm->clip_rect);
+                                    SDL_SetColorKey(pawn, SDL_SRCCOLORKEY, SDL_RED);
+                                    SDL_BlitSurface(pawn, NULL, screen, &posPawn);
+                                    SDL_Flip(screen);
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        }
+                        posCase.x =(short)event.button.x;
+                        posCase.y =(short)event.button.y;
+                        square =sdl_whichCase(i, posCase);
+
+                        if (square.y !=-1) {
+                            if (interface_getPawn(i, (unsigned)square.y, (unsigned)square.x) ==0) {
+                                if (color ==interface_BLACK_PAWN)
+                                    interface_placePawn(i, interface_BLACK_PAWN, (unsigned)square.y, (unsigned)square.x);
+                                else if (color ==interface_WHITE_PAWN)
+                                    interface_placePawn(i, interface_WHITE_PAWN, (unsigned)square.y, (unsigned)square.x);
+                                else
+                                    if (event.button.button ==SDL_BUTTON_RIGHT)
+                                        interface_placePawn(i, interface_BLACK_PAWN, (unsigned)square.y, (unsigned)square.x);
+                                    else
+                                        interface_placePawn(i, interface_WHITE_PAWN, (unsigned)square.y, (unsigned)square.x);
+
+                            }
+                        }
+                        interface_majScreen(i);
                         break;
 
                     case SDL_BUTTON_WHEELDOWN:
-                        interface_undo();
+                        interface_undo(i);
+                        interface_majScreen(i);
+                        break;
 
-
+                    case SDL_BUTTON_WHEELUP:
+                        interface_redo(i);
+                        interface_majScreen(i);
                         break;
 
                     default:
                         break;
                 }
+                SDL_ShowCursor(SDL_ENABLE);
                 break;
 
             default:
                 break;
         }
     }
+    SDL_FreeSurface(pawn);
 }
 
 

@@ -14,6 +14,7 @@ void list_popBack(list l);
 void list_popFront(list l);
 void list_insertAt(list l, unsigned level, void* el);
 void list_removeAt(list l, unsigned level);
+void list_remove(list l, void* el);
 void* list_ith(list l, unsigned level);
 void* list_front(list l);
 void* list_back(list l);

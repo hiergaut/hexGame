@@ -15,13 +15,13 @@ void interface_destroy(interface* i);
 
 bool interface_legalityPawn(unsigned line, unsigned column);
 void interface_placePawn(interface i, int colorPawn, unsigned line, unsigned column);
-int interface_getPawn(unsigned line, unsigned column);
+int interface_getPawn(interface i, unsigned line, unsigned column);
 int interface_winner();
 
 int interface_saveGame();
 void interface_restoreGame(int idGame);
 void interface_displayHistory();
-void interface_undo();
+void interface_undo(interface i);
 
 void interface_displayGraph(interface i, graph g, SDL_Surface* area);
 void interface_displayPlateau(interface i);
