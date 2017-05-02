@@ -19,5 +19,8 @@ void graph_testBench();
 list graph_getCollection(graph g);
 void* graph_getData(vertex v);
 list graph_getVertices(vertex v);
+int graph_onlyVertex(vertex v);
 
+int graph_sameGroup(graph g, const void* data, const void* data2);
+int graph_neighbourVertex(graph g, const void* data, const void* data2);
 #endif

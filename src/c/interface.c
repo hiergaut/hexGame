@@ -43,6 +43,37 @@ struct s_interface {
     int redoActive;
 };
 
+void interface_buildGraphPlateau(interface i, graph g) {
+    graph_insertVertex(g, &i->whiteSide1);
+    graph_insertVertex(g, &i->whiteSide2);
+    graph_insertVertex(g, &i->blackSide1);
+    graph_insertVertex(g, &i->blackSide2);
+    unsigned side =i->size;
+    for (unsigned l =0; l <side; l++) {
+        for (unsigned c =0; c <side; c++) {
+            graph_insertVertex(g, plateau_getPtr(i->p, l, c));
+
+            if (l ==0)
+                graph_insertEdge(g, &i->blackSide1, plateau_getPtr(i->p, l, c));
+            else
+                graph_insertEdge(g, plateau_getPtr(i->p, l -1, c), plateau_getPtr(i->p, l, c));
+
+            if (c ==0)
+                graph_insertEdge(g, &i->whiteSide1, plateau_getPtr(i->p, l, c));
+            else
+                graph_insertEdge(g, plateau_getPtr(i->p, l, c -1), plateau_getPtr(i->p, l, c));
+
+            if (l ==side -1)
+                graph_insertEdge(g, &i->blackSide2, plateau_getPtr(i->p, l, c));
+
+            if (c ==side -1)
+                graph_insertEdge(g, &i->whiteSide2, plateau_getPtr(i->p, l, c));
+
+            if (l !=0 && c !=0)
+                graph_insertEdge(g, plateau_getPtr(i->p, l, c), plateau_getPtr(i->p, l -1, c -1));
+        }
+    }
+}
 
 interface interface_create(unsigned side) {
     interface i =malloc(sizeof(struct s_interface));
@@ -51,34 +82,7 @@ interface interface_create(unsigned side) {
     i->p =plateau_create(side, side);
 
     i->g =graph_create();
-    graph_insertVertex(i->g, &i->whiteSide1);
-    graph_insertVertex(i->g, &i->whiteSide2);
-    graph_insertVertex(i->g, &i->blackSide1);
-    graph_insertVertex(i->g, &i->blackSide2);
-    for (unsigned l =0; l <side; l++) {
-        for (unsigned c =0; c <side; c++) {
-            graph_insertVertex(i->g, plateau_getPtr(i->p, l, c));
-
-            if (l ==0)
-                graph_insertEdge(i->g, &i->blackSide1, plateau_getPtr(i->p, l, c));
-            else
-                graph_insertEdge(i->g, plateau_getPtr(i->p, l -1, c), plateau_getPtr(i->p, l, c));
-
-            if (c ==0)
-                graph_insertEdge(i->g, &i->whiteSide1, plateau_getPtr(i->p, l, c));
-            else
-                graph_insertEdge(i->g, plateau_getPtr(i->p, l, c -1), plateau_getPtr(i->p, l, c));
-
-            if (l ==side -1)
-                graph_insertEdge(i->g, &i->blackSide2, plateau_getPtr(i->p, l, c));
-
-            if (c ==side -1)
-                graph_insertEdge(i->g, &i->whiteSide2, plateau_getPtr(i->p, l, c));
-
-            if (l !=0 && c !=0)
-                graph_insertEdge(i->g, plateau_getPtr(i->p, l, c), plateau_getPtr(i->p, l -1, c -1));
-        }
-    }
+    interface_buildGraphPlateau(i, i->g);
 
     i->blackGroup =graph_create();
     graph_insertVertex(i->blackGroup, &i->blackSide1);
@@ -116,7 +120,9 @@ interface interface_create(unsigned side) {
     interface_displayGraph(i, i->whiteGroup, i->surface_whiteGroup);
 
     i->reduceGraph =graph_create();
+    interface_buildGraphPlateau(i, i->reduceGraph);
     i->surface_reduceGraph =sdl_newSurface(wBox, hBox, 3 *margin +2 *wBox, 3 *margin +2 *hBox +dec, "reduceGraph");
+    interface_displayGraph(i, i->reduceGraph, i->surface_reduceGraph);
     /* interface_displayGraph(i, i->whiteGroup, i->surface_whiteGroup); */
     /* interface_drawPlateau(i->s, i->p); */
     i->redoActive =0;
@@ -198,6 +204,65 @@ void interface_placePawn(interface i, int colorPawn, unsigned line, unsigned col
     }
     list_it_destroy(&it_vertices);
 
+
+    // reduceGraph
+    vertex vg1 =graph_findVertex(graph_getCollection(group), data);
+    vertex vr1;
+
+    if (! graph_onlyVertex(vg1)) {
+        vr1 =graph_findVertex(graph_getCollection(i->reduceGraph), data);
+        void* dvr1 =graph_getData(vr1);
+
+        list_it it_vr1 =list_it_create(graph_getVertices(vr1));
+        while (! list_it_end(it_vr1)) {
+            vertex vr2 =list_it_get(it_vr1);
+            void* dvr2 =graph_getData(vr2);
+
+            if (graph_sameGroup(group, dvr1, dvr2)) {
+
+                list_it it_vr2 =list_it_create(graph_getVertices(vr2));
+                while (! list_it_end(it_vr2)) {
+                    vertex vr3 =list_it_get(it_vr2);
+                    void* dvr3 =graph_getData(vr3);
+
+                    if (dvr1 !=dvr3) {
+                        if (! graph_findVertex(graph_getVertices(vr1), dvr3))
+                            graph_insertEdge(i->reduceGraph, dvr1, dvr3);
+                    }
+
+                    list_it_next(it_vr2);
+                }
+                list_it_destroy(&it_vr2);
+                /* graph_delVertex(i->reduceGraph, dvr2); */
+            }
+            list_it_next(it_vr1);
+        }
+
+        void* ddel;
+        do {
+            ddel =NULL;
+
+            it_vr1 =list_it_create(graph_getVertices(vr1));
+            while (! list_it_end(it_vr1)) {
+                vertex vr2 =list_it_get(it_vr1);
+                void* dvr2 =graph_getData(vr2);
+
+                if (graph_sameGroup(group, dvr1, dvr2)) {
+                    if (graph_findVertex(graph_getCollection(i->reduceGraph), dvr2))
+                        ddel =dvr2;
+                }
+                list_it_next(it_vr1);
+            }
+            list_it_destroy(&it_vr1);
+
+            if (ddel)
+                graph_delVertex(i->reduceGraph, ddel);
+        } while (ddel);
+    }
+    // end reduceGraph
+
+
+
     list_pushBack(i->casePlayed, data);
 
     if (!list_empty(i->caseRedo) && !i->redoActive) {
@@ -244,11 +309,11 @@ void interface_undo(interface i) {
     if (list_empty(i->casePlayed))
         return;
 
-    void* data =list_back(i->casePlayed);
+    void* dvr1 =list_back(i->casePlayed);
     void* pawn;
     for (unsigned l =0; l <i->size; l++) {
         for (unsigned c =0; c <i->size; c++) {
-            if (plateau_getPtr(i->p, l, c) ==data) {
+            if (plateau_getPtr(i->p, l, c) ==dvr1) {
                 pawn =plateau_get(i->p, l, c);
                 plateau_insert(i->p, l, c, NULL);
                 goto next;
@@ -270,12 +335,72 @@ void interface_undo(interface i) {
     else
         assert(0);
 
-    graph_delVertex(group, data);
+    graph_delVertex(group, dvr1);
+    
+
+
+
     /* vertex v =graph_findVertex(graph_getCollection(group), data); */
     /* graph_delVertex(v); */
 
     list_pushBack(i->caseRedo, list_back(i->casePlayed));
     list_popBack(i->casePlayed);
+
+    // reduceGraph
+    if (! list_empty(i->casePlayed)) {
+
+        void* d2 =list_back(i->casePlayed);
+        assert(d2);
+        if (! graph_findVertex(graph_getCollection(i->reduceGraph), d2)) {
+            graph_insertVertex(i->reduceGraph, d2);
+
+            vertex vr1 =graph_findVertex(graph_getCollection(i->reduceGraph), dvr1);
+            assert(vr1);
+            vertex vr2 =graph_findVertex(graph_getCollection(i->reduceGraph), d2);
+            assert(vr2);
+
+            vertex vg2 =graph_findVertex(graph_getCollection(i->g), d2);
+
+            list_it it_vg2 =list_it_create(graph_getVertices(vg2));
+            while (! list_it_end(it_vg2)) {
+                vertex vg21 =list_it_get(it_vg2);
+                assert(vg21);
+                void* dvg21 =graph_getData(vg21);
+                assert(dvg21);
+
+                list_it_next(it_vg2);
+                if (graph_findVertex(graph_getCollection(i->reduceGraph), dvg21)) {
+                    graph_insertEdge(i->reduceGraph, d2, dvg21);
+
+                }
+                /* if (! graph_neighbourVertex(i->g, dvr1, dvg21)) { */
+                /*     graph_unlink(vr1, vg21); */
+                /*     graph_insertEdge(i->reduceGraph, d2, dvg21); */
+                /*  */
+                /* } */
+            }
+            list_it_destroy(&it_vg2);
+
+            list_it it_vr1 =list_it_create(graph_getVertices(vr1));
+            while (! list_it_end(it_vr1)) {
+                vertex vr11 =list_it_get(it_vr1);
+                assert(vr11);
+                void* dvr11 =graph_getData(vr11);
+                assert(dvr11);
+
+                list_it_next(it_vr1);
+                if (! graph_neighbourVertex(i->g, dvr1, dvr11)) {
+                    graph_unlink(vr1, vr11);
+
+                    if (! graph_neighbourVertex(i->reduceGraph, d2, dvr11))
+                        graph_insertEdge(i->reduceGraph, d2, dvr11);
+
+                }
+            }
+            list_it_destroy(&it_vr1);
+        }
+    }
+
     return;
 }
 
@@ -311,6 +436,11 @@ void interface_redo(interface i) {
 SDL_Rect interface_graphCase(interface i, SDL_Surface* area, void* data, int marginX, int marginY, int caseSize, int line, int column) {
     SDL_Rect pos;
 
+    if (data ==NULL) {
+        pos.x =(short)(0);
+        pos.y =(short)(0);
+        return pos;
+    }
     if (data ==&i->whiteSide1) {
         /* sdl_squareFill(area, 0, area->h /2 -caseSize /2, caseSize, SDL_BLACK, sdl_uniqColorData(data)); */
         pos.x =(short)(0);
@@ -481,9 +611,10 @@ void interface_majScreen(interface i) {
     /* sdl_pause(); */
     interface_displayIhm(i);
     interface_displayPlateau(i);
-    interface_displayGraph(i, i->g, i->surface_graph);
+    /* interface_displayGraph(i, i->g, i->surface_graph); */
     interface_displayGraph(i, i->blackGroup, i->surface_blackGroup);
     interface_displayGraph(i, i->whiteGroup, i->surface_whiteGroup);
+    interface_displayGraph(i, i->reduceGraph, i->surface_reduceGraph);
 
     /* interface_drawPlateau(i->s, i->p); */
 }
@@ -591,7 +722,8 @@ void interface_ihm(interface i) {
                                     color =0;
                             }
                         }
-                        interface_majScreen(i);
+                        /* interface_majScreen(i); */
+                        interface_displayIhm(i);
                         /* posPawn.x =(short)event.button.x; */
                         /* posPawn.y =(short)event.button.y; */
                         /* SDL_BlitSurface(pawn, NULL, screen, &posPawn); */
