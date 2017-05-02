@@ -295,14 +295,13 @@ int interface_getPawn(interface i, unsigned line, unsigned column) {
 }
 
 int interface_winner(interface i) {
-    list rc =graph_getCollection(i->reduceGraph);
 
-    if (! (graph_findVertex(rc, &i->whiteSide1) || graph_findVertex(rc, &i->whiteSide2))) {
+    if (graph_sameGroup(i->whiteGroup, &i->whiteSide1, &i->whiteSide2))
         return interface_WHITE_PAWN;
-    }
-    if (! (graph_findVertex(rc, &i->blackSide1) || graph_findVertex(rc, &i->blackSide2))) {
+
+    if (graph_sameGroup(i->blackGroup, &i->blackSide1, &i->blackSide2))
         return interface_BLACK_PAWN;
-    }
+
     return 0;
 }
 
@@ -794,6 +793,10 @@ void interface_ihm(interface i) {
                             }
                         }
                         interface_majScreen(i);
+                        int w;
+                        if ((w =interface_winner(i)))
+                            printf("winner %d\n", w);
+
                         break;
 
                     case SDL_BUTTON_WHEELDOWN:
@@ -815,6 +818,7 @@ void interface_ihm(interface i) {
             default:
                 break;
         }
+
     }
     SDL_FreeSurface(pawn);
 }
@@ -837,7 +841,7 @@ void interface_displayIhm(interface i) {
     SDL_Rect pos;
     /* int topX =area->w /2; */
     /* int topY =caseHeight; */
-    void* data;
+    /* void* data; */
     for (int l =0 ;l <line ;l++) {
         for (int c =0 ;c <line ;c++) {
             pos =interface_ihmCasePos(i, l, c);
@@ -854,15 +858,27 @@ void interface_displayIhm(interface i) {
                 sdl_floodfill(area, pos.x, pos.y, sdl_color(0xDA, 0xA5, 0x20), SDL_BLACK);
 
 
-            data =plateau_get(i->p, (unsigned)l, (unsigned)c);
+
+            void* data =plateau_get(i->p, (unsigned)l, (unsigned)c);
+            void* data2 =plateau_getPtr(i->p, (unsigned)l, (unsigned)c);
             if (data) {
                 if (data ==&i->blackPawn) {
                     /* sdl_disk(area, x, y, caseHeight /3, SDL_BLACK); */
                     sdl_disk(area, pos.x, pos.y, caseHeight /3, SDL_BLACK);
+
+                    if (graph_sameGroup(i->blackGroup, &i->blackSide1, data2))
+                        sdl_circle(area, pos.x, pos.y, caseHeight /4, SDL_WHITE);
+                    if (graph_sameGroup(i->blackGroup, &i->blackSide2, data2))
+                        sdl_circle(area, pos.x, pos.y, caseHeight /4, SDL_WHITE);
                 }
                 else {
                     /* sdl_disk(area, x, y, caseHeight /3, SDL_WHITE); */
                     sdl_disk(area, pos.x, pos.y, caseHeight /3, SDL_WHITE);
+
+                    if (graph_sameGroup(i->whiteGroup, &i->whiteSide1, data2))
+                        sdl_circle(area, pos.x, pos.y, caseHeight /4, SDL_BLACK);
+                    if (graph_sameGroup(i->whiteGroup, &i->whiteSide2, data2))
+                        sdl_circle(area, pos.x, pos.y, caseHeight /4, SDL_BLACK);
                 }
             }
         }
