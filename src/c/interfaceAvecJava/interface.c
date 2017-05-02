@@ -252,14 +252,13 @@ int interface_getPawn(interface i, unsigned line, unsigned column) {
 }
 
 int interface_winner(interface i) {
-    list rc =graph_getCollection(i->reduceGraph);
 
-    if (! (graph_findVertex(rc, &i->whiteSide1) || graph_findVertex(rc, &i->whiteSide2))) {
+    if (graph_sameGroup(i->whiteGroup, &i->whiteSide1, &i->whiteSide2))
         return interface_WHITE_PAWN;
-    }
-    if (! (graph_findVertex(rc, &i->blackSide1) || graph_findVertex(rc, &i->blackSide2))) {
+
+    if (graph_sameGroup(i->blackGroup, &i->blackSide1, &i->blackSide2))
         return interface_BLACK_PAWN;
-    }
+
     return 0;
 }
 

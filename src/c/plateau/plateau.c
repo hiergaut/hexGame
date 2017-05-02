@@ -95,10 +95,12 @@ void plateau_insert(plateau p, unsigned line, unsigned column, void* square) {
 }
 
 void* plateau_get(plateau p, unsigned line, unsigned column) {
+    assert(line <p->line);
     return p->square[line][column];
 }
 
 void* plateau_getPtr(plateau p, unsigned line, unsigned column) {
+    assert(line <p->line);
     return &p->square[line][column];
 }
 
