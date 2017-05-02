@@ -1,4 +1,4 @@
-package hexGame; 
+//package hexGame; 
 
 import java.util.Scanner;
 
@@ -23,12 +23,19 @@ public class Game {
 	    challenger.play(b,s);
 	}
     }
+
+   // static {
+   //     System.loadLibrary("InterfaceAvecC");
+   // }
+
     public static void main(String[] args) {
 	Scanner scan = new Scanner(System.in);
 	Board b = new Board();
 	Player p1 = new Player('o','W');
 	Player p2 = new Player('*','B');
 	boolean wantsToQuit = false;
+	InterfaceAvecC.newGame(b.getSize());
+
 
 
 	while (!wantsToQuit) {

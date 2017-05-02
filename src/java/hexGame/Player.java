@@ -1,4 +1,4 @@
-package hexGame;
+//package hexGame;
 
 import java.util.Scanner;
 

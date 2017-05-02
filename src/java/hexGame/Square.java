@@ -1,4 +1,4 @@
-package hexGame;
+//package hexGame;
 
 public class Square {
     protected boolean isEmpty;
