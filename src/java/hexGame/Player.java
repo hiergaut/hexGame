@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 class Player {
     protected String name;
-    protected char pawn;
-    protected char edge;
+    protected int pawn;
+    protected String edge;
     protected int round = 0;
     protected int move_number = 0;
     protected String lastMove = " - - - ";
@@ -16,7 +16,7 @@ class Player {
      * @param pawn, the pawn the player will use
      * @param edge, the edges the player need to link to win
      */
-    public Player(char pawn, char edge) {
+    public Player(int pawn, String edge) {
 	this.pawn = pawn;
 	this.edge = edge;
     }
@@ -41,7 +41,7 @@ class Player {
      * Getter for the pawn of the player
      * @return the pawn of the player
      */
-    public char getPawn() {
+    public int getPawn() {
 	return this.pawn;
     }
 
@@ -49,7 +49,7 @@ class Player {
      * Getter for the edge of the player
      * @return the edge of the player
      */
-    public char getEdge() {
+    public String getEdge() {
 	return this.edge;
     }
 
@@ -105,17 +105,26 @@ class Player {
      * @param b, the board of which the player plays
      * @param s, the scanner for I/O
      */
-    public void play(Board b, Scanner s) {
-	System.out.println();
-	System.out.println("Ou posez le pion ?");
-	int i,j;
-	i = (s.nextInt() - 1) % b.getSize() ;
-	j = (s.nextInt() - 1) % b.getSize() ;
+    public void play(Scanner s) {
 
-	b.squares[i][j].setIsEmpty(false);
-	b.squares[i][j].setPawn(this.getPawn());
-	lastMove = "row " + (i + 1) + " col " + (j + 1);
-	incRound();
+	boolean isPossible = false;
+	while (!isPossible) {
+	    System.out.println();
+	    System.out.println("Ou posez le pion ?");
+	    int i,j;
+	    i = (s.nextInt() - 1) % Game.boardSize ;
+	    j = (s.nextInt() - 1) % Game.boardSize;
+
+	    if (InterfaceAvecC.getPawn(i,j) == InterfaceAvecC.NO_PAWN) {
+		InterfaceAvecC.insertPawn(getPawn(),i,j);
+		lastMove = "row " + (i + 1) + " col " + (j + 1);
+		incRound();
+		isPossible = true;
+	    }
+	    else {
+		System.out.println("Action impossible ! \n");
+	    }
+	}
     }
     
 

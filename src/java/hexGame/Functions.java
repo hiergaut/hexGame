@@ -22,7 +22,7 @@ public class Functions {
 	System.out.println();
 	System.out.println("1. 1 Joueur");
 	System.out.println("2. 2 Joueur");
-	System.out.println("3. Back");
+	System.out.println("3. Retour");
 	System.out.println();
     }
      
@@ -31,9 +31,9 @@ public class Functions {
      */
     public static void printInfos(Player player) {
 	System.out.println();
-	System.out.printf("Player Name: %-10s",player.getName());
-	System.out.printf("Round: %-10s",player.getRound());
-	System.out.printf("%s's last move: %-10s", player.getName(), player.getLastMove());
+	System.out.printf("Nom: %-10s",player.getName());
+	System.out.printf("Tour: %-10s",player.getRound());
+	System.out.printf("Derniere action de %s : %-10s", player.getName(), player.getLastMove());
 	System.out.println();
 	System.out.println();
     }
@@ -41,9 +41,9 @@ public class Functions {
     /**
      * Display the options menu
      */
-    public static void printOptions(Board b, Player p1, Player p2) {
+    public static void printOptions(Player p1, Player p2) {
 	System.out.println();
-	System.out.printf("1. Change the size of the Board (Curr : %d)", b.getSize());
+	System.out.printf("1. Change the size of the Board (Curr : %d)", Game.boardSize);
 	System.out.println();
 	System.out.printf("2. Change the starting player (Curr : %s)",p1.isStarting ? 
 	p1.getPawn() : p2.getPawn() );
@@ -80,6 +80,45 @@ public class Functions {
 	playerName = s.next();
 
 	return playerName;
+    }
+
+    /**
+     * Display the current board
+     * @param size, the size of the board
+     */
+    public static void displayBoard(Player p1, Player p2, int size) {
+	display_edges(p1,p2,size);
+	for (int i = 0; i < size; i++) {
+	    for (int j =0; j <= i; j++)
+		System.out.print(" ");
+
+	    System.out.print(p1.getEdge());
+	    for (int j =0 ;j < size; j++) {
+		System.out.print(" " + displayPawn(InterfaceAvecC.getPawn(i,j)));
+	    }
+	    System.out.print(" ");
+	    System.out.print(p1.getEdge());
+	    System.out.println();
+	}
+
+	for (int i = 0; i <= size; i++) {
+	    System.out.print(" ");
+	}
+	display_edges(p1,p2,size);
+    }
+
+    private static void display_edges(Player p1, Player p2, int size) {
+	System.out.print(p1.getEdge() + "\\" + p2.getEdge());
+	for (int i = 1; i <= size - 2 ; i++) {
+	    System.out.print(" " + p2.getEdge());
+	}
+	System.out.print(" " + p2.getEdge() + "\\" + p1.getEdge() + "\n");
+    }
+
+    private static String displayPawn(int pawn) {
+	if ( pawn == 1 ) return Game.RED;
+	else if (pawn == 2) return Game.BLUE;
+	else return Game.WHITE;
     }
 
 
