@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 class Player {
     protected String name;
-    protected char pawn;
+    protected int pawn;
     protected char edge;
     protected int round = 0;
     protected int move_number = 0;
@@ -16,7 +16,7 @@ class Player {
      * @param pawn, the pawn the player will use
      * @param edge, the edges the player need to link to win
      */
-    public Player(char pawn, char edge) {
+    public Player(int pawn, char edge) {
 	this.pawn = pawn;
 	this.edge = edge;
     }
@@ -41,7 +41,7 @@ class Player {
      * Getter for the pawn of the player
      * @return the pawn of the player
      */
-    public char getPawn() {
+    public int getPawn() {
 	return this.pawn;
     }
 
@@ -105,17 +105,26 @@ class Player {
      * @param b, the board of which the player plays
      * @param s, the scanner for I/O
      */
-    public void play(Board b, Scanner s) {
+    public void play(Scanner s) {
 	System.out.println();
 	System.out.println("Ou posez le pion ?");
 	int i,j;
-	i = (s.nextInt() - 1) % b.getSize() ;
-	j = (s.nextInt() - 1) % b.getSize() ;
+	i = (s.nextInt() - 1) % 11 ;
+	j = (s.nextInt() - 1) % 11 ;
 
-	b.squares[i][j].setIsEmpty(false);
-	b.squares[i][j].setPawn(this.getPawn());
-	lastMove = "row " + (i + 1) + " col " + (j + 1);
-	incRound();
+	if (InterfaceAvecC.permission(i,j)) {
+	    InterfaceAvecC.setPawn(getPawn(),i,j);
+	    lastMove = "row " + (i + 1) + "col " + (j + 1);
+	    incRound();
+	}
+	else {
+	    System.out.println("Action impossible ! \n");
+	}
+
+	//b.squares[i][j].setIsEmpty(false);
+	//b.squares[i][j].setPawn(this.getPawn());
+	//lastMove = "row " + (i + 1) + " col " + (j + 1);
+	//incRound();
     }
     
 
