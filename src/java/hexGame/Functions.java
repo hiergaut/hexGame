@@ -22,7 +22,7 @@ public class Functions {
 	System.out.println();
 	System.out.println("1. 1 Joueur");
 	System.out.println("2. 2 Joueur");
-	System.out.println("3. Back");
+	System.out.println("3. Retour");
 	System.out.println();
     }
      
@@ -31,9 +31,9 @@ public class Functions {
      */
     public static void printInfos(Player player) {
 	System.out.println();
-	System.out.printf("Player Name: %-10s",player.getName());
-	System.out.printf("Round: %-10s",player.getRound());
-	System.out.printf("%s's last move: %-10s", player.getName(), player.getLastMove());
+	System.out.printf("Nom: %-10s",player.getName());
+	System.out.printf("Tour: %-10s",player.getRound());
+	System.out.printf("Derniere action de %s : %-10s", player.getName(), player.getLastMove());
 	System.out.println();
 	System.out.println();
     }
@@ -43,7 +43,7 @@ public class Functions {
      */
     public static void printOptions(Player p1, Player p2) {
 	System.out.println();
-	//System.out.printf("1. Change the size of the Board (Curr : %d)", b.getSize());
+	System.out.printf("1. Change the size of the Board (Curr : %d)", Game.boardSize);
 	System.out.println();
 	System.out.printf("2. Change the starting player (Curr : %s)",p1.isStarting ? 
 	p1.getPawn() : p2.getPawn() );
@@ -94,7 +94,7 @@ public class Functions {
 
 	    System.out.print(p1.getEdge());
 	    for (int j =0 ;j < size; j++) {
-		System.out.print(" " + InterfaceAvecC.getPawn(i,j));
+		System.out.print(" " + displayPawn(InterfaceAvecC.getPawn(i,j)));
 	    }
 	    System.out.print(" ");
 	    System.out.print(p1.getEdge());
@@ -113,6 +113,12 @@ public class Functions {
 	    System.out.print(" " + p2.getEdge());
 	}
 	System.out.print(" " + p2.getEdge() + "\\" + p1.getEdge() + "\n");
+    }
+
+    private static String displayPawn(int pawn) {
+	if ( pawn == 1 ) return Game.RED;
+	else if (pawn == 2) return Game.BLUE;
+	else return Game.WHITE;
     }
 
 

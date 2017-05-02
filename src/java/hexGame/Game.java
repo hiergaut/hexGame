@@ -22,6 +22,10 @@ public class Game {
     //        challenger.play(b,s);
     //    }
     //}
+    protected static int boardSize = 4;
+    protected static final String RED = "\u001b[41m \u001b[0m";
+    protected static final String BLUE = "\u001b[44m \u001b[0m";
+    protected static final String WHITE = "\u001b[47m \u001b[0m";
 
     private static void startGameC(Player p1, Player p2, Scanner s) {
 	boolean gameover = false;
@@ -34,20 +38,20 @@ public class Game {
 	System.out.println(starting.getName() + " starts the game !");
 	while (!gameover) {
 	    Functions.printInfos(starting);
-	    Functions.displayBoard(p1,p2,11);
+	    Functions.displayBoard(p1,p2,boardSize);
 	    starting.play(s);
 	    Functions.printInfos(challenger);
-	    Functions.displayBoard(p1,p2,11);
+	    Functions.displayBoard(p1,p2,boardSize);
 	    challenger.play(s);
 	}
     }
 
     public static void main(String[] args) {
 	Scanner scan = new Scanner(System.in);
-	Player p1 = new Player(2,'W');
-	Player p2 = new Player(1,'B');
+	Player p1 = new Player(2,BLUE);
+	Player p2 = new Player(1,RED);
 	boolean wantsToQuit = false;
-	InterfaceAvecC.newGame(11);
+	InterfaceAvecC.newGame(boardSize);
 
 
 
@@ -78,7 +82,9 @@ public class Game {
 		    Functions.printOptions(p1,p2);
 		    switch ( scan.nextInt() ) {
 			case 1:
-			    //b.setSize(Functions.askBoardSize(scan));
+			    boardSize = Functions.askBoardSize(scan);
+			    InterfaceAvecC.endGame();
+			    InterfaceAvecC.newGame(boardSize);
 			    break;
 			case 2:
 			    p1.switchStarting();
