@@ -13,16 +13,17 @@ typedef struct s_interface* interface;
 interface interface_create(unsigned side);
 void interface_destroy(interface* i);
 
-bool interface_legalityPawn(unsigned line, unsigned column);
 void interface_placePawn(interface i, int colorPawn, unsigned line, unsigned column);
 int interface_getPawn(interface i, unsigned line, unsigned column);
-int interface_winner();
+int interface_winner(interface i);
 
 int interface_saveGame();
 void interface_restoreGame(int idGame);
 void interface_displayHistory();
 void interface_undo(interface i);
 
+
+// sdl
 void interface_displayGraph(interface i, graph g, SDL_Surface* area);
 void interface_displayPlateau(interface i);
 void interface_displayGroup(interface i, int color);
@@ -30,5 +31,6 @@ void interface_displayGroup(interface i, int color);
 void interface_majScreen(interface i);
 void interface_ihm(interface i);
 void interface_displayIhm(interface i);
+// end sdl
 
 #endif

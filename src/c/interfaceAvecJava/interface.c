@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-/* #include <math.h> */
-/* #include "ihm.h" */
-
+#include <math.h>
 void interface_drawPlateau(plateau p);
 
 struct s_interface {
@@ -33,6 +31,8 @@ struct s_interface {
     list caseRedo;
     list caseRedoColor;
     int redoActive;
+
+
 };
 
 void interface_buildGraphPlateau(interface i, graph g) {
@@ -46,23 +46,27 @@ void interface_buildGraphPlateau(interface i, graph g) {
             graph_insertVertex(g, plateau_getPtr(i->p, l, c));
 
             if (l ==0)
-                graph_insertEdge(g, &i->blackSide1, plateau_getPtr(i->p, l, c));
+                /* graph_insertEdge(g, &i->blackSide1, plateau_getPtr(i->p, l, c)); */
+                graph_insertEdge(g, &i->whiteSide1, plateau_getPtr(i->p, l, c));
             else
                 graph_insertEdge(g, plateau_getPtr(i->p, l -1, c), plateau_getPtr(i->p, l, c));
 
             if (c ==0)
-                graph_insertEdge(g, &i->whiteSide1, plateau_getPtr(i->p, l, c));
+                /* graph_insertEdge(g, &i->whiteSide1, plateau_getPtr(i->p, l, c)); */
+                graph_insertEdge(g, &i->blackSide1, plateau_getPtr(i->p, l, c));
             else
                 graph_insertEdge(g, plateau_getPtr(i->p, l, c -1), plateau_getPtr(i->p, l, c));
 
             if (l ==side -1)
-                graph_insertEdge(g, &i->blackSide2, plateau_getPtr(i->p, l, c));
-
-            if (c ==side -1)
+                /* graph_insertEdge(g, &i->blackSide2, plateau_getPtr(i->p, l, c)); */
                 graph_insertEdge(g, &i->whiteSide2, plateau_getPtr(i->p, l, c));
 
-            if (l !=0 && c !=0)
-                graph_insertEdge(g, plateau_getPtr(i->p, l, c), plateau_getPtr(i->p, l -1, c -1));
+            if (c ==side -1)
+                /* graph_insertEdge(g, &i->whiteSide2, plateau_getPtr(i->p, l, c)); */
+                graph_insertEdge(g, &i->blackSide2, plateau_getPtr(i->p, l, c));
+
+            if (l !=0 && c !=side -1)
+                graph_insertEdge(g, plateau_getPtr(i->p, l, c), plateau_getPtr(i->p, l -1, c +1));
         }
     }
 }
@@ -84,16 +88,16 @@ interface interface_create(unsigned side) {
     graph_insertVertex(i->whiteGroup, &i->whiteSide1);
     graph_insertVertex(i->whiteGroup, &i->whiteSide2);
 
+    i->reduceGraph =graph_create();
+    interface_buildGraphPlateau(i, i->reduceGraph);
 
     i->casePlayed =list_create();
     i->caseRedo =list_create();
     i->caseRedoColor =list_create();
 
-    i->reduceGraph =graph_create();
-    interface_buildGraphPlateau(i, i->reduceGraph);
-    /* interface_displayGraph(i, i->whiteGroup, i->surface_whiteGroup); */
-    /* interface_drawPlateau(i->s, i->p); */
     i->redoActive =0;
+
+
 
     return i;
 }
@@ -111,6 +115,9 @@ void interface_destroy(interface* i) {
     list_destroy(&((*i)->casePlayed));
     list_destroy(&((*i)->caseRedo));
     list_destroy(&((*i)->caseRedoColor));
+
+
+
 
     free(*i);
     *i =NULL;
@@ -244,8 +251,16 @@ int interface_getPawn(interface i, unsigned line, unsigned column) {
     return 1;
 }
 
-int interface_winner() {
-    return 1;
+int interface_winner(interface i) {
+    list rc =graph_getCollection(i->reduceGraph);
+
+    if (! (graph_findVertex(rc, &i->whiteSide1) || graph_findVertex(rc, &i->whiteSide2))) {
+        return interface_WHITE_PAWN;
+    }
+    if (! (graph_findVertex(rc, &i->blackSide1) || graph_findVertex(rc, &i->blackSide2))) {
+        return interface_BLACK_PAWN;
+    }
+    return 0;
 }
 
 int interface_saveGame() {
@@ -387,3 +402,6 @@ void interface_redo(interface i) {
     }
     assert(0);
 }
+
+
+

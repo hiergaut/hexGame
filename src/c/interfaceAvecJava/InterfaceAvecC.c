@@ -27,7 +27,7 @@ Java_InterfaceAvecC_getPawn(JNIEnv *env, jclass c1, jint line, jint column) {
 
 JNIEXPORT jint JNICALL 
 Java_InterfaceAvecC_hasAWinner(JNIEnv *env, jclass c1) {
-    return interface_winner();
+    return interface_winner(global_interface);
 }
 
 JNIEXPORT int JNICALL 

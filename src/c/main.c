@@ -16,6 +16,7 @@ int main() {
 
     interface i =interface_create(5);
 
+    /* interface_winner(i); */
     interface_ihm(i);
     /* int continuer =1; */
     /* SDL_Event event; */

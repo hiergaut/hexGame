@@ -7,6 +7,8 @@ then
     exit 1
 fi
 
+# ./mergeInterface.sh
+
 
 f="InterfaceAvecC"
 
