@@ -43,5 +43,6 @@ void list_it_destroy(list_it* it);
 void list_it_restart(list_it it);
 
 unsigned list_getSize(list l);
+int list_in(list l, const void* el);
 
 #endif

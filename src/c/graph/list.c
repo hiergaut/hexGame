@@ -292,3 +292,17 @@ unsigned list_getSize(list l) {
     return l->size;
 }
 
+int list_in(list l, const void* el) {
+    list_it it =list_it_create(l);
+    while (! list_it_end(it)) {
+        void* cur =list_it_get(it);
+        if (cur ==el)
+            return 1;
+
+        list_it_next(it);
+    }
+    return 0;
+}
+
+
+

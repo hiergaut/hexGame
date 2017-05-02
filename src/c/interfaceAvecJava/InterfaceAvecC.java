@@ -1,7 +1,7 @@
 
 public class InterfaceAvecC {
     static {
-	System.loadLibrary("InterfaceAvecC");
+        System.loadLibrary("InterfaceAvecC");
     }
 
     public final static int NO_PAWN =0;
@@ -10,42 +10,43 @@ public class InterfaceAvecC {
     public final static int WHITE_PAWN =2;
 
     /**
-     * create a graph of plateau, and group of player's pawn
+     * create data structure in C which are :
+     *      - plateau (allow creation of graph and fast save on text file)
+     *      - graph (permit group and reduceGraph)
+     *      - group of black/white player
+     *      - reduceGraph (for calculation of game)
      * @param sizeOfPlateau describe the side of plateau, including width and height
      */
     public static native void newGame(int sizeOfPlateau);
 
     /**
-     * to free all data structure representing the game in c
+     * to free all data structure of current interface, representing the game in C
      */
     public static native void endGame();
 
     /**
-     * permit to place a pawn
-     * @param line of plateau to insert pawn
-     * @param column of plateau to insert pawn
-     * @return true if permit to take a place (empty case)
-     */
-    public static native boolean permission(int line, int column);
-
-    /**
-     * place a pawn black, white, or empty place in plateau's square
-     * @param colorPawn use constant variable BLACK_PAWN, WHITE_PAWN, EMPTY_PAWN
+     * place a black/white pawn on plateau's square
+     * @param colorPawn use constant variable (BLACK_PAWN, WHITE_PAWN)
+     * you can't use EMPTY_PAWN, you must use undo to go backward in a game
+     * undo manage the history of play for each player of the current party
      * @param line plateau's line
      * @param column plateau's column
+     * assert if out of range line or column 
+     * and if you insert pawn on a already full case
      */
-    public static native void setPawn(int colorPawn, int line, int column);
+    public static native void insertPawn(int colorPawn, int line, int column);
 
     /**
-     * return color of a specific case, 0 if empty, 1 if Black, 2 if White
+     * return color int constant of a specific case (NO_PAWN, BLACK_PAWN, WHITE_PAWN)
      * @param line plateau's line
      * @param column plateau's column
+     * assert if out of range line/column
      */
     public static native int getPawn(int line, int column);
 
     /**
      * looks for the winner
-     * @return 0 if no winner, 1 if Black winner, 2 if White winner
+     * @return 0 if no winner, otherwise winner's color (BLACK_PAWN, WHITE_PAWN)
      * no egality on Hex game
      */
     public static native int hasAWinner();
@@ -70,9 +71,9 @@ public class InterfaceAvecC {
 
     /**
      * if a player make a wrong shot, he can resume game, one pawn a time
-     * undo if an empty plateau, assume your consequence, 
-     * program will be interrupted
+     * @return the color of pawn (BLACK_PAWN, WHITE_PAWN) who was delete on plateau
+     * 0 if no pawn in the game so no undo to do
      */
-    public static native void undo();
+    public static native int undo();
 
 }
