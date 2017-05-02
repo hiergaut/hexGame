@@ -31,18 +31,10 @@ JNIEXPORT void JNICALL Java_InterfaceAvecC_endGame
 
 /*
  * Class:     InterfaceAvecC
- * Method:    permission
- * Signature: (II)Z
- */
-JNIEXPORT jboolean JNICALL Java_InterfaceAvecC_permission
-  (JNIEnv *, jclass, jint, jint);
-
-/*
- * Class:     InterfaceAvecC
- * Method:    setPawn
+ * Method:    insertPawn
  * Signature: (III)V
  */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_setPawn
+JNIEXPORT void JNICALL Java_InterfaceAvecC_insertPawn
   (JNIEnv *, jclass, jint, jint, jint);
 
 /*
@@ -88,9 +80,9 @@ JNIEXPORT void JNICALL Java_InterfaceAvecC_displayHistoryGame
 /*
  * Class:     InterfaceAvecC
  * Method:    undo
- * Signature: ()V
+ * Signature: ()I
  */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_undo
+JNIEXPORT jint JNICALL Java_InterfaceAvecC_undo
   (JNIEnv *, jclass);
 
 #ifdef __cplusplus

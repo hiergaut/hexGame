@@ -21,13 +21,13 @@ struct s_graph {
 vertex graph_findVertex(list l, const void* data) {
     list_it it =list_it_create(l);
     while (! list_it_end(it)) {
-	vertex v =list_it_get(it);
-	if (v->data ==data) {
-	    list_it_destroy(&it);
-	    return v;
-	}
+        vertex v =list_it_get(it);
+        if (v->data ==data) {
+            list_it_destroy(&it);
+            return v;
+        }
 
-	list_it_next(it);
+        list_it_next(it);
     }
     list_it_destroy(&it);
 
@@ -200,13 +200,67 @@ void graph_testBench() {
 }
 
 list graph_getCollection(graph g) {
+    assert(g);
     return g->collection;
 }
 
 void* graph_getData(vertex v) {
+    assert(v);
     return v->data;
 }
 
 list graph_getVertices(vertex v) {
+    assert(v);
     return v->vertices;
+}
+
+int graph_onlyVertex(vertex v) {
+    assert(v);
+    return ! list_getSize(v->vertices);
+}
+
+int graph_sameGroupRec(list vertices, const void* data2, list vDejaVu) {
+    list_it it =list_it_create(vertices);
+    while (! list_it_end(it)) {
+        vertex v =list_it_get(it);
+
+        if (! list_in(vDejaVu, v)) {
+            if (graph_getData(v) ==data2) {
+                list_it_destroy(&it);
+                return 1;
+            }
+            list_pushBack(vDejaVu, v);
+            if (graph_sameGroupRec(v->vertices, data2, vDejaVu)) {
+                list_it_destroy(&it);
+                return 1;
+            }
+        }
+
+        list_it_next(it);
+    }
+    list_it_destroy(&it);
+    return 0;
+}
+
+int graph_sameGroup(graph g, const void* data, const void* data2) {
+    /* vertex vData =graph_findVertex(graph_getCollection(g), data); */
+    vertex vData =graph_findVertex(g->collection, data);
+    assert(vData);
+
+    list vDejaVu =list_create();
+    list_pushBack(vDejaVu, vData);
+
+    int r =graph_sameGroupRec(vData->vertices, data2, vDejaVu);
+    list_destroy(&vDejaVu);
+
+    return r;
+}
+
+int graph_neighbourVertex(graph g, const void* data, const void* data2) {
+    vertex v =graph_findVertex(g->collection, data);
+    vertex v2 =graph_findVertex(g->collection, data2);
+    assert(v);
+    assert(v2);
+
+    return graph_findVertex(v->vertices, data2) !=NULL;
 }
