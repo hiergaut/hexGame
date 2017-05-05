@@ -54,20 +54,18 @@ public class InterfaceAvecC {
     /**
      * save status game on database implement in c, maybe in SQL
      * if you save an already saved party then it erase the previous save for the new
+     * @param fileName file to save
      * @return integer representative an uniq key of curent game
      */
-    public static native int saveGame();
+    public static native int saveGame(String fileName);
 
     /**
      * restore previous game, before that you must quit the current game
      * @param idGame uniq key code of previous game
+     * @param fileName file to pull history game
+     * @return side of restore plateau, obviously square plateau involved line =column
      */
-    public static native void restoreGame(int idGame);
-
-    /**
-     * display history database, help for restoration
-     */
-    public static native void displayHistoryGame();
+    public static native int restoreGame(int idGame, String fileName);
 
     /**
      * if a player make a wrong shot, he can resume game, one pawn a time

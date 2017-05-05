@@ -56,26 +56,18 @@ JNIEXPORT jint JNICALL Java_InterfaceAvecC_hasAWinner
 /*
  * Class:     InterfaceAvecC
  * Method:    saveGame
- * Signature: ()I
+ * Signature: (Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_InterfaceAvecC_saveGame
-  (JNIEnv *, jclass);
+  (JNIEnv *, jclass, jstring);
 
 /*
  * Class:     InterfaceAvecC
  * Method:    restoreGame
- * Signature: (I)V
+ * Signature: (ILjava/lang/String;)I
  */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_restoreGame
-  (JNIEnv *, jclass, jint);
-
-/*
- * Class:     InterfaceAvecC
- * Method:    displayHistoryGame
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_displayHistoryGame
-  (JNIEnv *, jclass);
+JNIEXPORT jint JNICALL Java_InterfaceAvecC_restoreGame
+  (JNIEnv *, jclass, jint, jstring);
 
 /*
  * Class:     InterfaceAvecC

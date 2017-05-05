@@ -1,0 +1,30 @@
+\hex
+\dim 6
+\board
+. . . . . . 
+. o . . . . 
+. . * . . . 
+. . . . . . 
+. . . . . . 
+. . . . . . 
+\endboard
+\game
+\play o 1 1
+\play * 2 2
+\endgame
+\endhex
+\hex
+\dim 6
+\board
+. . . . . . 
+. o . . . . 
+. . * . . . 
+. . . . . . 
+. . . . . . 
+. . . . . . 
+\endboard
+\game
+\play o 1 1
+\play * 2 2
+\endgame
+\endhex

@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String args[]) {
 
-        int side =2;
+        int side =3;
 
 
         InterfaceAvecC.newGame(side);
@@ -36,11 +36,21 @@ public class Main {
 
 
 
-        InterfaceAvecC.saveGame();
-        InterfaceAvecC.restoreGame(5);
+        InterfaceAvecC.saveGame("file.txt");
+
+
+        // int side =InterfaceAvecC.restoreGame(1, "file.txt");
+        // aff(side);
+        //
+        // InterfaceAvecC.insertPawn(InterfaceAvecC.WHITE_PAWN, 0, 1);
+        // aff(side);
+        // InterfaceAvecC.restoreGame(1, "file.txt");
+        // aff(side);
+
+
         // InterfaceAvecC.undo();
 
-        InterfaceAvecC.displayHistoryGame();
+        // InterfaceAvecC.displayHistoryGame();
 
         // InterfaceAvecC.displayGraphGame();
         // InterfaceAvecC.displayPlateau();

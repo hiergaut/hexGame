@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "InterfaceAvecC.h"
 #include "interface.h"
+#include <assert.h>
 
 interface global_interface =NULL;
 
@@ -31,21 +32,20 @@ Java_InterfaceAvecC_hasAWinner(JNIEnv *env, jclass c1) {
 }
 
 JNIEXPORT int JNICALL 
-Java_InterfaceAvecC_saveGame(JNIEnv *env, jclass c1) {
-    interface_saveGame();
+Java_InterfaceAvecC_saveGame(JNIEnv *env, jclass c1, jstring str) {
+    const char* saveFile =(*env)->GetStringUTFChars(env, str, 0);
+    interface_saveGame(global_interface, saveFile);
 }
 
-JNIEXPORT void JNICALL 
-Java_InterfaceAvecC_restoreGame(JNIEnv *env, jclass c1, jint idGame) {
-    interface_restoreGame(idGame);
-}
-
-JNIEXPORT void JNICALL 
-Java_InterfaceAvecC_displayHistoryGame(JNIEnv *env, jclass c1) {
-    interface_displayHistory();
+JNIEXPORT int JNICALL 
+Java_InterfaceAvecC_restoreGame(JNIEnv *env, jclass c1, jint idGame, jstring str) {
+    const char* saveFile =(*env)->GetStringUTFChars(env, str, 0);
+    assert(! global_interface);
+    global_interface =interface_restoreGame(idGame, saveFile);
+    return interface_getSide(global_interface);
 }
 
 JNIEXPORT jint JNICALL 
 Java_InterfaceAvecC_undo(JNIEnv *env, jclass c1) {
-    interface_undo(global_interface);
+    return interface_undo(global_interface);
 }

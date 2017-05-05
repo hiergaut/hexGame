@@ -6,12 +6,13 @@
 #include <assert.h>
 #include <math.h>
 #include "sdl.h"
-
-void interface_drawPlateau(plateau p);
+#include "backup.h"
+#include <string.h>
 
 struct s_interface {
     unsigned size;
     plateau p;
+    int key;
 
     // graph of plateau
     graph g;
@@ -84,6 +85,7 @@ interface interface_create(unsigned side) {
 
     i->size =side;
     i->p =plateau_create(side, side);
+    i->key =0;
 
     i->g =graph_create();
     interface_buildGraphPlateau(i, i->g);
@@ -109,6 +111,8 @@ interface interface_create(unsigned side) {
     // sdl
     int width =1600;
     int height =900;
+    /* int width =1280; */
+    /* int height =720; */
     int dec =5;
     sdl_create(width, height, "HegGame");
     int margin =30;
@@ -295,7 +299,6 @@ int interface_getPawn(interface i, unsigned line, unsigned column) {
 }
 
 int interface_winner(interface i) {
-
     if (graph_sameGroup(i->whiteGroup, &i->whiteSide1, &i->whiteSide2))
         return interface_WHITE_PAWN;
 
@@ -305,21 +308,53 @@ int interface_winner(interface i) {
     return 0;
 }
 
-int interface_saveGame() {
-    return 0;
+int interface_saveGame(interface i, const char* file) {
+    catalog cat =catalog_create(file);
+    backup_save(cat, &i->key, i->p, i->casePlayed, &i->whitePawn, &i->blackPawn);
+    catalog_destroy(&cat);
+    
+    return i->key;
 }
 
-void interface_restoreGame(int idGame) {
-    (void)idGame;
+interface interface_restoreGame(int idGame, const char* file) {
+    assert(idGame >0);
+    catalog cat =catalog_create(file);
+
+    interface i =interface_create((unsigned)backup_sidePlateau(cat, idGame));
+    i->key =idGame;
+
+    int pos =catalog_posIthOccurrence(cat, "\\game", idGame) +1;
+    char str[CATALOG_BUFFER_MAX +1];
+    catalog_getLine(cat, pos++, str);
+    while (strcmp(str, "\\endgame")) {
+        char color =str[6];
+        int line;
+        int column;
+        sscanf(&str[8], "%d %d", &line, &column);
+        /* printf("str ='%s'\n", str); */
+
+        assert(color =='*' || color =='o');
+        color =(color =='*') ?(interface_BLACK_PAWN) :(interface_WHITE_PAWN);
+
+        interface_placePawn(i, color, (unsigned)line, (unsigned)column);
+        /* printf("line =%d column =%d\n", line, column); */
+
+
+        catalog_getLine(cat, pos++, str);
+    }
+    interface_majScreen(i); //sdl
+
+    catalog_destroy(&cat);
+    return i;
 }
 
-void interface_displayHistory() {
-    printf("History of previous game\n");
-}
+/* void interface_displayHistory() { */
+/*     printf("History of previous game\n"); */
+/* } */
 
-void interface_undo(interface i) {
+int interface_undo(interface i) {
     if (list_empty(i->casePlayed))
-        return;
+        return 0;
 
     void* dvr1 =list_back(i->casePlayed);
     void* pawn;
@@ -332,7 +367,7 @@ void interface_undo(interface i) {
             }
         }
     }
-    return;
+    assert(0);
 
     graph group;
     next:
@@ -413,7 +448,11 @@ void interface_undo(interface i) {
         }
     }
 
-    return;
+    if (pawn ==&i->blackPawn)
+        return interface_BLACK_PAWN;
+    if (pawn ==&i->whitePawn)
+        return interface_WHITE_PAWN;
+    assert(0);
 }
 
 void interface_redo(interface i) {
@@ -444,6 +483,7 @@ void interface_redo(interface i) {
     }
     assert(0);
 }
+
 
 
 
@@ -794,8 +834,14 @@ void interface_ihm(interface i) {
                         }
                         interface_majScreen(i);
                         int w;
-                        if ((w =interface_winner(i)))
-                            printf("winner %d\n", w);
+                        if ((w =interface_winner(i))) {
+                            if (w ==interface_WHITE_PAWN)
+                                printf("winner white\n");
+                            else if (w ==interface_BLACK_PAWN)
+                                printf("winner black\n");
+                            else
+                                assert(0);
+                        }
 
                         break;
 
@@ -930,3 +976,8 @@ void interface_displayIhm(interface i) {
     SDL_Flip(screen);
 }
 // end sdl
+
+
+int interface_getSide(interface i) {
+    return (int)i->size;
+}

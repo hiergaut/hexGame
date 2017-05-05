@@ -1,0 +1,25 @@
+\hex
+\dim 2
+\board
+* * 
+. o 
+\endboard
+\game
+\play * 0 0
+\play o 1 1
+\play * 0 1
+\endgame
+\endhex
+\hex
+\dim 3
+\board
+* * . 
+. o . 
+. . . 
+\endboard
+\game
+\play * 0 0
+\play o 1 1
+\play * 0 1
+\endgame
+\endhex
