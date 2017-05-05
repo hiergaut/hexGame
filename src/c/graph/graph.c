@@ -243,7 +243,6 @@ int graph_sameGroupRec(list vertices, const void* data2, list vDejaVu) {
 }
 
 int graph_sameGroup(graph g, const void* data, const void* data2) {
-    /* vertex vData =graph_findVertex(graph_getCollection(g), data); */
     vertex vData =graph_findVertex(g->collection, data);
     assert(vData);
 

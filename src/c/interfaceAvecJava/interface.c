@@ -34,14 +34,6 @@ struct s_interface {
     list caseRedo;
     list caseRedoColor;
     int redoActive;
-
-
-
-
-
-
-
-
 };
 
 void interface_buildGraphPlateau(interface i, graph g) {
