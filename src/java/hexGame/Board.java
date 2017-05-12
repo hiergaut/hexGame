@@ -1,5 +1,3 @@
-package hexGame;
-
 public class Board {
     protected int size = 11;
     protected Square[][] squares;

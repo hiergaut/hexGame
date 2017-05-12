@@ -1,5 +1,3 @@
-//package hexGame;
-
 public class Square {
     protected boolean isEmpty;
     protected char currPawn;

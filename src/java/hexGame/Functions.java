@@ -1,5 +1,3 @@
-//package hexGame;
-
 import java.util.Scanner;
 
 public class Functions {

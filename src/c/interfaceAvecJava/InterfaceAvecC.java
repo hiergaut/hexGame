@@ -1,4 +1,3 @@
-
 public class InterfaceAvecC {
     static {
         System.loadLibrary("InterfaceAvecC");

@@ -1,27 +1,7 @@
-//package hexGame; 
-
 import java.util.Scanner;
 
 public class Game {
 
-    //private static void startGame(Board b, Scanner s) {
-    //    boolean gameover = false;
-    //    Player starting;
-    //    Player challenger;
-
-    //    starting = b.getPlayer1().getStartingStatus() ? b.getPlayer1() : b.getPlayer2();
-    //    challenger = b.getPlayer1().getStartingStatus() ? b.getPlayer2() : b.getPlayer1();
-
-    //    System.out.println(starting.getName() + " starts the game !");
-    //    while (!gameover) {
-    //        Functions.printInfos(starting);
-    //        b.display();
-    //        starting.play(b,s);
-    //        Functions.printInfos(challenger);
-    //        b.display();
-    //        challenger.play(b,s);
-    //    }
-    //}
     protected static int boardSize = 4;
     protected static final String RED = "\u001b[41m \u001b[0m";
     protected static final String BLUE = "\u001b[44m \u001b[0m";
