@@ -46,7 +46,7 @@ public class Functions {
 	System.out.printf("1. Change the size of the Board (Curr : %d)", Game.boardSize);
 	System.out.println();
 	System.out.printf("2. Change the starting player (Curr : %s)",p1.isStarting ? 
-	p1.getPawn() : p2.getPawn() );
+	Game.RED : Game.BLUE );
 	System.out.println();
 	System.out.println("3. Back");
 	System.out.println();
@@ -116,8 +116,8 @@ public class Functions {
     }
 
     private static String displayPawn(int pawn) {
-	if ( pawn == 1 ) return Game.RED;
-	else if (pawn == 2) return Game.BLUE;
+	if ( pawn == 1 ) return Game.BLUE;
+	else if (pawn == 2) return Game.RED;
 	else return Game.WHITE;
     }
 

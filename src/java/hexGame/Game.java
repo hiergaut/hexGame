@@ -29,6 +29,7 @@ public class Game {
 
     private static void startGameC(Player p1, Player p2, Scanner s) {
 	boolean gameover = false;
+	int gameStatus;
 	Player starting;
 	Player challenger;
 
@@ -40,9 +41,19 @@ public class Game {
 	    Functions.printInfos(starting);
 	    Functions.displayBoard(p1,p2,boardSize);
 	    starting.play(s);
+	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
+		System.out.println( starting.getName() + " remporte la partie !" );
+		Functions.displayBoard(p1,p2,boardSize);
+		break;
+	    }
 	    Functions.printInfos(challenger);
 	    Functions.displayBoard(p1,p2,boardSize);
 	    challenger.play(s);
+	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
+		System.out.println( challenger.getName() + " remporte la partie !" );
+		Functions.displayBoard(p1,p2,boardSize);
+		break;
+	    }
 	}
     }
 
@@ -51,12 +62,12 @@ public class Game {
 	Player p1 = new Player(2,BLUE);
 	Player p2 = new Player(1,RED);
 	boolean wantsToQuit = false;
-	InterfaceAvecC.newGame(boardSize);
 
 
 
 	while (!wantsToQuit) {
 	    Functions.printMenu();
+	    InterfaceAvecC.newGame(boardSize);
 	    switch ( scan.nextInt() ) {
 		case 1:
 		    Functions.printSubMenu();
