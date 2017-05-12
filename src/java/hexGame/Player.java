@@ -112,12 +112,14 @@ class Player {
 	    int i,j;
 	    i = (s.nextInt() - 1) % Game.boardSize ;
 	    j = (s.nextInt() - 1) % Game.boardSize;
+	    s.nextLine();
 
 	    if (InterfaceAvecC.getPawn(i,j) == InterfaceAvecC.NO_PAWN) {
 		InterfaceAvecC.insertPawn(getPawn(),i,j);
 		lastMove = "row " + (i + 1) + " col " + (j + 1);
 		incRound();
 		isPossible = true;
+		
 	    }
 	    else {
 		System.out.println("Action impossible ! \n");

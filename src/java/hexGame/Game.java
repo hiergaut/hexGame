@@ -21,14 +21,25 @@ public class Game {
 	    Functions.printInfos(starting);
 	    Functions.displayBoard(p1,p2,boardSize);
 	    starting.play(s);
+	    if (Functions.undo(s)) {
+		starting.play(s);
+	    }
+	    
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
 		System.out.println( starting.getName() + " remporte la partie !" );
 		Functions.displayBoard(p1,p2,boardSize);
 		break;
 	    }
+
 	    Functions.printInfos(challenger);
 	    Functions.displayBoard(p1,p2,boardSize);
+
 	    challenger.play(s);
+
+	    if (Functions.undo(s)) {
+		challenger.play(s);
+	    }
+
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
 		System.out.println( challenger.getName() + " remporte la partie !" );
 		Functions.displayBoard(p1,p2,boardSize);

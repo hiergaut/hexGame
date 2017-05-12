@@ -120,4 +120,16 @@ public class Functions {
     }
 
 
+    public static boolean undo(Scanner s) {
+	System.out.println("Cancel last move ? y/n");
+	String str = s.nextLine();
+	System.out.println(str);
+	char c = str.charAt(0);
+	if (c == 'y') {
+	    System.out.println("Annulation du dernier coup!");
+	    InterfaceAvecC.undo();
+	    return true;
+	}
+	return false;
+    }
 }
