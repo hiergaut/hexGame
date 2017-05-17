@@ -8,6 +8,7 @@
 
 #include "backup.h"
 #include <string.h>
+#include "tree.h"
 
 struct s_interface {
     unsigned size;
@@ -34,6 +35,14 @@ struct s_interface {
     list caseRedo;
     list caseRedoColor;
     int redoActive;
+
+
+
+
+
+
+
+
 };
 
 void interface_buildGraphPlateau(interface i, graph g) {
@@ -445,6 +454,14 @@ void interface_redo(interface i) {
         }
     }
     assert(0);
+}
+
+void interface_botTakePlace(interface i, int colorPawn) {
+    (void)i;
+    (void)colorPawn;
+    Root root =create_tree();
+
+    destroy_tree(root);
 }
 
 

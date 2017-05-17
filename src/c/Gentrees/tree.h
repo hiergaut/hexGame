@@ -34,5 +34,6 @@ void print_tree(Node);
  * Free the memory allocated to the nodes
  */
 void destroy_tree(Node);
+void tree_widthBrowse(Node node);
 
 #endif

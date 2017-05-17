@@ -49,3 +49,8 @@ JNIEXPORT jint JNICALL
 Java_InterfaceAvecC_undo(JNIEnv *env, jclass c1) {
     return interface_undo(global_interface);
 }
+
+JNIEXPORT void JNICALL 
+Java_InterfaceAvecC_botTakePlace(JNIEnv *env, jclass c1, jint colorPawn) {
+    interface_botTakePlace(global_interface, colorPawn);
+}

@@ -3,11 +3,12 @@
 \board
 . . . . . 
 . . . . . 
-. . o . . 
+. * o . . 
 . . . . . 
 . . . . . 
 \endboard
 \game
 \play o 2 2
+\play * 2 1
 \endgame
 \endhex

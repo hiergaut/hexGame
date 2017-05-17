@@ -77,6 +77,14 @@ JNIEXPORT jint JNICALL Java_InterfaceAvecC_restoreGame
 JNIEXPORT jint JNICALL Java_InterfaceAvecC_undo
   (JNIEnv *, jclass);
 
+/*
+ * Class:     InterfaceAvecC
+ * Method:    botTakePlace
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_InterfaceAvecC_botTakePlace
+  (JNIEnv *, jclass, jint);
+
 #ifdef __cplusplus
 }
 #endif

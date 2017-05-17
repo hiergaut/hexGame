@@ -73,4 +73,9 @@ public class InterfaceAvecC {
      */
     public static native int undo();
 
+    /**
+     * @param colorPawn use constant variable (BLACK_PAWN, WHITE_PAWN)
+     * a robot insert one pawn in the game
+     */
+    public static native void botTakePlace(int colorPawn);
 }

@@ -34,6 +34,7 @@ public class Main {
         // System.out.println("Enter a number: ");
         // int n = reader.nextInt(); // Scans the next token of the input as an int.
 
+        InterfaceAvecC.botTakePlace(InterfaceAvecC.BLACK_PAWN);
 
 
         InterfaceAvecC.saveGame("file.txt");
