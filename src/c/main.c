@@ -13,13 +13,14 @@
 #include "sdl.h"
 
 int main() {
-    char file[] ="save.txt";
+    /* char file[] ="save.txt"; */
 
-    /* interface i =interface_create(5); */
-    interface i =interface_restoreGame(1, file);
+    interface i =interface_create(3);
+    /* interface i =interface_restoreGame(2, file); */
 
     interface_ihm(i);
-    interface_saveGame(i, file);
+    /* interface_botTakePlace(i, interface_BLACK_PAWN); */
+    /* interface_saveGame(i, file); */
 
 
     interface_destroy(&i);

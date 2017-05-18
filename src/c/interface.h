@@ -8,6 +8,7 @@
 #define interface_BLACK_PAWN 1
 #define interface_WHITE_PAWN 2
 
+
 typedef struct s_interface* interface;
 
 interface interface_create(unsigned side);

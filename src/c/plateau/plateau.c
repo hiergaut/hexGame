@@ -12,6 +12,7 @@ struct s_plateau {
     void*** square;
 };
 
+
 plateau plateau_create(unsigned line, unsigned column) {
     plateau born =malloc(sizeof(struct s_plateau));
 
@@ -119,3 +120,14 @@ int plateau_getNbColumn(plateau p) {
 /* 	} */
 /* } */
 /*  */
+plateau plateau_copy(plateau p) {
+    plateau copy =plateau_create(p->line, p->column);
+
+    for (unsigned l =0; l <copy->line; l++) {
+        for (unsigned c =0; c <copy->column; c++) {
+            plateau_insert(copy, l, c, plateau_get(p, l, c));
+        }
+    }
+    return copy;
+}
+

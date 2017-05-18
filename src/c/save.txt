@@ -11,3 +11,12 @@
 \play * 2 2
 \endgame
 \endhex
+\hex
+\dim 2
+\board
+. . 
+. . 
+\endboard
+\game
+\endgame
+\endhex

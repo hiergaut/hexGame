@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include "tree.h"
+#include <assert.h>
+/* #include "list.h" */
+#include "math.h"
 
 
 struct _node {
@@ -82,7 +85,6 @@ void print_tree(Node node) {
 }
 
 int traverse_tree(Node node, action_node action) {
-
     if (node == NULL) {
         return -1;
     }
@@ -111,6 +113,8 @@ int traverse_tree(Node node, action_node action) {
 }
 
 int tree_height(Node node) {
+    if (! node)
+        return -1;
     int level =0;
     while (node->parent) {
         level++;
@@ -120,8 +124,8 @@ int tree_height(Node node) {
 }
 
 
-void tree_widthBrowse(Node node) {
-    Node list[100];
+void tree_widthBrowse(Node node, action_node action) {
+    Node list[1000000000];
     int cursorRight =0;
     int cursorLeft =0;
     int level =-1;
@@ -129,30 +133,86 @@ void tree_widthBrowse(Node node) {
     list[cursorRight++] =node;
     while (cursorLeft !=cursorRight) {
         Node pullNode =list[cursorLeft++];
-        /* if (pullNode) { */
-        if (tree_height(pullNode) !=level) {
-            printf("\n");
-            for (int i =10; i >level; i--) {
-                printf("       ");
+        if (pullNode) {
+            if (tree_height(pullNode) !=level) {
+                printf("\n");
+                for (int i =5; i >level; i--) {
+                    printf("    ");
+                }
+                level =tree_height(pullNode);
             }
-            level =tree_height(pullNode);
-        }
 
-        print(pullNode);
-        if (pullNode->parent && pullNode ==last_sibling(pullNode))
-            printf("   ");
+            /* print(pullNode); */
+            action(pullNode);
 
-        if (pullNode->first_child) {
-            list[cursorRight++] =pullNode->first_child;
 
-            Node brother =pullNode->first_child->sibling;
-            while (brother) {
-                list[cursorRight++] =brother;
-                brother =brother->sibling;
+            if (pullNode->first_child) {
+                list[cursorRight++] =pullNode->first_child;
+
+                Node brother =pullNode->first_child->sibling;
+                while (brother) {
+                    list[cursorRight++] =brother;
+                    brother =brother->sibling;
+                }
+            }
+            else
+                list[cursorRight++] =NULL;
+
+            if (pullNode->parent && pullNode ==last_sibling(pullNode)) {
+                printf("    ");
+                list[cursorRight++] =NULL;
             }
         }
-        /* } */
+        else
+            printf("    ");
     }
-
+    printf("\n");
 }
+
+void* tree_getData(Node n) {
+    assert(n);
+    return n->data;
+}
+
+void* tree_parent(Node n) {
+    return n->parent;
+}
+
+int tree_firstChild(Node n) {
+    assert(n);
+    if (n->parent)
+        return n ==n->parent->first_child;
+    else
+        return 0;
+}
+
+int tree_lastChild(Node n) {
+    return ! n->sibling;
+}
+
+int tree_isLeaf(Node n) {
+    return ! n->first_child;
+}
+
+Node tree_getChild(Node n) {
+    assert(n);
+    return n->first_child;
+}
+
+Node tree_getBrother(Node n) {
+    assert(n);
+    return n->sibling;
+}
+
+void tree_mapInfix(Node n, action_node action) {
+    if (n->first_child)
+        tree_mapInfix(n->first_child, action);
+    action(n);
+    if (n->sibling)
+        tree_mapInfix(n->sibling, action);
+}
+
+
+
+
 

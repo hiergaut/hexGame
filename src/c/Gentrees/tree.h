@@ -34,6 +34,14 @@ void print_tree(Node);
  * Free the memory allocated to the nodes
  */
 void destroy_tree(Node);
-void tree_widthBrowse(Node node);
+void tree_widthBrowse(Node node, action_node);
+void* tree_getData(Node n);
+void* tree_parent(Node n);
+int tree_firstChild(Node n);
+int tree_lastChild(Node n);
+int tree_isLeaf(Node n);
+Node tree_getChild(Node n);
+Node tree_getBrother(Node n);
+void tree_mapInfix(Node n, action_node action);
 
 #endif

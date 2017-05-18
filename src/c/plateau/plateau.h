@@ -12,5 +12,6 @@ void* plateau_getPtr(plateau p, unsigned line, unsigned column);
 int plateau_getNbLine(plateau p);
 int plateau_getNbColumn(plateau p);
 
+plateau plateau_copy(plateau p);
 
 #endif
