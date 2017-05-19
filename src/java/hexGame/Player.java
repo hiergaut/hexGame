@@ -100,7 +100,6 @@ class Player {
 
     /**
      * The player play his turn
-     * @param b, the board of which the player plays
      * @param s, the scanner for I/O
      */
     public void play(Scanner s) {

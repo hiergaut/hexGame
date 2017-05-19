@@ -50,8 +50,9 @@ public class Game {
 
     public static void main(String[] args) {
 	Scanner scan = new Scanner(System.in);
-	Player p1 = new Player(2,BLUE);
-	Player p2 = new Player(1,RED);
+	Player p1 = new Player(1,BLUE);
+	Player p2 = new Player(2,RED);
+	AI comp = new AI(2,RED);
 	boolean wantsToQuit = false;
 
 
@@ -65,10 +66,11 @@ public class Game {
 		    switch ( scan.nextInt() ) {
 			case 1:
 			    System.out.println("Partie contre IA ! ");
+			    p1.setName(Functions.askPlayerName(1,scan));
+			    startGameC(p1,comp,scan);
 			    break;
 			case 2:
 			    System.out.println("Humain contre Humain ! ");
-			    p1.setName(Functions.askPlayerName(1,scan));
 			    p2.setName(Functions.askPlayerName(2,scan));
 			    startGameC(p1,p2,scan);
 			    break;
@@ -110,13 +112,5 @@ public class Game {
 	}
 
 	scan.close();
-
-
-
-
-	
-	
-	
-
     }
 }
