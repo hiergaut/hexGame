@@ -258,6 +258,7 @@ int graph_sameGroup(graph g, const void* data, const void* data2) {
 int graph_neighbourVertex(graph g, const void* data, const void* data2) {
     vertex v =graph_findVertex(g->collection, data);
     vertex v2 =graph_findVertex(g->collection, data2);
+    (void)v2;
     assert(v);
     assert(v2);
 

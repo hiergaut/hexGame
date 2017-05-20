@@ -58,26 +58,23 @@ void interface_buildGraphPlateauWithoutInterface(plateau p, void* whiteSide,
     for (unsigned l =0; l <side; l++) {
         for (unsigned c =0; c <side; c++) {
             graph_insertVertex(g, plateau_getPtr(p, l, c));
-            /*  */
+
+
             /* if (l ==0) */
             /*     graph_insertEdge(g, blackSide, plateau_getPtr(p, l, c)); */
-            /*     #<{(| graph_insertEdge(g, whiteSide, plateau_getPtr(p, l, c)); |)}># */
             /* else */
             /*     graph_insertEdge(g, plateau_getPtr(p, l -1, c), plateau_getPtr(p, l, c)); */
             /*  */
             /* if (c ==0) */
             /*     graph_insertEdge(g, whiteSide, plateau_getPtr(p, l, c)); */
-            /*     #<{(| graph_insertEdge(g, blackSide, plateau_getPtr(p, l, c)); |)}># */
             /* else */
             /*     graph_insertEdge(g, plateau_getPtr(p, l, c -1), plateau_getPtr(p, l, c)); */
             /*  */
             /* if (l ==side -1) */
             /*     graph_insertEdge(g, blackSide2, plateau_getPtr(p, l, c)); */
-            /*     #<{(| graph_insertEdge(g, whiteSide2, plateau_getPtr(p, l, c)); |)}># */
             /*  */
             /* if (c ==side -1) */
             /*     graph_insertEdge(g, whiteSide2, plateau_getPtr(p, l, c)); */
-            /*     #<{(| graph_insertEdge(g, blackSide2, plateau_getPtr(p, l, c)); |)}># */
             /*  */
             /* if (l !=0 && c !=side -1) */
             /*     graph_insertEdge(g, plateau_getPtr(p, l, c), plateau_getPtr(p, l -1, c +1)); */
@@ -86,23 +83,19 @@ void interface_buildGraphPlateauWithoutInterface(plateau p, void* whiteSide,
 
 
             if (l ==0)
-                /* graph_insertEdge(g, blackSide, plateau_getPtr(p, l, c)); */
                 graph_insertEdge(g, whiteSide, plateau_getPtr(p, l, c));
             else
                 graph_insertEdge(g, plateau_getPtr(p, l -1, c), plateau_getPtr(p, l, c));
 
             if (c ==0)
-                /* graph_insertEdge(g, whiteSide, plateau_getPtr(p, l, c)); */
                 graph_insertEdge(g, blackSide, plateau_getPtr(p, l, c));
             else
                 graph_insertEdge(g, plateau_getPtr(p, l, c -1), plateau_getPtr(p, l, c));
 
             if (l ==side -1)
-                /* graph_insertEdge(g, blackSide2, plateau_getPtr(p, l, c)); */
                 graph_insertEdge(g, whiteSide2, plateau_getPtr(p, l, c));
 
             if (c ==side -1)
-                /* graph_insertEdge(g, whiteSide2, plateau_getPtr(p, l, c)); */
                 graph_insertEdge(g, blackSide2, plateau_getPtr(p, l, c));
 
             if (l !=0 && c !=side -1)
@@ -246,6 +239,7 @@ void interface_placePawnInGraphAndGroup(void* data, graph g, graph group) {
     assert(vGraph);
 
     vertex vGroup =graph_findVertex(graph_getCollection(group), data);
+    (void)vGroup;
     assert(vGroup);
 
     list_it it_vertices =list_it_create(graph_getVertices(vGraph));
@@ -492,8 +486,10 @@ int interface_undo(interface i) {
             graph_insertVertex(i->reduceGraph, d2);
 
             vertex vr1 =graph_findVertex(graph_getCollection(i->reduceGraph), dvr1);
+            (void)vr1;
             assert(vr1);
             vertex vr2 =graph_findVertex(graph_getCollection(i->reduceGraph), d2);
+            (void)vr2;
             assert(vr2);
 
             vertex vg2 =graph_findVertex(graph_getCollection(i->g), d2);
@@ -543,6 +539,7 @@ int interface_undo(interface i) {
     if (pawn ==&i->whitePawn)
         return interface_WHITE_PAWN;
     assert(0);
+    return -1;
 }
 
 void interface_redo(interface i) {
@@ -577,7 +574,6 @@ void interface_redo(interface i) {
 
 // robot
 struct s_game {
-    plateau p;
     int colorPlayerTurn;
     int value;
     int line;
@@ -585,10 +581,9 @@ struct s_game {
 };
 typedef struct s_game* game;
 
-game game_create(plateau p, int colorPlayerTurn, int line, int column) {
+game game_create(int colorPlayerTurn, int line, int column) {
     game new =malloc(sizeof(struct s_game));
 
-    new->p =p;
     new->colorPlayerTurn =colorPlayerTurn;
     new->value =0;
     new->line =line;
@@ -608,46 +603,46 @@ int game_switchPlayer(int color) {
     return interface_WHITE_PAWN;
 }
 
-bool game_winner(plateau p, void* whitePawn, void* blackPawn) {
-    (void)blackPawn;
-    int side =plateau_getNbLine(p);
-    void* color;
-    int whiteSide, whiteSide2, blackSide, blackSide2;
-
-    graph g =graph_create();
-    interface_buildGraphPlateauWithoutInterface(p, &whiteSide, &whiteSide2, 
-            &blackSide, &blackSide2, g);
-
-    graph whiteGroup =graph_create();
-    graph_insertVertex(whiteGroup, &whiteSide);
-    graph_insertVertex(whiteGroup, &whiteSide2);
-
-    graph blackGroup =graph_create();
-    graph_insertVertex(blackGroup, &blackSide);
-    graph_insertVertex(blackGroup, &blackSide2);
-
-    for (int l =0; l <side; l++) {
-        for (int c =0; c <side; c++) {
-            // if pawn here
-            if ((color =plateau_get(p, (unsigned)l, (unsigned)c))) {
-                void* data =plateau_getPtr(p, (unsigned)l, (unsigned)c);
-                graph group =(color ==whitePawn) ?(whiteGroup) :(blackGroup);
-
-                interface_placePawnInGraphAndGroup(data, g, group);
-            }
-        }
-    }
+bool game_winner(interface i, graph whiteGroup, graph blackGroup) {
+    /* (void)blackPawn; */
+    /* int side =plateau_getNbLine(p); */
+    /* void* color; */
+    /* int whiteSide, whiteSide2, blackSide, blackSide2; */
+    /*  */
+    /* graph g =graph_create(); */
+    /* interface_buildGraphPlateauWithoutInterface(p, &whiteSide, &whiteSide2,  */
+    /*         &blackSide, &blackSide2, g); */
+    /*  */
+    /* graph whiteGroup =graph_create(); */
+    /* graph_insertVertex(whiteGroup, &whiteSide); */
+    /* graph_insertVertex(whiteGroup, &whiteSide2); */
+    /*  */
+    /* graph blackGroup =graph_create(); */
+    /* graph_insertVertex(blackGroup, &blackSide); */
+    /* graph_insertVertex(blackGroup, &blackSide2); */
+    /*  */
+    /* for (int l =0; l <side; l++) { */
+    /*     for (int c =0; c <side; c++) { */
+    /*         // if pawn here */
+    /*         if ((color =plateau_get(p, (unsigned)l, (unsigned)c))) { */
+    /*             void* data =plateau_getPtr(p, (unsigned)l, (unsigned)c); */
+    /*             graph group =(color ==whitePawn) ?(whiteGroup) :(blackGroup); */
+    /*  */
+    /*             interface_placePawnInGraphAndGroup(data, g, group); */
+    /*         } */
+    /*     } */
+    /* } */
 
     int r =0;
-    if (graph_sameGroup(whiteGroup, &whiteSide, &whiteSide2))
+    if (graph_sameGroup(whiteGroup, &i->whiteSide1, &i->whiteSide2))
         r =interface_WHITE_PAWN;
 
-    if (graph_sameGroup(blackGroup, &blackSide, &blackSide2))
+    if (graph_sameGroup(blackGroup, &i->blackSide1, &i->blackSide2))
         r =interface_BLACK_PAWN;
 
-    graph_destroy(&g);
-    graph_destroy(&whiteGroup);
-    graph_destroy(&blackGroup);
+    /* graph_destroy(&g); */
+    /* graph_destroy(&whiteGroup); */
+    /* graph_destroy(&blackGroup); */
 
     return r;
 }
@@ -663,11 +658,69 @@ void game_makeLeaf(Node n) {
     }
 }
 
+void game_print(Node n);
+
 int game_getValue(Node n) {
     assert(n);
     game g =tree_getData(n);
     return g->value;
 }
+
+void game_mergeValue(Node n) {
+    assert(game_getValue(n));
+    /* printf("merge"); */
+    /* game_print(n); */
+    /* n =tree_getFather(n); */
+    int value;
+    int prevValue;
+    game g =NULL;
+    while ((value =game_getValue(n)) && (n =tree_getFather(n))) prevValue =value;
+    if (n) {
+        /* printf("\tvalueSon =%d", prevValue); */
+        /* printf("\t\tblank father"); */
+        /* game_print(n); */
+
+        g =tree_getData(n);
+
+        if (g->colorPlayerTurn ==interface_WHITE_PAWN) {
+            if (prevValue ==-1) {
+                g->value =-1;
+            }
+        }
+        else
+            if (prevValue ==1)
+                g->value =1;
+    }
+    /* else */
+        /* printf("already ROOT"); */
+
+    /* printf("\n"); */
+    if (n) {
+        if (g->value) {
+            game_mergeValue(n);
+        }
+        else {
+            Node child;
+            int max;
+            int min;
+            if ((child =tree_getChild(n))) {
+                if ((max =min =game_getValue(child))) {
+                    while ((child =tree_getBrother(child))) {
+                        value =game_getValue(child);
+                        if (! value)
+                            return;
+                        if (value >max)
+                            max =value;
+                        if (value <min)
+                            min =value;
+                    }
+                }
+            }
+            g->value =(g->colorPlayerTurn ==interface_WHITE_PAWN) ?(min) :(max);
+        }
+    }
+}
+
 
 void game_makeNode(Node n) {
     game g =tree_getData(n);
@@ -699,9 +752,8 @@ void game_makeNode(Node n) {
     }
 }
 
-void game_print(Node n);
 
-void interface_mergeTree(interface i, Root root) {
+void game_mergeTree(interface i, Root root, plateau p, graph g, graph whiteGroup, graph blackGroup, list casePlayed, int* nbLeaf) {
     (void)i;
     (void)root;
 
@@ -709,23 +761,49 @@ void interface_mergeTree(interface i, Root root) {
     int futurePlayer =game_switchPlayer(parentGame->colorPlayerTurn);
     void* pawn =(parentGame->colorPlayerTurn ==interface_WHITE_PAWN) ?(&i->whitePawn) :(&i->blackPawn);
 
-    for (unsigned l =0; l <i->size; l++) {
-        for (unsigned c =0; c <i->size; c++) {
-            if (! plateau_get(parentGame->p, l, c)) {
-                if (! game_winner(parentGame->p, &i->whitePawn, &i->blackPawn)) {
-                    plateau futurePlateau =plateau_copy(parentGame->p);
-                    plateau_insert(futurePlateau, l, c, pawn);
+    if (! game_winner(i, whiteGroup, blackGroup)) {
+        for (unsigned l =0; l <i->size; l++) {
+            for (unsigned c =0; c <i->size; c++) {
+                if (! plateau_get(p, l, c)) {
+                    plateau_insert(p, l, c, pawn);
+                    void* data =plateau_getPtr(p, (unsigned)l, (unsigned)c);
+                    if (pawn ==&i->whitePawn)
+                        interface_placePawnInGraphAndGroup(data, g, whiteGroup);
+                    else
+                        interface_placePawnInGraphAndGroup(data, g, blackGroup);
+                    list_pushBack(casePlayed, data);
 
-                    game futureGame =game_create(futurePlateau, futurePlayer, (int)l, (int)c);
-                    interface_mergeTree(i, add_child(root, root, futureGame));
+                    game futureGame =game_create(futurePlayer, (int)l, (int)c);
+                    game_mergeTree(i, add_child(root, root, futureGame), p, g, whiteGroup, blackGroup, casePlayed, nbLeaf);
+
+
+                    // undo
+                    plateau_insert(p, l, c, NULL);
+                    data =list_back(casePlayed);
+                    if (pawn ==&i->whitePawn)
+                        graph_delVertex(whiteGroup, data);
+                    else
+                        graph_delVertex(blackGroup, data);
+                    list_popBack(casePlayed);
                 }
             }
         }
     }
+    else {
+        if (parentGame->colorPlayerTurn ==interface_WHITE_PAWN)
+            parentGame->value =1;
+        else
+            parentGame->value =-1;
+        *nbLeaf =*nbLeaf +1;
+    }
 
-    traverse_tree(root, game_makeLeaf);
-    while (! game_getValue(root))
-        tree_mapInfix(root, game_makeNode);
+
+    /* traverse_tree(root, game_makeLeaf); */
+    /* tree_widthBrowse(root, game_print); */
+    /* tree_mapLeaf(root, game_mergeValue); */
+    /* while (! game_getValue(root)) */
+    /*     tree_mapInfix(root, game_makeNode); */
+
         /* traverse_tree(root, game_makeNode); */
         /* tree_widthBrowse(root, game_makeNode); */
         /* traverse_tree(root, game_makeNode); */
@@ -778,52 +856,154 @@ void game_destroyTree(Node n) {
     tree_mapInfix(n, game_destroyNode);
 }
 
-void interface_botTakePlace(interface i, int colorPawn) {
-    Root root =create_tree();
-    game g =game_create(i->p, colorPawn, 0, 0);
+unsigned long long factorial(int n) {
+    assert(n >0);
+    unsigned long long N =(unsigned long long)n;
+    unsigned long long r =N;
+    while (--N) r *=N;
+    return r;
+}
 
-    root =add_child(root, NULL, g);
-    interface_mergeTree(i, root);
-    /* tree_widthBrowse(root, game_print); */
+int interface_botTakePlace(interface i, int colorPawn) {
+    int side =(int)i->size;
+    int line;
+    int column;
+    int caseRemaining =side *side -(int)list_size(i->casePlayed);
+    if (caseRemaining >10) {
+        printf("Too leaf\n");
 
-    int value =(colorPawn ==interface_WHITE_PAWN) ?(-1) :(1);
-    /* if (colorPawn ==interface_BLACK_PAWN) { */
-    if (game_getValue(root) !=value) {
-        printf("AI loose\n");
-        /* Node nChild =tree_getChild(root); */
-        /* game gChild =tree_getData(nChild); */
-        /* interface_placePawn(i, colorPawn, (unsigned)gChild->line, (unsigned)gChild->column); */
-        /* printf("insert %d,%d\n", gChild->line, gChild->column); */
+        do {
+            line =rand() %side;
+            column =rand() %side;
+        } while (interface_getPawn(i, (unsigned)line, (unsigned)column));
+
+        interface_placePawn(i, colorPawn, (unsigned)line, (unsigned)column);
     }
     else {
-        Node nChild =tree_getChild(root);
-        assert(nChild);
-        game gChild =tree_getData(nChild);
-        assert(gChild);
-        if (gChild->value ==value) {
-            /* plateau_insert(i->p, (unsigned)gChild->line, (unsigned)gChild->column, &i->blackPawn); */
-            interface_placePawn(i, colorPawn, (unsigned)gChild->line, (unsigned)gChild->column);
-            printf("insert %d,%d\n", gChild->line, gChild->column);
-        }
-        else {
-            while ((nChild =tree_getBrother(nChild))) {
-                gChild =tree_getData(nChild);
-                if (gChild->value ==value) {
-                    /* plateau_insert(i->p, (unsigned)gChild->line, (unsigned)gChild->column, &i->blackPawn); */
-                    interface_placePawn(i, colorPawn, (unsigned)gChild->line, (unsigned)gChild->column);
-                    printf("insert %d,%d\n", gChild->line, gChild->column);
-                    break;
+        void* color;
+        /* int whiteSide, whiteSide2, blackSide, blackSide2; */
+        plateau p =plateau_copy(i->p);
+
+        graph g =graph_create();
+        interface_buildGraphPlateauWithoutInterface(p, &i->whiteSide1, &i->whiteSide2, 
+                &i->blackSide1, &i->blackSide2, g);
+
+        graph whiteGroup =graph_create();
+        graph_insertVertex(whiteGroup, &i->whiteSide1);
+        graph_insertVertex(whiteGroup, &i->whiteSide2);
+
+        graph blackGroup =graph_create();
+        graph_insertVertex(blackGroup, &i->blackSide1);
+        graph_insertVertex(blackGroup, &i->blackSide2);
+
+        list casePlayed =list_create();
+
+        for (int l =0; l <side; l++) {
+            for (int c =0; c <side; c++) {
+                // if pawn here
+                if ((color =plateau_get(p, (unsigned)l, (unsigned)c))) {
+                    void* data =plateau_getPtr(p, (unsigned)l, (unsigned)c);
+                    graph group =(color ==&i->whitePawn) ?(whiteGroup) :(blackGroup);
+
+                    interface_placePawnInGraphAndGroup(data, g, group);
+                    list_pushBack(casePlayed, data);
                 }
             }
-            assert(gChild);
         }
+
+        /* assert(! graph_sameGroup(whiteGroup, &i->whiteSide1, &i->whiteSide2)); */
+        /* assert(! graph_sameGroup(blackGroup, &i->blackSide1, &i->blackSide2)); */
+
+
+        Root root =create_tree();
+        game ga =game_create(colorPawn, 0, 0);
+
+        root =add_child(root, NULL, ga);
+        /* tree_widthBrowse(root, game_print); */
+
+        int nbLeaf =0;
+        game_mergeTree(i, root, p, g, whiteGroup, blackGroup, casePlayed, &nbLeaf);
+        printf("nbLeaf =%d\n", nbLeaf);
+        printf("factorial %d =%lld\n", caseRemaining, factorial(caseRemaining));
+        /* tree_widthBrowse(root, game_print); */
+
+
+        while (! game_getValue(root)) {
+            tree_mapLeaf(root, game_mergeValue);
+            /* tree_widthBrowse(root, game_print); */
+        }
+        /* tree_mapLeaf(root, game_mergeValue); */
+        /* tree_mapLeaf(root, game_mergeValue); */
+        /* tree_mapLeaf(root, game_mergeValue); */
+        /* tree_mapLeaf(root, game_mergeValue); */
+        /* tree_mapLeaf(root, game_mergeValue); */
+        /* tree_mapLeaf(root, game_mergeValue); */
+        /* } */
+
+        int value =(colorPawn ==interface_WHITE_PAWN) ?(-1) :(1);
+        /* if (colorPawn ==interface_BLACK_PAWN) { */
+        if (game_getValue(root) !=value) {
+            printf("AI :FUCK off! \\) o_o \\) ^ _|_|_\n");
+            /* int line; */
+            /* int column; */
+            do {
+                line =rand() %side;
+                column =rand() %side;
+            } while (interface_getPawn(i, (unsigned)line, (unsigned)column));
+
+            interface_placePawn(i, colorPawn, (unsigned)line, (unsigned)column);
+            /* Node nChild =tree_getChild(root); */
+            /* game gChild =tree_getData(nChild); */
+            /* interface_placePawn(i, colorPawn, (unsigned)gChild->line, (unsigned)gChild->column); */
+            /* printf("insert %d,%d\n", gChild->line, gChild->column); */
+        }
+        else {
+            Node nChild =tree_getChild(root);
+            assert(nChild);
+            game gChild =tree_getData(nChild);
+            assert(gChild);
+            if (gChild->value ==value) {
+                /* plateau_insert(i->p, (unsigned)gChild->line, (unsigned)gChild->column, &i->blackPawn); */
+                interface_placePawn(i, colorPawn, (unsigned)gChild->line, (unsigned)gChild->column);
+                printf("insert %d,%d\n", gChild->line, gChild->column);
+
+                line =gChild->line;
+                column =gChild->column;
+            }
+            else {
+                while ((nChild =tree_getBrother(nChild))) {
+                    gChild =tree_getData(nChild);
+                    if (gChild->value ==value) {
+                        /* plateau_insert(i->p, (unsigned)gChild->line, (unsigned)gChild->column, &i->blackPawn); */
+                        interface_placePawn(i, colorPawn, (unsigned)gChild->line, (unsigned)gChild->column);
+                        printf("insert %d,%d\n", gChild->line, gChild->column);
+
+                        line =gChild->line;
+                        column =gChild->column;
+                        break;
+                    }
+                }
+                assert(gChild);
+            }
+        }
+
+
+        game_destroyTree(root);
+
+        /* game_destroy(&g); */
+        destroy_tree(root);
+
+
+        graph_destroy(&g);
+        graph_destroy(&whiteGroup);
+        graph_destroy(&blackGroup);
+
+        list_destroy(&casePlayed);
+
     }
-
-
-    game_destroyTree(root);
-
-    /* game_destroy(&g); */
-    destroy_tree(root);
+    printf("line =%d, column =%d\n", line, column);
+    printf("side =%d\n", side);
+    return line *side +column;
 }
 
 
@@ -883,6 +1063,7 @@ SDL_Rect interface_graphCase(interface i, SDL_Surface* area, void* data, int mar
         }
     }
     assert(0);
+    return pos;
 }
 
 void interface_displayGraph(interface i, graph g, SDL_Surface* area) {
@@ -1025,6 +1206,7 @@ SDL_Rect interface_ihmCasePos(interface i, int l, int c) {
 
     int line =plateau_getNbLine(i->p);
     int column =plateau_getNbColumn(i->p);
+    (void)column;
     assert(line ==column);
 
     int caseHeight =area->h /(line +1);
@@ -1053,6 +1235,7 @@ SDL_Rect sdl_whichCase(interface i, SDL_Rect pos) {
 
         int line =plateau_getNbLine(i->p);
         int column =plateau_getNbColumn(i->p);
+        (void)column;
         int sizeCase =(area->h /(line +1)) /3;
         assert(line ==column);
         for (short l=0; l <line; l++) {

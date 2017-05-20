@@ -3,7 +3,9 @@ CFLAGS = -pedantic -W -Wall -g -std=c99 -Werror -DUNIX -lm -Wextra -Wfloat-equal
 		 -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align -Wconversion -Wshadow \
 		 -Wredundant-decls -Wdouble-promotion -Winit-self -Wswitch-default -Wswitch-enum \
 		 -Wundef -Wlogical-op -Winline \
-		 -lSDL_ttf -lSDL_image `sdl-config --cflags --libs`
+		 -lSDL_ttf -lSDL_image `sdl-config --cflags --libs` \
+		 # -DNDEBUG
+
  
 SRC = $(wildcard *.c)
 OBJS = $(SRC:.c=.o)

@@ -13,5 +13,6 @@ int plateau_getNbLine(plateau p);
 int plateau_getNbColumn(plateau p);
 
 plateau plateau_copy(plateau p);
+int plateau_getDensity(plateau p);
 
 #endif

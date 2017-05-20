@@ -8,6 +8,7 @@
 #define interface_BLACK_PAWN 1
 #define interface_WHITE_PAWN 2
 
+
 typedef struct s_interface* interface;
 
 interface interface_create(unsigned side);
@@ -21,7 +22,7 @@ int interface_saveGame(interface i, const char* file);
 interface interface_restoreGame(int idGame, const char* file);
 // void interface_displayHistory();
 int interface_undo(interface i);
-void interface_botTakePlace(interface i, int colorPawn);
+int interface_botTakePlace(interface i, int colorPawn);
 
 
 
