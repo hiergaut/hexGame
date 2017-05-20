@@ -80,9 +80,9 @@ JNIEXPORT jint JNICALL Java_InterfaceAvecC_undo
 /*
  * Class:     InterfaceAvecC
  * Method:    botTakePlace
- * Signature: (I)V
+ * Signature: (I)I
  */
-JNIEXPORT void JNICALL Java_InterfaceAvecC_botTakePlace
+JNIEXPORT jint JNICALL Java_InterfaceAvecC_botTakePlace
   (JNIEnv *, jclass, jint);
 
 #ifdef __cplusplus

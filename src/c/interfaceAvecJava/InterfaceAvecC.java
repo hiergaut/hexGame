@@ -76,6 +76,7 @@ public class InterfaceAvecC {
     /**
      * @param colorPawn use constant variable (BLACK_PAWN, WHITE_PAWN)
      * a robot insert one pawn in the game
+     * @return the number of new case (line *side +column)
      */
-    public static native void botTakePlace(int colorPawn);
+    public static native int botTakePlace(int colorPawn);
 }

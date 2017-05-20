@@ -131,3 +131,6 @@ plateau plateau_copy(plateau p) {
     return copy;
 }
 
+int plateau_getDensity(plateau p) {
+    return (int)p->density;
+}

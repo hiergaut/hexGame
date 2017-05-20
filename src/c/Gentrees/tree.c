@@ -2,7 +2,7 @@
 #include <stdlib.h> 
 #include "tree.h"
 #include <assert.h>
-/* #include "list.h" */
+#include "list.h"
 #include "math.h"
 
 
@@ -125,14 +125,19 @@ int tree_height(Node node) {
 
 
 void tree_widthBrowse(Node node, action_node action) {
-    Node list[1000000000];
-    int cursorRight =0;
-    int cursorLeft =0;
+    /* Node list[1000000000]; */
+    list l =list_create();
+    /* int cursorRight =0; */
+    /* int cursorLeft =0; */
     int level =-1;
 
-    list[cursorRight++] =node;
-    while (cursorLeft !=cursorRight) {
-        Node pullNode =list[cursorLeft++];
+    /* list[cursorRight++] =node; */
+    list_pushBack(l, node);
+    /* while (cursorLeft !=cursorRight) { */
+    while (! list_empty(l)) {
+        /* Node pullNode =list[cursorLeft++]; */
+        Node pullNode =list_front(l);
+        list_popFront(l);
         if (pullNode) {
             if (tree_height(pullNode) !=level) {
                 printf("\n");
@@ -147,20 +152,24 @@ void tree_widthBrowse(Node node, action_node action) {
 
 
             if (pullNode->first_child) {
-                list[cursorRight++] =pullNode->first_child;
+                /* list[cursorRight++] =pullNode->first_child; */
+                list_pushBack(l, pullNode->first_child);
 
                 Node brother =pullNode->first_child->sibling;
                 while (brother) {
-                    list[cursorRight++] =brother;
+                    /* list[cursorRight++] =brother; */
+                    list_pushBack(l, brother);
                     brother =brother->sibling;
                 }
             }
             else
-                list[cursorRight++] =NULL;
+                /* list[cursorRight++] =NULL; */
+                list_pushBack(l, NULL);
 
             if (pullNode->parent && pullNode ==last_sibling(pullNode)) {
                 printf("    ");
-                list[cursorRight++] =NULL;
+                /* list[cursorRight++] =NULL; */
+                list_pushBack(l, NULL);
             }
         }
         else
@@ -212,7 +221,44 @@ void tree_mapInfix(Node n, action_node action) {
         tree_mapInfix(n->sibling, action);
 }
 
+Node tree_nextLeaf(Node n) {
+    assert(n);
+    assert(! n->first_child);
+    if (n->sibling) {
+        n =n->sibling;
+        while (n->first_child) {
+            n =n->first_child;
+        }
+        return n;
+    }
+    else {
+        n =n->parent;
+        while (! n->sibling) {
+            if (n->parent) {
+                n =n->parent;
+            }
+            else {
+                return NULL;
+            }
+        }
+        n =n->sibling;
+        while (n->first_child) {
+            n =n->first_child;
+        }
+        return n;
+    }
+}
 
+void tree_mapLeaf(Node n, action_node action) {
+    while (n->first_child) {
+        n =n->first_child;
+    }
+    action(n);
+    while ((n =tree_nextLeaf(n))) {
+        action(n);
+    }
+}
 
-
-
+Node tree_getFather(Node n) {
+    return n->parent;
+}

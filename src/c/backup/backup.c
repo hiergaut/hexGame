@@ -11,7 +11,8 @@
 
 void backup_printSquare(char* str, plateau p, void* whitePawn, void* blackPawn) {
     int side;
-    assert((side =plateau_getNbLine(p)) ==plateau_getNbColumn(p));
+    side =plateau_getNbLine(p);
+    assert(side ==plateau_getNbColumn(p));
 
     for (int l =0; l <side; l++) {
         for (int c =0; c <side; c++) {
@@ -33,8 +34,8 @@ void backup_printData(catalog cat, int key, plateau p, list casePlayed, void* wh
 
     /* strcat(str, "\\hex\n"); */
 
-    int side;
-    assert((side =plateau_getNbLine(p)) ==plateau_getNbColumn(p));
+    int side =plateau_getNbLine(p);
+    assert(side ==plateau_getNbColumn(p));
     sprintf(temp, "\\dim %d\n", side);
     strcpy(str, temp);
 
