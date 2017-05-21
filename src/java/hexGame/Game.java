@@ -1,11 +1,12 @@
 import java.util.Scanner;
 
-public class Game {
+public abstract class Game {
 
     protected static int boardSize = 4;
     protected static final String RED = "\u001b[41m \u001b[0m";
     protected static final String BLUE = "\u001b[44m \u001b[0m";
     protected static final String WHITE = "\u001b[47m \u001b[0m";
+    protected static int savedGame;
 
     private static void startGameC(Player p1, Player p2, Scanner s) {
 	boolean gameover = false;
@@ -18,11 +19,10 @@ public class Game {
 
 	System.out.println(starting.getName() + " starts the game !");
 	while (!gameover) {
-	    Functions.printInfos(starting);
-	    Functions.displayBoard(p1,p2,boardSize);
-	    starting.play(s);
-	    if (Functions.undo(s)) {
-		starting.play(s);
+	    gameover = starting.play(p1,p2,boardSize,s);
+	    if (gameover) {
+		System.out.println(starting.getName() + "se rend!");
+		break;
 	    }
 	    
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
@@ -30,14 +30,12 @@ public class Game {
 		Functions.displayBoard(p1,p2,boardSize);
 		break;
 	    }
+	    
 
-	    Functions.printInfos(challenger);
-	    Functions.displayBoard(p1,p2,boardSize);
-
-	    challenger.play(s);
-
-	    if (Functions.undo(s)) {
-		challenger.play(s);
+	    gameover = challenger.play(p1,p2,boardSize,s);
+	    if (gameover) {
+		System.out.println(challenger.getName() +" se rend!");
+		break;
 	    }
 
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
@@ -46,6 +44,17 @@ public class Game {
 		break;
 	    }
 	}
+    }
+    
+    /**
+     * Load a previous game
+     * @param s, the scanner for I/O
+     */
+    private static void loadGame(Scanner s) {
+	System.out.print("Name of file to load : ");
+	String name = s.nextLine();
+
+	InterfaceAvecC.restoreGame(Game.savedGame,name);
     }
 
     public static void main(String[] args) {
@@ -83,6 +92,10 @@ public class Game {
 		    }
 		    break;
 		case 2:
+		    scan.nextLine();
+		    loadGame(scan);
+		    break;
+		case 3:
 		    System.out.println("Menu options");
 		    Functions.printOptions(p1,p2);
 		    switch ( scan.nextInt() ) {
@@ -101,7 +114,7 @@ public class Game {
 			    break;
 		    }
 		    break;
-		case 3:
+		case 4:
 		    System.out.println("Goodbye !");
 		    wantsToQuit = true;
 		    break;

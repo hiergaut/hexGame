@@ -15,10 +15,10 @@ class AI extends Player {
     /**
      * Simple wrapper for AI's play method
      */
-    @Override
-    public void play(Scanner s) {
+    public boolean play(Player p1, Player p2, int size, Scanner s) {
 	InterfaceAvecC.botTakePlace(getPawn());
 	incRound();
+	return false;
     }
 
 }

@@ -29,8 +29,7 @@ class Player {
 
     /**
      * Sets the name of the player
-     * @param n, the new name of the player
-     */
+     * @param n, the new name of the player */
     public void setName(String name) {
 	this.name = name;
     }
@@ -61,10 +60,16 @@ class Player {
 
     /**
      * Increment the round number
-     * @return the new round
      */
     public void incRound() {
 	++round;
+    }
+
+    /**
+     * Decrement the round number
+     */
+    private void decRound(){
+	--round;
     }
 
     /**
@@ -102,11 +107,44 @@ class Player {
      * The player play his turn
      * @param s, the scanner for I/O
      */
-    public void play(Scanner s) {
+    public boolean play(Player p1, Player p2, int size, Scanner s) {
+	boolean notOver = false;
+	while (!notOver) {
+	    Functions.printInfos(this);
+	    Functions.displayBoard(p1,p2,size);
+	    Functions.printActionMenu();
+	    switch (s.nextInt()) {
+		case 1:
+		    placeAPawn(s);
+		    break;
+		case 2:
+		    s.nextLine();
+		    Game.savedGame = saveGame(s);
+		    break;
+		case 3:
+		    cancelMove();
+		    break;
+		case 4:
+		    return true;
+		case 5:
+		    notOver = endTurn();
+		    break;
+		default:
+		    System.out.println("Choix invalide");
+		    break;
+	    }
+	}
+	return false;
 
+    }
+
+    /**
+     * The player place a pawn on the board
+     * @param s, the scanner for I/O
+     */
+    private void placeAPawn(Scanner s) {
 	boolean isPossible = false;
 	while (!isPossible) {
-	    Functions.printActionMenu();
 	    System.out.println("Ou posez le pion ?");
 	    int i,j;
 	    i = (s.nextInt() - 1) % Game.boardSize ;
@@ -118,13 +156,36 @@ class Player {
 		lastMove = "row " + (i + 1) + " col " + (j + 1);
 		incRound();
 		isPossible = true;
-		
+
 	    }
 	    else {
 		System.out.println("Action impossible ! \n");
 	    }
 	}
     }
-    
+
+    /**
+     * The player saves the current state of the game
+     */
+    private int saveGame(Scanner s) {
+	System.out.println("Entrez le nom de la sauvegarde:");
+	String saveName = s.nextLine();
+	return InterfaceAvecC.saveGame(saveName);
+    }
+
+    /**
+     * The player cancel his last move
+     */
+    private void cancelMove() {
+	InterfaceAvecC.undo();
+	decRound();
+    }
+
+    private boolean endTurn() {
+	System.out.println("Fin du tour!");
+	return true;
+    }
+
+
 
 }

@@ -8,8 +8,9 @@ public class Functions {
     public static void printMenu() {
 	System.out.println();
 	System.out.println("1. Start");
-	System.out.println("2. Options");
-	System.out.println("3. Quitter");
+	System.out.println("2. Load");
+	System.out.println("3. Options");
+	System.out.println("4. Exit");
 	System.out.println();
     }
 
@@ -18,9 +19,9 @@ public class Functions {
      */
     public static void printSubMenu() {
 	System.out.println();
-	System.out.println("1. 1 Joueur");
-	System.out.println("2. 2 Joueur");
-	System.out.println("3. Retour");
+	System.out.println("1. 1 Player");
+	System.out.println("2. 2 Player");
+	System.out.println("3. Return");
 	System.out.println();
     }
 
@@ -29,7 +30,7 @@ public class Functions {
      */
     public static void printActionMenu() {
 	System.out.println();
-	System.out.println("1. Place a pawn \t\t 2. Save the game");
+	System.out.println("1. Place a pawn \t\t 2. Save the game \t\t 5.End Turn");
 	System.out.println("3. Cancel last move \t\t 4. Give up.");
 	System.out.println();
 
