@@ -124,10 +124,11 @@ public abstract class Game {
 		System.out.println(debug);
 	    }
 
-	    Game.boardSize = Integer.valueOf(lines[0]);
-	    int gameId = Integer.valueOf(lines[1]);
+	    Game.boardSize = Integer.parseInt(lines[0]);
+	    int gameId = Integer.parseInt(lines[1]);
+	    System.out.println(gameId);
 	    Player challenger = loadInfos(p1,p2,comp,lines);
-	    //InterfaceAvecC.restoreGame(gameId,SAVEG);
+	    InterfaceAvecC.restoreGame(gameId,SAVEG);
 	    r.close();
 	    resumeGame(p1,challenger,s);
 	}
@@ -146,10 +147,10 @@ public abstract class Game {
     private static Player loadInfos(Player p1, Player p2, AI comp, String[] buffer) {
 	// Player 1 infos
 	p1.setName(buffer[2]);
-	p1.setPawn(Integer.valueOf((buffer[3])));
+	p1.setPawn(Integer.parseInt((buffer[3])));
 	p1.setEdge(buffer[4]);
-	p1.setRound(Integer.valueOf(buffer[5]));
-	p1.setMoveNumber(Integer.valueOf(buffer[6]));
+	p1.setRound(Integer.parseInt(buffer[5]));
+	p1.setMoveNumber(Integer.parseInt(buffer[6]));
 	p1.setLastMove(buffer[7]);
 	p1.setStartingStatus(Boolean.parseBoolean(buffer[8]));
 	p1.setPlaying(Boolean.parseBoolean(buffer[9]));
@@ -157,20 +158,20 @@ public abstract class Game {
 	// Player 2 or CPU infos
 	if (buffer[10].equals("Computer")) {
 	    comp.setName(buffer[10]);
-	    comp.setPawn(Integer.valueOf((buffer[11])));
+	    comp.setPawn(Integer.parseInt((buffer[11])));
 	    comp.setEdge(buffer[12]);
-	    comp.setRound(Integer.valueOf(buffer[13]));
-	    comp.setMoveNumber(Integer.valueOf(buffer[14]));
+	    comp.setRound(Integer.parseInt(buffer[13]));
+	    comp.setMoveNumber(Integer.parseInt(buffer[14]));
 	    comp.setLastMove(buffer[15]);
 	    comp.setStartingStatus(Boolean.parseBoolean(buffer[16]));
 	    return comp;
 	}
 	else {
 	    p2.setName(buffer[10]);
-	    p2.setPawn(Integer.valueOf((buffer[11])));
+	    p2.setPawn(Integer.parseInt((buffer[11])));
 	    p2.setEdge(buffer[12]);
-	    p2.setRound(Integer.valueOf(buffer[13]));
-	    p2.setMoveNumber(Integer.valueOf(buffer[14]));
+	    p2.setRound(Integer.parseInt(buffer[13]));
+	    p2.setMoveNumber(Integer.parseInt(buffer[14]));
 	    p2.setLastMove(buffer[15]);
 	    p2.setStartingStatus(Boolean.parseBoolean(buffer[16]));
 	    return p2;
