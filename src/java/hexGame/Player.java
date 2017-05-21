@@ -106,7 +106,7 @@ class Player {
 
 	boolean isPossible = false;
 	while (!isPossible) {
-	    System.out.println();
+	    Functions.printActionMenu();
 	    System.out.println("Ou posez le pion ?");
 	    int i,j;
 	    i = (s.nextInt() - 1) % Game.boardSize ;

@@ -23,6 +23,17 @@ public class Functions {
 	System.out.println("3. Retour");
 	System.out.println();
     }
+
+    /**
+     * Display the action menu
+     */
+    public static void printActionMenu() {
+	System.out.println();
+	System.out.println("1. Place a pawn \t\t 2. Save the game");
+	System.out.println("3. Cancel last move \t\t 4. Give up.");
+	System.out.println();
+
+    }
      
     /**
      * Display overhead infos of game
