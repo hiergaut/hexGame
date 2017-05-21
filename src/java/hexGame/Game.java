@@ -71,6 +71,7 @@ public class Game {
 			    break;
 			case 2:
 			    System.out.println("Humain contre Humain ! ");
+			    p1.setName(Functions.askPlayerName(1,scan));
 			    p2.setName(Functions.askPlayerName(2,scan));
 			    startGameC(p1,p2,scan);
 			    break;
