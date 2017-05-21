@@ -23,4 +23,7 @@ int graph_onlyVertex(vertex v);
 
 int graph_sameGroup(graph g, const void* data, const void* data2);
 int graph_neighbourVertex(graph g, const void* data, const void* data2);
+int graph_smallerWay(graph g, graph wall, void* data, void* data2);
+void* graph_middleWay(graph g, graph wall, graph all, void* data, void* data2, int ith);
+graph graph_cat(graph g, graph g2);
 #endif
