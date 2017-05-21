@@ -692,7 +692,6 @@ void game_mergeValue(Node n) {
     }
 }
 
-
 void game_makeNode(Node n) {
     game g =tree_getData(n);
     int min;
@@ -722,7 +721,6 @@ void game_makeNode(Node n) {
 
     }
 }
-
 
 void game_mergeTree(interface i, Root root, plateau p, graph g, graph whiteGroup, graph blackGroup, list casePlayed, int* nbLeaf) {
     (void)i;
@@ -835,6 +833,523 @@ unsigned long long factorial(int n) {
     return r;
 }
 
+int interface_edge(interface i, void* data) {
+    return (data ==&i->whiteSide1) || (data ==&i->whiteSide2)
+        || (data ==&i->blackSide1) || (data ==&i->blackSide2);
+}
+
+struct s_rank {
+    int rank;
+    int own;
+    int other;
+};
+
+void interface_botBridge(interface i, int colorBotPawn, int* line, int* col) {
+    int l;
+    int c;
+    struct s_rank ranking[i->size][i->size];
+    for (l =0; l <(int)i->size; l++) {
+        for (c =0; c <(int)i->size; c++) {
+            ranking[l][c].rank =0;
+            ranking[l][c].own =0;
+            ranking[l][c].other =0;
+        }
+    }
+
+    graph opponentGroup =(colorBotPawn ==interface_WHITE_PAWN) ?(i->blackGroup) :(i->whiteGroup);
+
+    // for each pawn in versus group
+    list_it it_vog =list_it_create(graph_getCollection(opponentGroup));
+    while (! list_it_end(it_vog)) {
+        vertex vog =list_it_get(it_vog);
+        assert(vog);
+        void* dv =graph_getData(vog);
+        assert(dv);
+
+        if (! interface_edge(i, dv)) {
+            vertex vg=graph_findVertex(graph_getCollection(i->g), dv);
+            assert(vg);
+
+            // for each neighbor in graph
+            list_it it_vg =list_it_create(graph_getVertices(vg));
+            while (! list_it_end(it_vg)) {
+                vertex vg2 =list_it_get(it_vg);
+                assert(vg2);
+                void* dvg2 =graph_getData(vg2);
+                assert(dvg2);
+
+                // if empty neighbor
+                if (! interface_edge(i, dvg2)) {
+                    if (! plateau_searchPtrCaseData(i->p, dvg2)) {
+
+                        /* plateau_searchPtrCasePos(i->p, dvg2, &l, &c); */
+                        /* ranking[l][c].rank++; */
+                        /* ranking[l][c].other =1; */
+
+
+                        // for each neighbor of neighbor
+                        list_it it_vg2 =list_it_create(graph_getVertices(vg2));
+                        while (! list_it_end(it_vg2)) {
+                            vertex vg3 =list_it_get(it_vg2);
+                            assert(vg3);
+                            void* dvg3 =graph_getData(vg3);
+                            assert(dvg3);
+
+                            // if empty neighbor^2
+                            if (! interface_edge(i, dvg3)) {
+                                if (! plateau_searchPtrCaseData(i->p, dvg3)) {
+                                    if (graph_neighbourVertex(i->g, dvg3, dv)) {
+
+                                        // for each neighbor ^3
+                                        list_it it_vg3 =list_it_create(graph_getVertices(vg3));
+                                        while (! list_it_end(it_vg3)) {
+                                            vertex vg4 =list_it_get(it_vg3);
+                                            assert(vg4);
+                                            void* dvg4 =graph_getData(vg4);
+                                            assert(dvg4);
+
+                                            if (! interface_edge(i, dvg4)) {
+                                                if (! plateau_searchPtrCaseData(i->p, dvg4)) {
+                                                    if (graph_neighbourVertex(i->g, dvg4, dvg2)) {
+                                                        /* plateau_searchPtrCasePos(i->p, dvg2, &l, &c); */
+                                                        /* ranking[l][c].rank++; */
+                                                        /* ranking[l][c].other =1; */
+                                                        /*  */
+                                                        /* plateau_searchPtrCasePos(i->p, dvg3, &l, &c); */
+                                                        /* ranking[l][c].rank++; */
+                                                        /* ranking[l][c].other =1; */
+
+                                                        plateau_searchPtrCasePos(i->p, dvg4, &l, &c);
+                                                        ranking[l][c].rank++;
+                                                        ranking[l][c].other =1;
+
+                                                    }
+                                                }
+                                            }
+                                            /* else if (graph_neighbourVertex(i->g, dvg3, &i->whiteSide1) || graph_neighbourVertex(i->g, dvg3, &i->whiteSide2)) { */
+                                            /*     plateau_searchPtrCasePos(i->p, dvg3, &l, &c); */
+                                            /*     ranking[l][c].rank +=2; */
+                                            /*     ranking[l][c].other =1; */
+                                            /* } */
+
+                                            list_it_next(it_vg3);
+                                        }
+                                        list_it_destroy(&it_vg3);
+                                    }
+                                }
+                            }
+                            list_it_next(it_vg2);
+                        }
+                        list_it_destroy(&it_vg2);
+                    }
+                }
+                list_it_next(it_vg);
+            }
+            list_it_destroy(&it_vg);
+        }
+        list_it_next(it_vog);
+    }
+    list_it_destroy(&it_vog);
+
+
+
+    graph botGroup =(colorBotPawn ==interface_WHITE_PAWN) ?(i->whiteGroup) :(i->blackGroup);
+    
+    // for each bot's pawn
+    list_it it_vbg =list_it_create(graph_getCollection(botGroup));
+    while (! list_it_end(it_vbg)) {
+        vertex vbg =list_it_get(it_vbg);
+        assert(vbg);
+        void* dv =graph_getData(vbg);
+        assert(dv);
+
+        if (! interface_edge(i, dv)) {
+            vertex vg=graph_findVertex(graph_getCollection(i->g), dv);
+            assert(vg);
+
+            // for each neighbor in graph
+            list_it it_vg =list_it_create(graph_getVertices(vg));
+            while (! list_it_end(it_vg)) {
+                vertex vg2 =list_it_get(it_vg);
+                assert(vg2);
+                void* dvg2 =graph_getData(vg2);
+                assert(dvg2);
+
+                // if empty neighbor
+                if (! interface_edge(i, dvg2)) {
+                    if (! plateau_searchPtrCaseData(i->p, dvg2)) {
+
+                        /* plateau_searchPtrCasePos(i->p, dvg2, &l, &c); */
+                        /* ranking[l][c].rank++; */
+                        /* ranking[l][c].own =1; */
+
+                        // for each neighbor of neighbor
+                        list_it it_vg2 =list_it_create(graph_getVertices(vg2));
+                        while (! list_it_end(it_vg2)) {
+                            vertex vg3 =list_it_get(it_vg2);
+                            assert(vg3);
+                            void* dvg3 =graph_getData(vg3);
+                            assert(dvg3);
+
+                            // if empty neighbor^2
+                            if (! interface_edge(i, dvg3)) {
+                                if (! plateau_searchPtrCaseData(i->p, dvg3)) {
+                                    // if also neighbor of first
+                                    if (graph_neighbourVertex(i->g, dvg3, dv)) {
+
+                                        // for each neighbor ^3
+                                        list_it it_vg3 =list_it_create(graph_getVertices(vg3));
+                                        while (! list_it_end(it_vg3)) {
+                                            vertex vg4 =list_it_get(it_vg3);
+                                            assert(vg4);
+                                            void* dvg4 =graph_getData(vg4);
+                                            assert(dvg4);
+
+                                            if (! interface_edge(i, dvg4)) {
+                                                if (! plateau_searchPtrCaseData(i->p, dvg4)) {
+
+                                                    if (graph_neighbourVertex(i->g, dvg4, dvg2)) {
+                                                        /* plateau_searchPtrCasePos(i->p, dvg2, &l, &c); */
+                                                        /* ranking[l][c]++; */
+                                                        plateau_searchPtrCasePos(i->p, dvg4, &l, &c);
+                                                        ranking[l][c].rank++;
+                                                        ranking[l][c].own =1;
+
+                                                        /* plateau_searchPtrCasePos(i->p, dvg3, &l, &c); */
+                                                        /* ranking[l][c].rank++; */
+                                                        /* ranking[l][c].own =1; */
+                                                        /*  */
+                                                        /* plateau_searchPtrCasePos(i->p, dvg2, &l, &c); */
+                                                        /* ranking[l][c].rank++; */
+                                                        /* ranking[l][c].own =1; */
+                                                        /*  */
+                                                        /* if (graph_neighbourVertex(i->g, dvg4, &i->whiteSide1) || graph_neighbourVertex(i->g, dvg4, &i->whiteSide2)) { */
+                                                        /*     plateau_searchPtrCasePos(i->p, dvg4, &l, &c); */
+                                                        /*     ranking[l][c]++; */
+                                                        /* } */
+                                                    }
+                                                }
+                                            }
+                                            /* else if (graph_neighbourVertex(i->g, dvg3, &i->blackSide1) || graph_neighbourVertex(i->g, dvg3, &i->blackSide2)) { */
+                                            /*     plateau_searchPtrCasePos(i->p, dvg3, &l, &c); */
+                                            /*     ranking[l][c].rank +=2; */
+                                            /*     ranking[l][c].own =1; */
+                                            /* } */
+                                            list_it_next(it_vg3);
+                                        }
+                                        list_it_destroy(&it_vg3);
+                                    }
+                                }
+                            }
+                            list_it_next(it_vg2);
+                        }
+                        list_it_destroy(&it_vg2);
+                    }
+                }
+                list_it_next(it_vg);
+            }
+            list_it_destroy(&it_vg);
+        }
+        list_it_next(it_vbg);
+    }
+    list_it_destroy(&it_vbg);
+
+    
+    int max =0;
+    int lmax;
+    int cmax;
+    for (l =0; l <(int)i->size; l++) {
+        for (c =0; c <(int)i->size; c++) {
+            if (plateau_get(i->p, (unsigned)l, (unsigned)c)) {
+                printf(" ");
+            }
+            else {
+                if (ranking[l][c].own && ranking[l][c].other)
+                    printf("\x1B[33m%d\x1B[0m", ranking[l][c].rank);
+                else if (ranking[l][c].own)
+                    printf("\x1B[32m%d\x1B[0m", ranking[l][c].rank);
+                else if (ranking[l][c].other)
+                    printf("\x1B[31m%d\x1B[0m", ranking[l][c].rank);
+                else
+                    printf("%d", ranking[l][c].rank);
+
+            }
+
+            if (ranking[l][c].rank >=max) {
+                lmax =l;
+                cmax =c;
+                max =ranking[l][c].rank;
+            }
+        }
+        printf("\n");
+    }
+
+    interface_placePawn(i, colorBotPawn, (unsigned)lmax, (unsigned)cmax);
+    *line =lmax;
+    *col =cmax;
+}
+
+void interface_botCutSmallerWay(interface i, int colorBotPawn, int* line, int* col) {
+    /* int opponentColor; */
+    /* graph botGroup; */
+    /* graph opponentGroup; */
+    /* (void)opponentColor; */
+    /* (void)botGroup; */
+    /* (void)opponentGroup; */
+    /* if (colorBotPawn ==interface_WHITE_PAWN) { */
+    /*     opponentColor =interface_BLACK_PAWN; */
+    /*  */
+    /*     botGroup =i->whiteGroup; */
+    /*     opponentGroup =i->blackGroup; */
+    /* } */
+    /* else { */
+    /*     opponentColor =interface_WHITE_PAWN; */
+    /*  */
+    /*     botGroup =i->blackGroup; */
+    /*     opponentGroup =i->whiteGroup; */
+    /* } */
+
+    int len;
+    int minLen =1000;
+    void* minData;
+    void* minData2;
+    graph minWallGroup;
+    int cptOnlyWhite =0;
+    int cptOnlyBlack =0;
+
+    /* plateau_print(i->p); */
+    /* graph_print(i->reduceGraph); */
+
+    // for each vertex in reduce graph
+    list_it it_vrd =list_it_create(graph_getCollection(i->reduceGraph));
+    while (! list_it_end(it_vrd)) {
+        vertex vrd =list_it_get(it_vrd);
+        assert(vrd);
+        void* dvrd =graph_getData(vrd);
+        assert(dvrd);
+
+        // color of case
+        void* cvrd =NULL;
+        // if case not empty
+        if (interface_edge(i, dvrd)) {
+            if (dvrd ==&i->whiteSide1 || dvrd ==&i->whiteSide2)
+                cvrd =&i->whitePawn;
+            else
+                cvrd =&i->blackPawn;
+        }
+        /* if (cvrd || (cvrd =plateau_searchPtrCaseData(i->p, dvrd))) { */
+        if ((cvrd || (cvrd =plateau_searchPtrCaseData(i->p, dvrd))) && cvrd !=&i->blackPawn) {
+
+            // for each vertex in reduce graph
+            list_it it_vrd2 =list_it_create(graph_getCollection(i->reduceGraph));
+            while (! list_it_end(it_vrd2)) {
+                vertex vrd2 =list_it_get(it_vrd2);
+                assert(vrd2);
+                void* dvrd2 =graph_getData(vrd2);
+                assert(dvrd2);
+
+                // if not a same case, and same color first
+                if (dvrd !=dvrd2) {
+                    void* cvrd2 =NULL;
+                    if (interface_edge(i, dvrd2)) {
+                        if (dvrd2 ==&i->whiteSide1 || dvrd2 ==&i->whiteSide2)
+                            cvrd2 =&i->whitePawn;
+                        else
+                            cvrd2 =&i->blackPawn;
+                    }
+                    if (cvrd2 || (cvrd2 =plateau_searchPtrCaseData(i->p, dvrd2))) {
+                        /* assert(cvrd ==cvrd2); */
+                        if (cvrd ==cvrd2) {
+                            if (cvrd2 ==&i->whitePawn) {
+                                cptOnlyWhite++;
+                                printf("\x1B[7mwhite\x1B[0m :");
+                            }
+                            else {
+                                cptOnlyBlack++;
+                                printf("black :");
+                            }
+
+
+                            graph wallGroup =(cvrd2 ==&i->whitePawn) ?(i->blackGroup) :(i->whiteGroup);
+                            len =graph_smallerWay(i->reduceGraph, wallGroup, dvrd, dvrd2);
+                            printf("\tlen =%d", len);
+
+                            if (len <minLen) {
+                                minLen =len;
+                                minData =dvrd;
+                                minData2 =dvrd2;
+                                minWallGroup =wallGroup;
+                                printf("\tminLen =%d", minLen);
+                            }
+
+                            if (! (interface_edge(i, dvrd) || interface_edge(i, dvrd2))) {
+                                plateau_searchPtrCasePos(i->p, dvrd, line, col);
+                                printf("\t%d %d ->", *line, *col);
+                                plateau_searchPtrCasePos(i->p, dvrd2, line, col);
+                                printf("%d %d", *line, *col);
+                                printf(" =%d", len);
+                            }
+                                printf("\n");
+                        }
+                    }
+                }
+
+
+                list_it_next(it_vrd2);
+            }
+            list_it_destroy(&it_vrd2);
+
+        }
+        list_it_next(it_vrd);
+    }
+    list_it_destroy(&it_vrd);
+    assert(minLen !=1000);
+
+
+    printf("minLen %d\n", minLen);
+    int minDataLine =-1;
+    int minDataColumn =-1;
+    int whiteSide1 =0;
+    int whiteSide2 =0;
+    int blackSide1 =0;
+    int blackSide2 =0;
+    if (interface_edge(i, minData)) {
+        if (minData ==&i->whiteSide1 || minData ==&i->whiteSide2)
+            if (minData ==&i->whiteSide1) {
+                printf("whiteSide1");
+                whiteSide1 =1;
+            }
+            else {
+                printf("whiteSide2");
+                whiteSide2 =1;
+            }
+        else
+            if (minData ==&i->blackSide1) {
+                printf("blackSide1");
+                blackSide1 =1;
+            }
+            else {
+                printf("blackSide2");
+                blackSide2 =1;
+            }
+        printf("\n");
+    }
+    else {
+        plateau_searchPtrCasePos(i->p, minData, &minDataLine, &minDataColumn);
+        printf("minData %d %d\n", minDataLine, minDataColumn);
+    }
+
+
+    int minData2Line =-1;
+    int minData2Column =-1;
+    if (interface_edge(i, minData2)) {
+        if (minData2 ==&i->whiteSide1 || minData2 ==&i->whiteSide2)
+            if (minData2 ==&i->whiteSide1) {
+                printf("whiteSide1");
+                whiteSide1 =2;
+            }
+            else {
+                printf("whiteSide2");
+                whiteSide2 =2;
+                }
+        else
+            if (minData2 ==&i->blackSide1) {
+                printf("blackSide1");
+                blackSide1 =2;
+            }
+            else {
+                printf("blackSide2");
+                blackSide2 =2;
+            }
+        printf("\n");
+    }
+    else {
+        plateau_searchPtrCasePos(i->p, minData2, &minData2Line, &minData2Column);
+        printf("minData2 %d %d\n", minData2Line, minData2Column);
+    }
+
+    int middleLen =minLen /2 +1;
+    if (middleLen ==0) {
+        printf("middleLen 0 ->1\n");
+        middleLen =1;
+    }
+    printf("middleLen =%d\n", middleLen);
+
+    /* void* middleWay =graph_middleWay(i->reduceGraph, minWallGroup, minData, minData2, middleLen); */
+    graph all =graph_cat(i->whiteGroup, i->blackGroup);
+    printf("MIDDLEWAY\n");
+    void* middleWay =graph_middleWay(i->reduceGraph, minWallGroup, all, minData, minData2, middleLen);
+    graph_destroy(&all);
+    plateau_searchPtrCasePos(i->p, middleWay, line, col);
+
+    interface_placePawn(i, colorBotPawn, (unsigned)(*line), (unsigned)(*col));
+
+
+
+    if (whiteSide1) {
+        if (whiteSide1 ==1)
+            printf("\x1B[32m");
+        else
+            printf("\x1B[31m");
+        for (unsigned ind =0; ind <i->size; ind++) {
+            printf("-");
+        }
+        printf("\x1B[0m");
+        printf("\n");
+    }
+    for (int l =0; l <(int)i->size; l++) {
+        if (blackSide1) {
+            if (blackSide1 ==1)
+                printf("\x1B[32m");
+            else
+                printf("\x1B[31m");
+            printf("|");
+            printf("\x1B[0m");
+        }
+        for (int c =0; c <(int)i->size; c++) {
+            if (plateau_get(i->p, (unsigned)l, (unsigned)c)) {
+                char car =(plateau_get(i->p, (unsigned)l, (unsigned)c) ==&i->whitePawn) ?('o') :('*');
+                if (l ==minDataLine && c ==minDataColumn)
+                    printf("\x1B[32m%c\x1B[0m", car);
+                else if (l ==minData2Line && c ==minData2Column)
+                    printf("\x1B[31m%c\x1B[0m", car);
+                else if (l ==*line && c ==*col)
+                    printf("\x1B[33m%c\x1B[0m", car);
+                else
+                    printf("%c", car);
+            }
+            else {
+                printf(".");
+
+            }
+
+        }
+        if (blackSide2) {
+            if (blackSide2 ==1)
+                printf("\x1B[32m");
+            else
+                printf("\x1B[31m");
+            printf("|");
+            printf("\x1B[0m");
+        }
+        printf("\n");
+    }
+    if (whiteSide2) {
+        if (whiteSide2 ==1)
+            printf("\x1B[32m");
+        else
+            printf("\x1B[31m");
+        for (unsigned ind =0; ind <i->size; ind++) {
+            printf("-");
+        }
+        printf("\x1B[0m");
+        printf("\n");
+    }
+    printf("minLen =%d, middleLen =%d\n", minLen, middleLen);
+    printf("onlyWhite =%d, onlyBlack =%d\n", cptOnlyWhite, cptOnlyBlack);
+    printf("\n");
+}
+
 int interface_botTakePlace(interface i, int colorPawn) {
     int side =(int)i->size;
     int line;
@@ -843,12 +1358,14 @@ int interface_botTakePlace(interface i, int colorPawn) {
     if (caseRemaining >10) {
         printf("Too leaf\n");
 
-        do {
-            line =rand() %side;
-            column =rand() %side;
-        } while (interface_getPawn(i, (unsigned)line, (unsigned)column));
+        /* do { */
+        /*     line =rand() %side; */
+        /*     column =rand() %side; */
+        /* } while (interface_getPawn(i, (unsigned)line, (unsigned)column)); */
 
-        interface_placePawn(i, colorPawn, (unsigned)line, (unsigned)column);
+        /* interface_botBridge(i, colorPawn, &line, &column); */
+        interface_botCutSmallerWay(i, colorPawn, &line, &column);
+        /* interface_placePawn(i, colorPawn, (unsigned)line, (unsigned)column); */
     }
     else {
         void* color;
@@ -917,12 +1434,14 @@ int interface_botTakePlace(interface i, int colorPawn) {
             printf("AI :FUCK off! \\) o_o \\) ^ _|_|_\n");
             /* int line; */
             /* int column; */
-            do {
-                line =rand() %side;
-                column =rand() %side;
-            } while (interface_getPawn(i, (unsigned)line, (unsigned)column));
+            /* do { */
+            /*     line =rand() %side; */
+            /*     column =rand() %side; */
+            /* } while (interface_getPawn(i, (unsigned)line, (unsigned)column)); */
 
-            interface_placePawn(i, colorPawn, (unsigned)line, (unsigned)column);
+            /* interface_placePawn(i, colorPawn, (unsigned)line, (unsigned)column); */
+            /* interface_botBridge(i, colorPawn, &line, &column); */
+            interface_botCutSmallerWay(i, colorPawn, &line, &column);
             /* Node nChild =tree_getChild(root); */
             /* game gChild =tree_getData(nChild); */
             /* interface_placePawn(i, colorPawn, (unsigned)gChild->line, (unsigned)gChild->column); */

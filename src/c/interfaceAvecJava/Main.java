@@ -39,11 +39,12 @@ public class Main {
 
 
         InterfaceAvecC.saveGame("file.txt");
+        InterfaceAvecC.endGame();
 
 
-        // int side =InterfaceAvecC.restoreGame(1, "file.txt");
-        // aff(side);
-        //
+        side =InterfaceAvecC.restoreGame(1, "file.txt");
+        aff(side);
+
         // InterfaceAvecC.insertPawn(InterfaceAvecC.WHITE_PAWN, 0, 1);
         // aff(side);
         // InterfaceAvecC.restoreGame(1, "file.txt");

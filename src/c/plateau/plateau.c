@@ -69,13 +69,13 @@ void printColor2(const void* ptr) {
 
 void plateau_print(plateau p) {
     for (unsigned i =0 ;i <p->line ;i++) {
-	for (unsigned j =0 ;j <p->column ;j++) {
-	    /* printf("%15p", p->square[i][j]); */
-	    printColor2(&p->square[i][j]);
-	    printColor2(p->square[i][j]);
-	    printf("  ");
-	}
-	printf("\n");
+        for (unsigned j =0 ;j <p->column ;j++) {
+            /* printf("%15p", p->square[i][j]); */
+            printColor2(&p->square[i][j]);
+            printColor2(p->square[i][j]);
+            printf("  ");
+        }
+        printf("\n");
     }
     printf("\n");
 }
@@ -133,4 +133,29 @@ plateau plateau_copy(plateau p) {
 
 int plateau_getDensity(plateau p) {
     return (int)p->density;
+}
+
+void* plateau_searchPtrCaseData(plateau p, void* ptrCase) {
+    for (unsigned l =0; l <p->line; l++) {
+        for (unsigned c =0; c <p->column; c++) {
+            if (&p->square[l][c] ==ptrCase) {
+                return p->square[l][c];
+            }
+        }
+    }
+    assert(0);
+    return NULL;
+}
+
+void plateau_searchPtrCasePos(plateau p, void* ptrCase, int* line, int* col) {
+    for (unsigned l =0; l <p->line; l++) {
+        for (unsigned c =0; c <p->column; c++) {
+            if (&p->square[l][c] ==ptrCase) {
+                *line =(int)l;
+                *col =(int)c;
+                return;
+            }
+        }
+    }
+    assert(0);
 }
