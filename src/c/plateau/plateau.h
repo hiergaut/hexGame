@@ -14,5 +14,7 @@ int plateau_getNbColumn(plateau p);
 
 plateau plateau_copy(plateau p);
 int plateau_getDensity(plateau p);
+void* plateau_searchPtrCaseData(plateau p, void* ptrCase);
+void plateau_searchPtrCasePos(plateau p, void* ptrCase, int* line, int* col);
 
 #endif

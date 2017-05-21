@@ -264,3 +264,120 @@ int graph_neighbourVertex(graph g, const void* data, const void* data2) {
 
     return graph_findVertex(v->vertices, data2) !=NULL;
 }
+
+void graph_smallerWayRec(list vertices, list wall, const void* data2, list vDejaVu, int len, int* r) {
+    if (len <*r) {
+        // for each neigbhor
+        list_it it =list_it_create(vertices);
+        while (! list_it_end(it)) {
+            vertex v =list_it_get(it);
+
+            // if not dejavu
+            if (! list_in(vDejaVu, v)) {
+                // if not wall
+                if (! graph_findVertex(wall, graph_getData(v))) {
+                    // if find
+                    if (graph_getData(v) ==data2) {
+                        list_it_destroy(&it);
+                        if (len <*r)
+                            *r =len;
+                        return;
+                    }
+                    else {
+                        list_pushBack(vDejaVu, v);
+                        graph_smallerWayRec(v->vertices, wall, data2, vDejaVu, len +1, r);
+                        list_remove(vDejaVu, v);
+                    }
+                }
+            }
+
+            list_it_next(it);
+        }
+        list_it_destroy(&it);
+    }
+}
+
+int graph_smallerWay(graph g, graph wall, void* data, void* data2) {
+    vertex vData =graph_findVertex(g->collection, data);
+    assert(vData);
+
+    list vDejaVu =list_create();
+    list_pushBack(vDejaVu, vData);
+
+    int r =1000;
+    graph_smallerWayRec(vData->vertices, wall->collection, data2, vDejaVu, 0, &r);
+
+    list_destroy(&vDejaVu);
+
+    return r;
+}
+
+void* graph_middleWay(graph g, graph wall, graph all, void* data, void* data2, int ith) {
+    if (ith && data !=data2) {
+        vertex vData =graph_findVertex(g->collection, data);
+        assert(vData);
+
+        int minLen =1000;
+        void* minData;
+
+        list_it it =list_it_create(vData->vertices);
+        while (! list_it_end(it)) {
+            vertex v =list_it_get(it);
+            assert(v);
+            void* dv =graph_getData(v);
+            assert(dv);
+
+            // if empty path
+            if (! graph_findVertex(all->collection, dv)) {
+
+                int len =graph_smallerWay(g, wall, dv, data2);
+                if (len <minLen) {
+                    minLen =len;
+                    minData =dv;
+                }
+            }
+            list_it_next(it);
+        }
+        list_it_destroy(&it);
+
+        return graph_middleWay(g, wall, all, minData, data2, ith -1);
+    }
+    else
+        return data;
+
+}
+
+graph graph_cat(graph g, graph g2) {
+    graph g3 =graph_create();
+
+    list_it it =list_it_create(g->collection);
+    while (! list_it_end(it)) {
+        vertex v =list_it_get(it);
+        assert(v);
+        void* dv =graph_getData(v);
+        assert(dv);
+
+        graph_insertVertex(g3, dv);
+
+        list_it_next(it);
+    }
+    list_it_destroy(&it);
+
+    it =list_it_create(g2->collection);
+    while (! list_it_end(it)) {
+        vertex v =list_it_get(it);
+        assert(v);
+        void* dv =graph_getData(v);
+        assert(dv);
+
+        graph_insertVertex(g3, dv);
+
+        list_it_next(it);
+    }
+    list_it_destroy(&it);
+
+
+
+    return g3;
+
+}
