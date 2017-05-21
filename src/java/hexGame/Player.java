@@ -1,4 +1,5 @@
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 class Player {
     protected String name;
@@ -8,6 +9,7 @@ class Player {
     protected int move_number = 0;
     protected String lastMove = " - - - ";
     protected boolean isStarting = true;
+    protected boolean isPlaying;
 
     /**
      * Constructor of Player Class
@@ -43,11 +45,27 @@ class Player {
     }
 
     /**
+     * Setter for the pawn of the player
+     * @param p, the new pawn of the player
+     */
+    public void setPawn(int p) {
+	this.pawn = p;
+    }
+
+    /**
      * Getter for the edge of the player
      * @return the edge of the player
      */
     public String getEdge() {
 	return this.edge;
+    }
+
+    /**
+     * Setter for the edge of the player
+     * @param e, the new edge of the player
+     */
+    public void setEdge(String e) {
+	this.edge = e;
     }
 
     /**
@@ -57,6 +75,14 @@ class Player {
     public int getRound() {
 	return round;
     } 
+
+    /**
+     * Setter for the current round of the player
+     * @param r, the current round
+     */
+    public void setRound(int r) {
+	this.round = r;
+    }
 
     /**
      * Increment the round number
@@ -81,11 +107,27 @@ class Player {
     }
 
     /**
+     * Setter for the number of moves the player has made
+     * @param m, the new number of moves
+     */
+    public void setMoveNumber(int m) {
+	this.move_number = m;
+    }
+
+    /**
      * Getter for the last move of the player
      * @return the last move made by the player
      */
     public String getLastMove() {
 	return this.lastMove;
+    }
+
+    /**
+     * Setter for the last move of the player
+     * @param lm, the last move made
+     */
+    public void setLastMove(String lm) {
+	this.lastMove = lm;
     }
 
     /**
@@ -97,6 +139,14 @@ class Player {
     }
 
     /**
+     * Set the current starting status
+     * @param s, the new status
+     */
+    public void setStartingStatus(boolean s) {
+	isStarting = s;
+    }
+
+    /**
      * Switch the starting status
      */
     public void switchStarting() {
@@ -104,12 +154,28 @@ class Player {
     }
 
     /**
+     * Getter for the playing status
+     * @return the playing status
+     */
+    public boolean getPlaying() {
+	return this.isPlaying;
+    }
+
+    /**
+     * Setter for the playing status
+     * @return the starting status
+     */
+    public void setPlaying(boolean s) {
+	this.isPlaying = s;
+    }
+
+    /**
      * The player play his turn
      * @param s, the scanner for I/O
      */
     public boolean play(Player p1, Player p2, int size, Scanner s) {
-	boolean notOver = false;
-	while (!notOver) {
+	setPlaying(true);
+	while (getPlaying()) {
 	    Functions.printInfos(this);
 	    Functions.displayBoard(p1,p2,size);
 	    Functions.printActionMenu();
@@ -119,7 +185,7 @@ class Player {
 		    break;
 		case 2:
 		    s.nextLine();
-		    Game.savedGame = saveGame(s);
+		    saveGame(p1,p2,s);
 		    break;
 		case 3:
 		    cancelMove();
@@ -127,14 +193,15 @@ class Player {
 		case 4:
 		    return true;
 		case 5:
-		    notOver = endTurn();
+		    setPlaying(endTurn());
 		    break;
 		default:
 		    System.out.println("Choix invalide");
 		    break;
 	    }
 	}
-	return false;
+	setPlaying(false);
+	return getPlaying();
 
     }
 
@@ -159,7 +226,7 @@ class Player {
 
 	    }
 	    else {
-		System.out.println("Action impossible ! \n");
+		System.out.println("Impossible change\n");
 	    }
 	}
     }
@@ -167,10 +234,21 @@ class Player {
     /**
      * The player saves the current state of the game
      */
-    private int saveGame(Scanner s) {
+    private void saveGame(Player p1, Player p2, Scanner s) {
 	System.out.println("Entrez le nom de la sauvegarde:");
 	String saveName = s.nextLine();
-	return InterfaceAvecC.saveGame(saveName);
+	try {
+	    FileWriter w = new FileWriter(saveName + Game.SAVEJ);
+	    w.write(Integer.toString(Game.boardSize) + '\n');
+	    int gameId = InterfaceAvecC.saveGame(saveName + Game.SAVEG); 
+	    w.write(Integer.toString(gameId) + '\n');
+	    w.close();
+	}
+	catch (Exception e) {
+	    e.printStackTrace();
+	}
+	p1.saveInfos(saveName + Game.SAVEJ);
+	p2.saveInfos(saveName + Game.SAVEJ);
     }
 
     /**
@@ -181,10 +259,41 @@ class Player {
 	decRound();
     }
 
+    /**
+     * End the turn of the player
+     */
     private boolean endTurn() {
 	System.out.println("Fin du tour!");
-	return true;
+	return false;
     }
+
+    /**
+     * Saves player's info to a textfile
+     * @param filename, the name of the file
+     */
+    private void saveInfos(String filename) {
+	try {
+	    FileWriter w = new FileWriter(filename,true);
+	    w.write(getName() + '\n');
+	    w.write(Integer.toString(getPawn()) + '\n');
+	    w.write(getEdge() + '\n');
+	    w.write(Integer.toString(getRound()) + '\n');
+	    w.write(Integer.toString(getMoveNumber()) + '\n');
+	    w.write(getLastMove() + '\n');
+	    w.write(Boolean.toString(getStartingStatus()) + '\n');
+	    w.write(Boolean.toString(getPlaying()) + '\n');
+	    w.close();
+	}
+	catch (Exception e) {
+	    e.printStackTrace();
+	}
+    }
+
+
+
+
+
+
 
 
 

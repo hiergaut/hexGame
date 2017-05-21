@@ -26,7 +26,7 @@ public class Functions {
     }
 
     /**
-     * Display the action menu
+     * Display the player's action menu
      */
     public static void printActionMenu() {
 	System.out.println();
@@ -37,7 +37,7 @@ public class Functions {
     }
      
     /**
-     * Display overhead infos of game
+     * Display overhead infos of current game
      */
     public static void printInfos(Player player) {
 	System.out.println();
@@ -144,4 +144,6 @@ public class Functions {
 	}
 	return false;
     }
+
+
 }
