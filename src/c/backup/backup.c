@@ -74,6 +74,7 @@ void backup_printData(catalog cat, int key, plateau p, list casePlayed, void* wh
     /* strcat(str, "\\endhex\n"); */
 
 
+    assert(key <=catalog_nbOccurrence(cat, "\\hex"));
     int posHex =catalog_posIthOccurrence(cat, "\\hex", key);
     catalog_insertAtLine(cat, posHex +1, str);
 }
@@ -83,7 +84,9 @@ int backup_effective(catalog c) {
 }
 
 void backup_overWrite(catalog c, int key) {
+    assert(key <=catalog_nbOccurrence(c, "\\hex"));
     int posHex =catalog_posIthOccurrence(c, "\\hex", key);
+    assert(key <=catalog_nbOccurrence(c, "\\endhex"));
     int posEndHex =catalog_posIthOccurrence(c, "\\endhex", key);
 
     catalog_eraseLineBand(c, posHex +1, posEndHex -1);
@@ -106,6 +109,7 @@ void backup_save(catalog c, int* key, plateau p, list casePlayed, void* whitePaw
 }
 
 int backup_sidePlateau(catalog c, int key) {
+    assert(key <=catalog_nbOccurrence(c, "\\hex"));
     int pos =catalog_posIthOccurrence(c, "\\hex", key);
     char str[BACKUP_MAX];
     catalog_getLine(c, pos +1, str);
