@@ -42,6 +42,9 @@ bin/interfaceSDLV2: obj/sdl.o obj/graph.o obj/plateau.o obj/list.o obj/tree.o ob
 
 bin/interfaceSDLV3: obj/sdl.o obj/graph.o obj/plateau.o obj/list.o obj/tree.o obj/catalog.o obj/backup.o test/test_interfaceSDLV3.c src/c/interface.c
 	$(CC) -o $@ $^ $(CFLAGS) $(SDL) $(LIB)
+
+# src/c/interface.c:
+mergeCToJava:
 	src/cToJava/mergeInterface.sh
 	src/cToJava/makefileJava.sh
 

@@ -1515,3 +1515,4 @@ int interface_botTakePlace(interface i, int colorPawn) {
 int interface_getSide(interface i) {
     return (int)i->size;
 }
+

@@ -5,7 +5,7 @@ int main() {
 
     interface i =interface_create(5);
     printf("test");
-    interface_saveGame(i, "file.txt");
+    interface_saveGame(i, "file/interface.txt");
 
     interface_destroy(&i);
 

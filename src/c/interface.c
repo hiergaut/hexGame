@@ -2052,3 +2052,4 @@ void interface_displayIhm(interface i) {
 int interface_getSide(interface i) {
     return (int)i->size;
 }
+

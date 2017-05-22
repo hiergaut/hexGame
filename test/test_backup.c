@@ -20,7 +20,7 @@ int main() {
     plateau_insert(p, 2, 2, &blackPawn);
     list_pushBack(casePlayed, plateau_getPtr(p, 2, 2));
 
-    catalog c =catalog_create("file/saveFile.txt");
+    catalog c =catalog_create("file/backup.txt");
     backup_save(c, &key, p, casePlayed, &whitePawn, &blackPawn);
 
     printf("side plateau =%d\n", backup_sidePlateau(c, 1));
