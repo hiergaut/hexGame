@@ -256,6 +256,7 @@ public abstract class Game {
 		    Functions.printBanner();
 		    scan.nextLine();
 		    loadGame(p1,p2,comp,scan);
+		    InterfaceAvecC.endGame();
 		    break;
 		case 3:
 		    Functions.clearScreen();
