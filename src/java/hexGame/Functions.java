@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Functions {
 
-    private final static int LINES_SEP = 10;
+    protected final static int LINES_SEP = 30;
     protected final static String CENTER = "\t\t\t\t\t\t\t\t";
     protected final static String MIDCENTER = "\t\t\t\t\t\t";
     protected final static String SUBCENTER = "\t\t\t\t";
@@ -70,6 +70,20 @@ public class Functions {
 	System.out.print("\033[H\033[2J");  
 	System.out.flush();  
     }  
+
+    /**
+     * Wait user Input
+     */
+    
+    public static void tempScreen(Scanner s) {
+	try {
+	    System.in.read();
+	    s.nextLine();
+	}
+	catch (Exception e) {
+	    e.printStackTrace();
+	}
+    }
 
     /**
      * Display the main banner of the game

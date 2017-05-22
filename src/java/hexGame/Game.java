@@ -36,26 +36,30 @@ public abstract class Game {
 	while (!gameover) {
 	    gameover = starting.play(p1,p2,boardSize,s);
 	    if (gameover) {
-		System.out.println(starting.getName() + " concedes!");
+		System.out.println(Functions.CENTER + starting.getName() + " concedes!");
+		Functions.tempScreen(s);
 		break;
 	    }
 	    
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
-		System.out.println( starting.getName() + " wins!" );
+		System.out.println(Functions.CENTER + starting.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
+		Functions.tempScreen(s);
 		break;
 	    }
 	    
 
 	    gameover = challenger.play(p1,p2,boardSize,s);
 	    if (gameover) {
-		System.out.println(challenger.getName() +" concedes!");
+		System.out.println(Functions.CENTER + challenger.getName() +" concedes!");
+		Functions.tempScreen(s);
 		break;
 	    }
 
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
-		System.out.println( challenger.getName() + " wins!" );
+		System.out.println(Functions.CENTER + challenger.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
+		Functions.tempScreen(s);
 		break;
 	    }
 	}
@@ -75,30 +79,34 @@ public abstract class Game {
 	starting = p1.getPlaying() ? p1 : p2;
 	challenger = (starting == p1) ? p2 : p1;
 
-	System.out.println(starting.getName() + " resumes the game!");
+	System.out.println(Functions.CENTER + starting.getName() + " resumes the game!");
 	while (!gameover) {
 	    gameover = starting.play(p1,p2,boardSize,s);
 	    if (gameover) {
-		System.out.println(starting.getName() + " concedes!");
+		System.out.println(Functions.CENTER + starting.getName() + " concedes!");
+		Functions.tempScreen(s);
 		break;
 	    }
 	    
 	    if ( InterfaceAvecC.hasAWinner() != 0 ) {
-		System.out.println( starting.getName() + " wins!" );
+		System.out.println( Functions.CENTER + starting.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
+		Functions.tempScreen(s);
 		break;
 	    }
 	    
 
 	    gameover = challenger.play(p1,p2,boardSize,s);
 	    if (gameover) {
-		System.out.println(challenger.getName() +" concedes!");
+		System.out.println(Functions.CENTER + challenger.getName() +" concedes!");
+		Functions.tempScreen(s);
 		break;
 	    }
 
 	    if ( InterfaceAvecC.hasAWinner() != 0 ) {
-		System.out.println( challenger.getName() + " wins!" );
+		System.out.println(Functions.CENTER + challenger.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
+		Functions.tempScreen(s);
 		break;
 	    }
 	}
@@ -254,14 +262,16 @@ public abstract class Game {
 			    Functions.clearScreen();
 			    Functions.printBanner();
 			    Functions.printBlanks(2);
-			    System.out.println("Change Successfull !");
+			    System.out.println(Functions.CENTER + "Change Successfull !");
+			    Functions.tempScreen(scan);
 			    break;
 			case 2:
 			    p1.switchStarting();
 			    Functions.clearScreen();
 			    Functions.printBanner();
 			    Functions.printBlanks(2);
-			    System.out.println("Change Successfull !");
+			    System.out.println(Functions.CENTER + "Change Successfull !");
+			    Functions.tempScreen(scan);
 			    break;
 			case 3:
 			    break; 

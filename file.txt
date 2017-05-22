@@ -46,3 +46,27 @@
 \game
 \endgame
 \endhex
+\hex
+\dim 5
+\board
+. . . . . 
+. . . . . 
+. . . . . 
+. . . . . 
+. . . . . 
+\endboard
+\game
+\endgame
+\endhex
+\hex
+\dim 5
+\board
+. . . . . 
+. . . . . 
+. . . . . 
+. . . . . 
+. . . . . 
+\endboard
+\game
+\endgame
+\endhex
