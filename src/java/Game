@@ -1,4 +1,6 @@
 #! /bin/sh -e
 
-cd obj/
-java -Djava.library.path=../lib/ Game
+# cd obj/
+# java -Djava.library.path=../lib/ Game
+
+java -Djava.library.path=lib/ -cp obj/ Game 
