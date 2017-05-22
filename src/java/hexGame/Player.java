@@ -201,11 +201,11 @@ class Player {
 		    }
 		    break;
 		case 2:
-		    s.nextLine();
-		    saveGame(p1,p2,s);
+		    cancelMove();
 		    break;
 		case 3:
-		    cancelMove();
+		    s.nextLine();
+		    saveGame(p1,p2,s);
 		    break;
 		case 4:
 		    return true;

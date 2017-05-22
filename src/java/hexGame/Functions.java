@@ -97,8 +97,8 @@ public class Functions {
      */
     public static void printActionMenu() {
 	System.out.println();
-	System.out.println(SUBCENTER + "1. Place a pawn \t\t 2. Save the game \t\t 5.End Turn");
-	System.out.println(SUBCENTER + "3. Cancel last move \t\t 4. Give up.");
+	System.out.println(SUBCENTER + "1. Place a pawn \t\t 3. Save the game \t\t 5.End Turn");
+	System.out.println(SUBCENTER + "2. Cancel last move \t\t 4. Give up.");
     }
      
     /**
@@ -206,20 +206,4 @@ public class Functions {
 	else if (pawn == 2) return Game.RED;
 	else return Game.WHITE;
     }
-
-
-    public static boolean undo(Scanner s) {
-	System.out.println("Cancel last move ? y/n");
-	String str = s.nextLine();
-	System.out.println(str);
-	char c = str.charAt(0);
-	if (c == 'y') {
-	    System.out.println("Annulation du dernier coup!");
-	    InterfaceAvecC.undo();
-	    return true;
-	}
-	return false;
-    }
-
-
 }
