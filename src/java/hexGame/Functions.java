@@ -17,20 +17,20 @@ public class Functions {
     protected final static String MIDCENTER = "\t\t\t\t\t\t";
     protected final static String SUBCENTER = "\t\t\t\t";
     private final static String BANNER =                                                                                                                                         
- "\u001b[31mhhhhhhh                                                                                                                                         \n"  
+ "hhhhhhh                                                                                                                                         \n"  
 + "h:::::h                                                                                                                                        \n"
 + "h:::::h                                                                                                                                        \n"
 + "h:::::h                                                                                                                                        \n"
 + " h::::h hhhhh           eeeeeeeeeeee  xxxxxxx      xxxxxxx        ggggggggg   ggggg aaaaaaaaaaaaa      mmmmmmm    mmmmmmm       eeeeeeeeeeee    \n"
 + " h::::hh:::::hhh      ee::::::::::::ee x:::::x    x:::::x        g:::::::::ggg::::g a::::::::::::a   mm:::::::m  m:::::::mm   ee::::::::::::ee  \n"
-+ " h::::::::::::::hh   e::::::eeeee:::::eex:::::x  x:::::x        g:::::::::::::::::g aaaaaaaaa:::::a m::::::::::mm::::::::::m e::::::eeeee:::::ee\u001b[0m\n"
-+ " \u001b[32mh:::::::hhh::::::h e::::::e     e:::::e x:::::xx:::::x        g::::::ggggg::::::gg          a::::a m::::::::::::::::::::::me::::::e     e:::::e\n"
++ " h::::::::::::::hh   e::::::eeeee:::::eex:::::x  x:::::x        g:::::::::::::::::g aaaaaaaaa:::::a m::::::::::mm::::::::::m e::::::eeeee:::::ee\n"
++ " h:::::::hhh::::::h e::::::e     e:::::e x:::::xx:::::x        g::::::ggggg::::::gg          a::::a m::::::::::::::::::::::me::::::e     e:::::e\n"
 + " h::::::h   h::::::he:::::::eeeee::::::e  x::::::::::x         g:::::g     g:::::g    aaaaaaa:::::a m:::::mmm::::::mmm:::::me:::::::eeeee::::::e\n"
 + " h:::::h     h:::::he:::::::::::::::::e    x::::::::x          g:::::g     g:::::g  aa::::::::::::a m::::m   m::::m   m::::me:::::::::::::::::e \n"
 + " h:::::h     h:::::he::::::eeeeeeeeeee     x::::::::x          g:::::g     g:::::g a::::aaaa::::::a m::::m   m::::m   m::::me::::::eeeeeeeeeee  \n"
 + " h:::::h     h:::::he:::::::e             x::::::::::x         g::::::g    g:::::ga::::a    a:::::a m::::m   m::::m   m::::me:::::::e           \n"
-+ " h:::::h     h:::::he::::::::e           x:::::xx:::::x        g:::::::ggggg:::::ga::::a    a:::::a m::::m   m::::m   m::::me::::::::e          \u001b[0m\n"
-+ " \u001b[33mh:::::h     h:::::h e::::::::eeeeeeee  x:::::x  x:::::x        g::::::::::::::::ga:::::aaaa::::::a m::::m   m::::m   m::::m e::::::::eeeeeeee  \n"
++ " h:::::h     h:::::he::::::::e           x:::::xx:::::x        g:::::::ggggg:::::ga::::a    a:::::a m::::m   m::::m   m::::me::::::::e          \n"
++ " h:::::h     h:::::h e::::::::eeeeeeee  x:::::x  x:::::x        g::::::::::::::::ga:::::aaaa::::::a m::::m   m::::m   m::::m e::::::::eeeeeeee  \n"
 + " h:::::h     h:::::h  ee:::::::::::::e x:::::x    x:::::x        gg::::::::::::::g a::::::::::aa:::am::::m   m::::m   m::::m  ee:::::::::::::e  \n"
 + " hhhhhhh     hhhhhhh    eeeeeeeeeeeeeexxxxxxx      xxxxxxx         gggggggg::::::g  aaaaaaaaaa  aaaammmmmm   mmmmmm   mmmmmm    eeeeeeeeeeeeee  \n"
 + "                                                                           g:::::g                                                              \n"
@@ -39,7 +39,7 @@ public class Functions {
 + "                                                                g::::::ggg:::::::g                    S4 - 2017 PROJECT                         \n"
 + "                                                                 gg:::::::::::::g                                                               \n"
 + "                                                                   ggg::::::ggg                                                                 \n"
-+ "                                                                      gggggg      \u001b[0m";
++ "                                                                      gggggg      ";
 
     /**
      * Display the starting menu
