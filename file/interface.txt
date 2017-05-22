@@ -154,6 +154,7 @@
 \game
 \endgame
 \endhex
+<<<<<<< HEAD
 \hex
 \dim 5
 \board
@@ -202,3 +203,5 @@
 \game
 \endgame
 \endhex
+=======
+>>>>>>> 7883e84eacea5c659d6e01b84cfee9842f39f80f

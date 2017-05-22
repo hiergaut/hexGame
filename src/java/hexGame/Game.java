@@ -216,13 +216,17 @@ public abstract class Game {
 	    Functions.clearScreen();
 	    Functions.printBanner();
 	    Functions.printMenu();
-	    switch ( scan.nextInt() ) {
+	    int choice = 0;
+
+	    choice = Functions.checkInput(scan);
+	    switch ( choice ) {
 		case 1:
 		    InterfaceAvecC.newGame(boardSize);
 		    Functions.clearScreen();
 		    Functions.printBanner();
 		    Functions.printSubMenu();
-		    switch ( scan.nextInt() ) {
+		    choice = Functions.checkInput(scan);
+		    switch ( choice )  {
 			case 1:
 			    Functions.clearScreen();
 			    Functions.printBanner();
@@ -245,17 +249,14 @@ public abstract class Game {
 			case 3:
 			    break; 
 			default:
-			    Functions.clearScreen();
-			    Functions.printBanner();
-			    System.out.println(Functions.CENTER + "Invalid choice ");
 			    break;
 		    }
 		    break;
 		case 2:
 		    Functions.clearScreen();
 		    Functions.printBanner();
-		    scan.nextLine();
 		    loadGame(p1,p2,comp,scan);
+		    InterfaceAvecC.endGame();
 		    break;
 		case 3:
 		    Functions.clearScreen();
@@ -263,7 +264,8 @@ public abstract class Game {
 		    Functions.printBlanks(1);
 		    System.out.println(Functions.CENTER + "Options");
 		    Functions.printOptions(p1,p2);
-		    switch ( scan.nextInt() ) {
+		    choice = Functions.checkInput(scan);
+		    switch ( choice ) {
 			case 1:
 			    boardSize = Functions.askBoardSize(scan);
 			    InterfaceAvecC.newGame(boardSize);
@@ -298,9 +300,6 @@ public abstract class Game {
 		    wantsToQuit = true;
 		    break;
 		default:
-		    Functions.clearScreen();
-		    Functions.printBanner();
-		    System.out.println(Functions.CENTER + "Invalid choice");
 		    break;
 	    }
 	}
