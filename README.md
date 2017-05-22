@@ -23,4 +23,5 @@ To play a game use
 make run
 ```
 
-![alt text](https://raw.githubusercontent.com/hiergaut)
+![alt text](https://github.com/hiergaut/hexGame/blob/master/src/c/fake/invertEdgeWay.png)
+https://github.com/hiergaut/hexGame/blob/master/src/c/fake/invertEdgeWay.png
