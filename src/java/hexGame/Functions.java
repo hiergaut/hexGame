@@ -86,6 +86,7 @@ public class Functions {
 
     /**
      * Checks input validity
+     * @param s, the scanner for I/O
      */
     public static int checkInput(Scanner s) {
 	String userInput = s.nextLine();
