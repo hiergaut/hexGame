@@ -25,7 +25,7 @@ To play a game use
 ```viml
 make run
 ```
-![all text]https://github.com/hiergaut/hexGame/blob/master/file/pictureGame.png
+![all text](https://github.com/hiergaut/hexGame/blob/master/file/pictureGame.png)
 
 ```viml
 ./bin/interfaceSDL
