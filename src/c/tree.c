@@ -262,3 +262,7 @@ void tree_mapLeaf(Node n, action_node action) {
 Node tree_getFather(Node n) {
     return n->parent;
 }
+
+void* tree_nodeGetData(Node n) {
+    return n->data;
+}

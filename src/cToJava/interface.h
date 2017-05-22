@@ -8,6 +8,7 @@
 #define interface_BLACK_PAWN 1
 #define interface_WHITE_PAWN 2
 
+// int interface_ENABLE_IA_AUTOPLAY =1;
 
 typedef struct s_interface* interface;
 

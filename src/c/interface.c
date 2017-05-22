@@ -10,7 +10,7 @@
 #include <string.h>
 #include "tree.h"
 
-#define interface_ENABLE_IA_AUTOPLAY 1
+/* #define interface_ENABLE_IA_AUTOPLAY 1 */
 
 struct s_interface {
     unsigned size;
@@ -1458,6 +1458,8 @@ int interface_botTakePlace(interface i, int colorPawn) {
             tree_mapLeaf(root, game_mergeValue);
             /* tree_widthBrowse(root, game_print); */
         }
+        tree_widthBrowse(root, game_print);
+
         /* tree_mapLeaf(root, game_mergeValue); */
         /* tree_mapLeaf(root, game_mergeValue); */
         /* tree_mapLeaf(root, game_mergeValue); */
@@ -1783,7 +1785,7 @@ SDL_Rect sdl_whichCase(interface i, SDL_Rect pos) {
     return pos;
 }
 
-void interface_ihm(interface i) {
+void interface_ihm(interface i, int autoPlay) {
     int continuer =1;
     int caseHeight =i->surface_ihm->h /((int)i->size +1);
     int rayPawn =caseHeight /3;
@@ -1895,7 +1897,8 @@ void interface_ihm(interface i) {
 
                         interface_majScreen(i);
 
-                        if (interface_ENABLE_IA_AUTOPLAY) {
+                        /* if (interface_ENABLE_IA_AUTOPLAY) { */
+                        if (autoPlay) {
                             interface_botTakePlace(i, interface_BLACK_PAWN);
                             interface_majScreen(i);
                         }
