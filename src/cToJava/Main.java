@@ -27,6 +27,8 @@ public class Main {
         aff(side);
         InterfaceAvecC.undo();
         aff(side);
+        InterfaceAvecC.insertPawn(InterfaceAvecC.WHITE_PAWN, 0, 2);
+        aff(side);
         InterfaceAvecC.insertPawn(InterfaceAvecC.BLACK_PAWN, 0, 1);
         aff(side);
 

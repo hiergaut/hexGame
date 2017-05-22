@@ -1,6 +1,10 @@
 #include "tree.h"
 #include <stdio.h>
 
+void print_node(Node n) {
+    printf("%p ", tree_nodeGetData(n));
+}
+
 int main(void) {
     Root root = create_tree();
 
@@ -31,7 +35,7 @@ int main(void) {
 
     print_tree(root);
     printf("\n");
-    /* tree_widthBrowse(root); */
+    tree_widthBrowse(root, print_node);
     destroy_tree(root);
     printf("\n");
 

@@ -8,6 +8,7 @@
 #define interface_BLACK_PAWN 1
 #define interface_WHITE_PAWN 2
 
+// int interface_ENABLE_IA_AUTOPLAY =1;
 
 typedef struct s_interface* interface;
 
@@ -31,7 +32,7 @@ void interface_displayPlateau(interface i);
 void interface_displayGroup(interface i, int color);
 
 void interface_majScreen(interface i);
-void interface_ihm(interface i);
+void interface_ihm(interface i, int autoPlay);
 void interface_displayIhm(interface i);
 // end sdl
 

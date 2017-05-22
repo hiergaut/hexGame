@@ -3,12 +3,15 @@
 \board
 . . . . . . . 
 . . . . . . . 
+. . . o . . . 
+. . . o . . . 
 . . . . . . . 
-. . . . . . . 
-. . . . . . . 
-. . . . . . . 
+. . . * . . . 
 . . . . . . . 
 \endboard
 \game
+\play o 3 3
+\play * 5 3
+\play o 2 3
 \endgame
 \endhex

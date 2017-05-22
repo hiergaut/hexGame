@@ -11,7 +11,7 @@ LIB =-I src/c/
 # OBJDIR =obj
 # FILEDIR =file
 
-all: bin obj bin/tree bin/plateau bin/graph bin/catalog bin/backup bin/interfaceSDL bin/interface bin/Game
+all: bin obj bin/tree bin/plateau bin/graph bin/catalog bin/backup bin/interfaceSDLV1 bin/interfaceSDLV2 bin/interfaceSDLV3 bin/interface bin/Game
 
 bin:
 	mkdir bin
@@ -34,7 +34,13 @@ bin/catalog: obj/catalog.o test/test_catalog.c
 bin/backup: obj/backup.o obj/list.o obj/plateau.o obj/catalog.o test/test_backup.c
 	$(CC) -o $@ $^ $(CFLAGS) $(LIB)
 
-bin/interfaceSDL: obj/sdl.o obj/graph.o obj/plateau.o obj/list.o obj/tree.o obj/catalog.o obj/backup.o test/test_interfaceSDL.c src/c/interface.c
+bin/interfaceSDLV1: obj/sdl.o obj/graph.o obj/plateau.o obj/list.o obj/tree.o obj/catalog.o obj/backup.o test/test_interfaceSDLV1.c src/c/interface.c
+	$(CC) -o $@ $^ $(CFLAGS) $(SDL) $(LIB)
+
+bin/interfaceSDLV2: obj/sdl.o obj/graph.o obj/plateau.o obj/list.o obj/tree.o obj/catalog.o obj/backup.o test/test_interfaceSDLV2.c src/c/interface.c
+	$(CC) -o $@ $^ $(CFLAGS) $(SDL) $(LIB)
+
+bin/interfaceSDLV3: obj/sdl.o obj/graph.o obj/plateau.o obj/list.o obj/tree.o obj/catalog.o obj/backup.o test/test_interfaceSDLV3.c src/c/interface.c
 	$(CC) -o $@ $^ $(CFLAGS) $(SDL) $(LIB)
 	src/cToJava/mergeInterface.sh
 	src/cToJava/makefileJava.sh
@@ -54,6 +60,18 @@ clean:
 run:
 	bin/Game
 
+runAll:
+	cp file/catalog.txt.default file/catalog.txt
+	bin/backup
+	bin/catalog
+	bin/Game
+	bin/graph
+	bin/interface
+	bin/interfaceSDLV1
+	bin/interfaceSDLV2
+	bin/interfaceSDLV3
+	bin/plateau
+	bin/tree
 
 
 obj/Game.class:

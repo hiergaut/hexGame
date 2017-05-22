@@ -10,7 +10,7 @@
 #include <string.h>
 #include "tree.h"
 
-#define interface_ENABLE_IA_AUTOPLAY 1
+/* #define interface_ENABLE_IA_AUTOPLAY 1 */
 
 struct s_interface {
     unsigned size;
@@ -1429,6 +1429,8 @@ int interface_botTakePlace(interface i, int colorPawn) {
             tree_mapLeaf(root, game_mergeValue);
             /* tree_widthBrowse(root, game_print); */
         }
+        tree_widthBrowse(root, game_print);
+
         /* tree_mapLeaf(root, game_mergeValue); */
         /* tree_mapLeaf(root, game_mergeValue); */
         /* tree_mapLeaf(root, game_mergeValue); */
