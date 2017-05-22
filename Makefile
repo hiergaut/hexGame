@@ -11,8 +11,13 @@ LIB =-I src/c/
 # OBJDIR =obj
 # FILEDIR =file
 
-all: bin/tree bin/plateau bin/graph bin/catalog bin/backup bin/interfaceSDL bin/interface bin/Game
+all: bin obj bin/tree bin/plateau bin/graph bin/catalog bin/backup bin/interfaceSDL bin/interface bin/Game
 
+bin:
+	mkdir bin
+
+obj:
+	mkdir obj
 
 bin/tree: obj/tree.o obj/list.o test/test_tree.c
 	$(CC) -o $@ $^ $(CFLAGS) $(LIB)
