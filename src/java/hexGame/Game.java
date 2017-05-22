@@ -4,9 +4,9 @@ import java.io.*;
 public abstract class Game {
 
     protected static int boardSize = 4;
-    protected static final String RED = "\u001b[41m \u001b[0m";
-    protected static final String BLUE = "\u001b[44m \u001b[0m";
-    protected static final String WHITE = "\u001b[47m \u001b[0m";
+    protected static final String RED = "\u2b22";
+    protected static final String BLUE = "\u2b21";
+    protected static final String WHITE = "\u2e30";
     private static final int SAVEFILE_NUMBER = 19;
     private static final int BUF_SIZ = 256;
     protected static final String SAVEJ = ".hex";
