@@ -255,7 +255,11 @@ class Player {
 	System.out.print("Name of savefile : ");
 	String saveName = s.nextLine();
 	try {
-	    FileWriter w = new FileWriter(saveName + Game.SAVEJ);
+	    File file = new File("file/" + saveName + Game.SAVEJ);
+	    file.getParentFile().mkdirs();
+	    file.createNewFile();
+
+	    FileWriter w = new FileWriter(file);
 	    w.write(Integer.toString(Game.boardSize) + '\n');
 	    int gameId = InterfaceAvecC.saveGame(saveName + Game.SAVEG); 
 	    w.write(Integer.toString(gameId) + '\n');
@@ -292,7 +296,12 @@ class Player {
      */
     private void saveInfos(String filename) {
 	try {
-	    FileWriter w = new FileWriter(filename,true);
+	    File file = new File("file/" + filename);
+	    file.getParentFile().mkdirs();
+	    file.createNewFile();
+
+	    FileWriter w = new FileWriter(file,true);
+
 	    w.write(getName() + '\n');
 	    w.write(Integer.toString(getPawn()) + '\n');
 	    w.write(getEdge() + '\n');
@@ -301,6 +310,7 @@ class Player {
 	    w.write(getLastMove() + '\n');
 	    w.write(Boolean.toString(getStartingStatus()) + '\n');
 	    w.write(Boolean.toString(getPlaying()) + '\n');
+
 	    w.close();
 	}
 	catch (Exception e) {

@@ -114,7 +114,10 @@ public abstract class Game {
 
 	String[] lines = new String[SAVEFILE_NUMBER];
 	try {
-	    FileReader r = new FileReader(filename + SAVEJ);
+	    File file = new File("file/" + filename + Game.SAVEJ);
+	    file.getParentFile().mkdirs();
+
+	    FileReader r = new FileReader(file);
 	    char[] buffer = new char[BUF_SIZ];
 	    System.out.println(r.read(buffer));
 	    Arrays.fill(lines,"");
