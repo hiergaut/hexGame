@@ -229,7 +229,6 @@ public abstract class Game {
 		    break;
 		case 2:
 		    scan.nextLine();
-		    InterfaceAvecC.newGame(boardSize);
 		    loadGame(p1,p2,comp,scan);
 		    break;
 		case 3:
