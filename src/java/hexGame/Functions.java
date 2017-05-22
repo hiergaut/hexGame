@@ -12,6 +12,8 @@ import java.util.Scanner;
 
 public class Functions {
 
+    private final static int LINES_SEP = 40;
+
     /**
      * Display the starting menu
      */
@@ -42,20 +44,27 @@ public class Functions {
 	System.out.println();
 	System.out.println("1. Place a pawn \t\t 2. Save the game \t\t 5.End Turn");
 	System.out.println("3. Cancel last move \t\t 4. Give up.");
-	System.out.println();
-
     }
      
+    /**
+     * Private function that prints blank lines
+     * @param n, the number of lines to print
+     */
+    private static void printBlanks(int n) {
+	for (int i = 0; i < n; ++i) {
+	    System.out.println();
+	}
+    }
+
     /**
      * Display overhead infos of current game
      */
     public static void printInfos(Player player) {
-	System.out.println();
+	printBlanks(LINES_SEP);
 	System.out.printf("Name: %-10s",player.getName());
 	System.out.printf("Turn: %-10s",player.getRound());
 	System.out.printf("Last action of %s : %-10s", player.getName(), player.getLastMove());
-	System.out.println();
-	System.out.println();
+	printBlanks(2);
     }
 
     /**
@@ -69,8 +78,7 @@ public class Functions {
 	Game.RED : Game.BLUE );
 	System.out.println();
 	System.out.println("3. Back");
-	System.out.println();
-	System.out.println();
+	printBlanks(2);
     }
 
     /**
@@ -96,7 +104,7 @@ public class Functions {
     public static String askPlayerName(int num, Scanner s) {
 	String playerName;
 
-	System.out.println("Player " + num + " name ?");
+	System.out.print("Player " + num + " name : ");
 	playerName = s.next();
 
 	return playerName;

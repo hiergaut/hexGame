@@ -222,7 +222,7 @@ class Player {
     private void placeAPawn(Scanner s) {
 	boolean isPossible = false;
 	while (!isPossible) {
-	    System.out.println("Where do you want to play ?");
+	    System.out.print("Where do you want to play : ");
 	    int i,j;
 	    i = (s.nextInt() - 1) % Game.boardSize ;
 	    j = (s.nextInt() - 1) % Game.boardSize;
@@ -236,7 +236,7 @@ class Player {
 
 	    }
 	    else {
-		System.out.println("Impossible change\n");
+		System.out.println("Impossible choice\n");
 	    }
 	}
     }
