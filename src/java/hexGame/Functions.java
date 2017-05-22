@@ -74,7 +74,6 @@ public class Functions {
     /**
      * Wait user Input
      */
-    
     public static void tempScreen(Scanner s) {
 	try {
 	    System.in.read();
@@ -83,6 +82,32 @@ public class Functions {
 	catch (Exception e) {
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * Checks input validity
+     */
+    public static int checkInput(Scanner s) {
+	String userInput = s.nextLine();
+	int choice = 0;
+	try {
+	    choice = Integer.parseInt(userInput);
+	}
+	catch ( Exception e ) {
+	    Functions.clearScreen();
+	    Functions.printBanner();
+	    Functions.printBlanks(2);
+	    System.out.println(Functions.CENTER + "Invalid Input");
+	    try {
+		System.in.read();
+	    }
+	    catch (Exception e2) {
+		e2.printStackTrace();
+	    }
+	    choice = 5;
+	}
+	return choice;
+
     }
 
     /**
