@@ -156,7 +156,7 @@ public class Functions {
 	System.out.printf(CENTER + "1. Change the size of the Board (Curr : %d)", Game.boardSize);
 	System.out.println();
 	System.out.printf(CENTER + "2. Change the starting player (Curr : %s)",p1.isStarting ? 
-	Game.RED : Game.BLUE );
+	Game.BLUE : Game.RED );
 	System.out.println();
 	System.out.println(CENTER + "3. Back");
 	printBlanks(2);

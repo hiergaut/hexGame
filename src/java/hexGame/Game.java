@@ -247,8 +247,10 @@ public abstract class Game {
 			    InterfaceAvecC.endGame();
 			    break;
 			case 3:
+			    InterfaceAvecC.endGame();
 			    break; 
 			default:
+			    InterfaceAvecC.endGame();
 			    break;
 		    }
 		    break;
@@ -300,6 +302,7 @@ public abstract class Game {
 		    wantsToQuit = true;
 		    break;
 		default:
+		    InterfaceAvecC.endGame();
 		    break;
 	    }
 	}
