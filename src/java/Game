@@ -1,0 +1,4 @@
+#! /bin/sh -e
+
+cd obj/
+java -Djava.library.path=../lib/ Game
