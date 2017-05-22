@@ -3,7 +3,7 @@
 \board
 . . . . . . . 
 . . . * . . . 
-. . . . . . . 
+. . o * . . . 
 . . . o . . . 
 . . . . . . . 
 . . . . . . . 
@@ -12,5 +12,7 @@
 \game
 \play o 3 3
 \play * 1 3
+\play o 2 2
+\play * 2 3
 \endgame
 \endhex

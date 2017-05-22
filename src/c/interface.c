@@ -1393,7 +1393,7 @@ int interface_botTakePlace(interface i, int colorPawn) {
     int line;
     int column;
     int caseRemaining =side *side -(int)list_size(i->casePlayed);
-    if (caseRemaining >10) {
+    if (caseRemaining >20) {
         printf("Too leaf\n");
 
         /* do { */
@@ -1458,7 +1458,7 @@ int interface_botTakePlace(interface i, int colorPawn) {
             tree_mapLeaf(root, game_mergeValue);
             /* tree_widthBrowse(root, game_print); */
         }
-        tree_widthBrowse(root, game_print);
+        /* tree_widthBrowse(root, game_print); */
 
         /* tree_mapLeaf(root, game_mergeValue); */
         /* tree_mapLeaf(root, game_mergeValue); */
@@ -1799,6 +1799,7 @@ void interface_ihm(interface i, int autoPlay) {
     int mouseDown;
     int color;
     while (continuer) {
+
         SDL_WaitEvent(&event);
 
         switch (event.type) {
@@ -1896,6 +1897,8 @@ void interface_ihm(interface i, int autoPlay) {
                         }
 
                         interface_majScreen(i);
+
+                        /* graph_print(i->reduceGraph); */
 
                         /* if (interface_ENABLE_IA_AUTOPLAY) { */
                         if (autoPlay) {
