@@ -16,11 +16,12 @@ int main() {
     char file[] ="file/interfaceIHM.txt";
 
     /* interface i =interface_create(7); */
+
     interface i =interface_restoreGame(1, file);
 
     interface_ihm(i);
     /* interface_botTakePlace(i, interface_BLACK_PAWN); */
-    /* interface_saveGame(i, file); */
+    interface_saveGame(i, file);
 
 
     interface_destroy(&i);
