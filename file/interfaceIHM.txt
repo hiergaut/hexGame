@@ -1,0 +1,16 @@
+\hex
+\dim 7
+\board
+. . . . . . . 
+. . . * . . . 
+. . . . . . . 
+. . . o . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+\endboard
+\game
+\play o 3 3
+\play * 1 3
+\endgame
+\endhex

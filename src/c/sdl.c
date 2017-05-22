@@ -32,7 +32,7 @@ void sdl_create(int width, int height, const char* str) {
 
 
     screen =SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE |SDL_DOUBLEBUF);
-    police =TTF_OpenFont("Roboto-Regular.ttf", 20);
+    police =TTF_OpenFont("file/Roboto-Regular.ttf", 20);
     /* TTF_SetFontStyle(police, TTF_STYLE_UNDERLINE); */
     /* screen =SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_HWSURFACE| SDL_FULLSCREEN); */
     SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, SCREEN_FONT_COLOR));
