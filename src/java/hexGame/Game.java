@@ -141,7 +141,7 @@ public abstract class Game {
 	    int gameId = Integer.parseInt(lines[1]);
 	    System.out.println(gameId);
 	    Player challenger = loadInfos(p1,p2,comp,lines);
-	   //InterfaceAvecC.restoreGame(gameId,SAVEG);
+	    InterfaceAvecC.restoreGame(gameId,SAVEG);
 	    r.close();
 	    resumeGame(p1,challenger,s);
 	}
