@@ -142,7 +142,7 @@ public abstract class Game {
 	    System.out.println(gameId);
 	    Player challenger = loadInfos(p1,p2,comp,lines);
 	    System.out.println("Restoring " + filename + SAVEG);
-	    InterfaceAvecC.restoreGame(gameId,filename+SAVEG);
+	    InterfaceAvecC.restoreGame(gameId,"file/saves/" + filename+SAVEG);
 	    r.close();
 	    resumeGame(p1,challenger,s);
 	}
