@@ -27,6 +27,8 @@ make run
 ```
 ![all text](https://github.com/hiergaut/hexGame/blob/master/file/pictureGame.png)
 
+To debug C Data Structure, Graph
+
 ```viml
 ./bin/interfaceSDL
 ```
