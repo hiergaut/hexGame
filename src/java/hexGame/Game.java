@@ -225,7 +225,7 @@ public abstract class Game {
 		    Functions.clearScreen();
 		    Functions.printBanner();
 		    Functions.printSubMenu();
-		    Functions.checkInput(scan);
+		    choice = Functions.checkInput(scan);
 		    switch ( choice )  {
 			case 1:
 			    Functions.clearScreen();
