@@ -57,10 +57,10 @@ clean:
 	rm -vf bin/*
 	rm -vf obj/*
 
-run:
+run: all
 	bin/Game
 
-runAll:
+runAll: all
 	cp file/catalog.txt.default file/catalog.txt
 	bin/backup
 	bin/catalog
