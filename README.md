@@ -33,5 +33,5 @@ To debug C Data Structure, Graph, with SDL
 ./bin/interfaceSDL
 ```
 
-![alt text](https://github.com/hiergaut/hexGame/blob/master/file/pictureSDL2.png)
+![alt text](https://github.com/hiergaut/hexGame/blob/master/file/pictureSDL.png)
 
