@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Functions {
 
-    private final static int LINES_SEP = 40;
+    private final static int LINES_SEP = 10;
 
     /**
      * Display the starting menu
@@ -36,6 +36,13 @@ public class Functions {
 	System.out.println("3. Return");
 	System.out.println();
     }
+    /**
+     * Clears the console screen
+     */
+    public static void clearScreen() {  
+	System.out.print("\033[H\033[2J");  
+	System.out.flush();  
+    }  
 
     /**
      * Display the player's action menu
