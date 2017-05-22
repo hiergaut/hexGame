@@ -42,6 +42,8 @@ public abstract class Game {
 	    }
 	    
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
+		Functions.clearScreen();
+		Functions.printBanner();
 		System.out.println(Functions.CENTER + starting.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
 		Functions.tempScreen(s);
@@ -57,6 +59,8 @@ public abstract class Game {
 	    }
 
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
+		Functions.clearScreen();
+		Functions.printBanner();
 		System.out.println(Functions.CENTER + challenger.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
 		Functions.tempScreen(s);
@@ -89,6 +93,8 @@ public abstract class Game {
 	    }
 	    
 	    if ( InterfaceAvecC.hasAWinner() != 0 ) {
+		Functions.clearScreen();
+		Functions.printBanner();
 		System.out.println( Functions.CENTER + starting.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
 		Functions.tempScreen(s);
@@ -104,6 +110,8 @@ public abstract class Game {
 	    }
 
 	    if ( InterfaceAvecC.hasAWinner() != 0 ) {
+		Functions.clearScreen();
+		Functions.printBanner();
 		System.out.println(Functions.CENTER + challenger.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
 		Functions.tempScreen(s);

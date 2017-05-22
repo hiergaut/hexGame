@@ -186,6 +186,7 @@ class Player {
     public boolean play(Player p1, Player p2, int size, Scanner s) {
 	setPlaying(true);
 	while (getPlaying()) {
+	    Functions.clearScreen();
 	    Functions.printBanner();
 	    Functions.printInfos(this);
 	    Functions.displayBoard(p1,p2,size);
