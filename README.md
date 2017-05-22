@@ -31,5 +31,5 @@ make run
 ./bin/interfaceSDL
 ```
 
-![alt text](https://github.com/hiergaut/hexGame/blob/master/src/c/fake/invertEdgeWay.png)
+![alt text](https://github.com/hiergaut/hexGame/blob/master/file/pictureSDL.png)
 
