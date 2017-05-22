@@ -138,7 +138,7 @@ public abstract class Game {
 	    int gameId = Integer.parseInt(lines[1]);
 	    System.out.println(gameId);
 	    Player challenger = loadInfos(p1,p2,comp,lines);
-	    InterfaceAvecC.restoreGame(gameId,SAVEG);
+	   //InterfaceAvecC.restoreGame(gameId,SAVEG);
 	    r.close();
 	    resumeGame(p1,challenger,s);
 	}
@@ -205,13 +205,13 @@ public abstract class Game {
 		    Functions.printSubMenu();
 		    switch ( scan.nextInt() ) {
 			case 1:
-			    System.out.println("Partie contre IA ! ");
+			    System.out.println("Human vs AI ! ");
 			    p1.setName(Functions.askPlayerName(1,scan));
 			    startGameC(p1,comp,scan);
 			    InterfaceAvecC.endGame();
 			    break;
 			case 2:
-			    System.out.println("Humain contre Humain ! ");
+			    System.out.println("Human vs Human ! ");
 			    p1.setName(Functions.askPlayerName(1,scan));
 			    p2.setName(Functions.askPlayerName(2,scan));
 			    startGameC(p1,p2,scan);
@@ -220,29 +220,34 @@ public abstract class Game {
 			case 3:
 			    break; 
 			default:
-			    System.out.println("Choix invalide");
+			    System.out.println("Invalid choice ");
 			    break;
 		    }
 		    break;
 		case 2:
 		    scan.nextLine();
+		    InterfaceAvecC.newGame(boardSize);
 		    loadGame(p1,p2,comp,scan);
 		    break;
 		case 3:
-		    System.out.println("Menu options");
+		    System.out.println("Options");
 		    Functions.printOptions(p1,p2);
 		    switch ( scan.nextInt() ) {
 			case 1:
 			    boardSize = Functions.askBoardSize(scan);
+			    System.out.println("Creating new board...");
 			    InterfaceAvecC.newGame(boardSize);
+			    System.out.println("Success !");
 			    break;
 			case 2:
 			    p1.switchStarting();
+			    System.out.println("Changing starting player...");
+			    System.out.println("Success !");
 			    break;
 			case 3:
 			    break; 
 			default:
-			    System.out.println("Choix invalide");
+			    System.out.println("Invalid choice");
 			    break;
 		    }
 		    break;
@@ -251,7 +256,7 @@ public abstract class Game {
 		    wantsToQuit = true;
 		    break;
 		default:
-		    System.out.println("Choix invalide");
+		    System.out.println("Invalid choice");
 		    break;
 	    }
 	}
