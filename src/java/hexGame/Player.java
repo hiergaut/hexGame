@@ -16,7 +16,7 @@ class Player {
     protected int pawn;
     protected String edge;
     protected int round = 0;
-    protected int move_number = 0;
+    protected boolean hasPlayed = false;
     protected String lastMove = " - - - ";
     protected boolean isStarting = true;
     protected boolean isPlaying;
@@ -109,19 +109,19 @@ class Player {
     }
 
     /**
-     * Getter for the number of moves the player has made
-     * @return the number of moves
+     * Get if this player already made a move 
+     * @return true or false
      */
-    public int getMoveNumber() {
-	return this.move_number;
+    public boolean getHasPlayed() {
+	return this.hasPlayed;
     }
 
     /**
-     * Setter for the number of moves the player has made
-     * @param m, the new number of moves
+     * Setter for the hasPlayed boolean
+     * @param b, the new value
      */
-    public void setMoveNumber(int m) {
-	this.move_number = m;
+    public void setHasPlayed(boolean b) {
+	this.hasPlayed = b;
     }
 
     /**
@@ -192,7 +192,12 @@ class Player {
 	    Functions.printActionMenu();
 	    switch (s.nextInt()) {
 		case 1:
-		    placeAPawn(s);
+		    if (!this.getHasPlayed()) {
+			placeAPawn(s);
+		    }
+		    else {
+			System.out.println("You already played this turn");
+		    }
 		    break;
 		case 2:
 		    s.nextLine();
@@ -234,6 +239,7 @@ class Player {
 		lastMove = "row " + (i + 1) + " col " + (j + 1);
 		incRound();
 		isPossible = true;
+		setHasPlayed(true);
 
 	    }
 	    else {
@@ -268,6 +274,7 @@ class Player {
     private void cancelMove() {
 	InterfaceAvecC.undo();
 	decRound();
+	setHasPlayed(false);
     }
 
     /**
@@ -275,6 +282,7 @@ class Player {
      */
     private boolean endTurn() {
 	System.out.println("Fin du tour!");
+	this.setHasPlayed(false);
 	return false;
     }
 
@@ -289,7 +297,7 @@ class Player {
 	    w.write(Integer.toString(getPawn()) + '\n');
 	    w.write(getEdge() + '\n');
 	    w.write(Integer.toString(getRound()) + '\n');
-	    w.write(Integer.toString(getMoveNumber()) + '\n');
+	    w.write(Boolean.toString(getHasPlayed()) + '\n');
 	    w.write(getLastMove() + '\n');
 	    w.write(Boolean.toString(getStartingStatus()) + '\n');
 	    w.write(Boolean.toString(getPlaying()) + '\n');
@@ -299,13 +307,4 @@ class Player {
 	    e.printStackTrace();
 	}
     }
-
-
-
-
-
-
-
-
-
 }

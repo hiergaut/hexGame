@@ -160,7 +160,7 @@ public abstract class Game {
 	p1.setPawn(Integer.parseInt((buffer[3])));
 	p1.setEdge(buffer[4]);
 	p1.setRound(Integer.parseInt(buffer[5]));
-	p1.setMoveNumber(Integer.parseInt(buffer[6]));
+	p1.setHasPlayed(Boolean.parseBoolean(buffer[6]));
 	p1.setLastMove(buffer[7]);
 	p1.setStartingStatus(Boolean.parseBoolean(buffer[8]));
 	p1.setPlaying(Boolean.parseBoolean(buffer[9]));
@@ -171,7 +171,7 @@ public abstract class Game {
 	    comp.setPawn(Integer.parseInt((buffer[11])));
 	    comp.setEdge(buffer[12]);
 	    comp.setRound(Integer.parseInt(buffer[13]));
-	    comp.setMoveNumber(Integer.parseInt(buffer[14]));
+	    comp.setHasPlayed(Boolean.parseBoolean(buffer[14]));
 	    comp.setLastMove(buffer[15]);
 	    comp.setStartingStatus(Boolean.parseBoolean(buffer[16]));
 	    return comp;
@@ -181,7 +181,7 @@ public abstract class Game {
 	    p2.setPawn(Integer.parseInt((buffer[11])));
 	    p2.setEdge(buffer[12]);
 	    p2.setRound(Integer.parseInt(buffer[13]));
-	    p2.setMoveNumber(Integer.parseInt(buffer[14]));
+	    p2.setHasPlayed(Boolean.parseBoolean(buffer[14]));
 	    p2.setLastMove(buffer[15]);
 	    p2.setStartingStatus(Boolean.parseBoolean(buffer[16]));
 	    return p2;
