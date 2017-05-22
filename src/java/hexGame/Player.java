@@ -255,13 +255,13 @@ class Player {
 	System.out.print("Name of savefile : ");
 	String saveName = s.nextLine();
 	try {
-	    File file = new File("file/" + saveName + Game.SAVEJ);
+	    File file = new File("file/saves/" + saveName + Game.SAVEJ);
 	    file.getParentFile().mkdirs();
 	    file.createNewFile();
 
 	    FileWriter w = new FileWriter(file);
 	    w.write(Integer.toString(Game.boardSize) + '\n');
-	    int gameId = InterfaceAvecC.saveGame(saveName + Game.SAVEG); 
+	    int gameId = InterfaceAvecC.saveGame("file/saves/" + saveName + Game.SAVEG); 
 	    w.write(Integer.toString(gameId) + '\n');
 	    w.close();
 	}
@@ -296,9 +296,8 @@ class Player {
      */
     private void saveInfos(String filename) {
 	try {
-	    File file = new File("file/" + filename);
+	    File file = new File("file/saves/" + filename);
 	    file.getParentFile().mkdirs();
-	    file.createNewFile();
 
 	    FileWriter w = new FileWriter(file,true);
 

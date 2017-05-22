@@ -114,7 +114,7 @@ public abstract class Game {
 
 	String[] lines = new String[SAVEFILE_NUMBER];
 	try {
-	    File file = new File("file/" + filename + Game.SAVEJ);
+	    File file = new File("file/saves/" + filename + Game.SAVEJ);
 	    file.getParentFile().mkdirs();
 
 	    FileReader r = new FileReader(file);
