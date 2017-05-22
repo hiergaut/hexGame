@@ -1,11 +1,14 @@
 #! /bin/sh -e
 
-f="interface"
 
-cp -v ../c/$f.* .
+fin="src/c/interface.*"
+fout="src/cToJava/interface.*"
 
-sed -i "/\/\/ sdl$/,/\/\/ end sdl$/d" $f.*
+# cp -v ../c/$f.* .
+cp -v $fin src/cToJava/
+
+sed -i "/\/\/ sdl$/,/\/\/ end sdl$/d" $fout
 # sed -i "/sdl/,/$/d" $f.*
 # sed -i "/SDL/,/$/d" $f.*
-sed -i 's/.*sdl.*//' $f.*
-sed -i 's/.*SDL.*//' $f.*
+sed -i 's/.*sdl.*//' $fout
+sed -i 's/.*SDL.*//' $fout
