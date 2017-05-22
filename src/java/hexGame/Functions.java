@@ -13,16 +13,43 @@ import java.util.Scanner;
 public class Functions {
 
     private final static int LINES_SEP = 10;
+    protected final static String CENTER = "\t\t\t\t\t\t\t\t";
+    protected final static String MIDCENTER = "\t\t\t\t\t\t";
+    protected final static String SUBCENTER = "\t\t\t\t";
+    private final static String BANNER =                                                                                                                                         
+ "\u001b[31mhhhhhhh                                                                                                                                         \n"  
++ "h:::::h                                                                                                                                        \n"
++ "h:::::h                                                                                                                                        \n"
++ "h:::::h                                                                                                                                        \n"
++ " h::::h hhhhh           eeeeeeeeeeee  xxxxxxx      xxxxxxx        ggggggggg   ggggg aaaaaaaaaaaaa      mmmmmmm    mmmmmmm       eeeeeeeeeeee    \n"
++ " h::::hh:::::hhh      ee::::::::::::ee x:::::x    x:::::x        g:::::::::ggg::::g a::::::::::::a   mm:::::::m  m:::::::mm   ee::::::::::::ee  \n"
++ " h::::::::::::::hh   e::::::eeeee:::::eex:::::x  x:::::x        g:::::::::::::::::g aaaaaaaaa:::::a m::::::::::mm::::::::::m e::::::eeeee:::::ee\u001b[0m\n"
++ " \u001b[32mh:::::::hhh::::::h e::::::e     e:::::e x:::::xx:::::x        g::::::ggggg::::::gg          a::::a m::::::::::::::::::::::me::::::e     e:::::e\n"
++ " h::::::h   h::::::he:::::::eeeee::::::e  x::::::::::x         g:::::g     g:::::g    aaaaaaa:::::a m:::::mmm::::::mmm:::::me:::::::eeeee::::::e\n"
++ " h:::::h     h:::::he:::::::::::::::::e    x::::::::x          g:::::g     g:::::g  aa::::::::::::a m::::m   m::::m   m::::me:::::::::::::::::e \n"
++ " h:::::h     h:::::he::::::eeeeeeeeeee     x::::::::x          g:::::g     g:::::g a::::aaaa::::::a m::::m   m::::m   m::::me::::::eeeeeeeeeee  \n"
++ " h:::::h     h:::::he:::::::e             x::::::::::x         g::::::g    g:::::ga::::a    a:::::a m::::m   m::::m   m::::me:::::::e           \n"
++ " h:::::h     h:::::he::::::::e           x:::::xx:::::x        g:::::::ggggg:::::ga::::a    a:::::a m::::m   m::::m   m::::me::::::::e          \u001b[0m\n"
++ " \u001b[33mh:::::h     h:::::h e::::::::eeeeeeee  x:::::x  x:::::x        g::::::::::::::::ga:::::aaaa::::::a m::::m   m::::m   m::::m e::::::::eeeeeeee  \n"
++ " h:::::h     h:::::h  ee:::::::::::::e x:::::x    x:::::x        gg::::::::::::::g a::::::::::aa:::am::::m   m::::m   m::::m  ee:::::::::::::e  \n"
++ " hhhhhhh     hhhhhhh    eeeeeeeeeeeeeexxxxxxx      xxxxxxx         gggggggg::::::g  aaaaaaaaaa  aaaammmmmm   mmmmmm   mmmmmm    eeeeeeeeeeeeee  \n"
++ "                                                                           g:::::g                                                              \n"
++ "                                                               gggggg      g:::::g                                                              \n"
++ "                                                               g:::::gg   gg:::::g                                                              \n"
++ "                                                                g::::::ggg:::::::g                    S4 - 2017 PROJECT                         \n"
++ "                                                                 gg:::::::::::::g                                                               \n"
++ "                                                                   ggg::::::ggg                                                                 \n"
++ "                                                                      gggggg      \u001b[0m";
 
     /**
      * Display the starting menu
      */
     public static void printMenu() {
 	System.out.println();
-	System.out.println("1. Start");
-	System.out.println("2. Load");
-	System.out.println("3. Options");
-	System.out.println("4. Exit");
+	System.out.println(CENTER + "1. Start");
+	System.out.println(CENTER + "2. Load");
+	System.out.println(CENTER + "3. Options");
+	System.out.println(CENTER + "4. Exit");
 	System.out.println();
     }
 
@@ -31,9 +58,9 @@ public class Functions {
      */
     public static void printSubMenu() {
 	System.out.println();
-	System.out.println("1. 1 Player");
-	System.out.println("2. 2 Player");
-	System.out.println("3. Return");
+	System.out.println(CENTER + "1. 1 Player");
+	System.out.println(CENTER + "2. 2 Player");
+	System.out.println(CENTER + "3. Return");
 	System.out.println();
     }
     /**
@@ -45,19 +72,26 @@ public class Functions {
     }  
 
     /**
+     * Display the main banner of the game
+     */
+    public static void printBanner() {
+	System.out.println(BANNER);
+    }
+
+    /**
      * Display the player's action menu
      */
     public static void printActionMenu() {
 	System.out.println();
-	System.out.println("1. Place a pawn \t\t 2. Save the game \t\t 5.End Turn");
-	System.out.println("3. Cancel last move \t\t 4. Give up.");
+	System.out.println(SUBCENTER + "1. Place a pawn \t\t 2. Save the game \t\t 5.End Turn");
+	System.out.println(SUBCENTER + "3. Cancel last move \t\t 4. Give up.");
     }
      
     /**
-     * Private function that prints blank lines
+     * Inner function that prints blank lines
      * @param n, the number of lines to print
      */
-    private static void printBlanks(int n) {
+    protected static void printBlanks(int n) {
 	for (int i = 0; i < n; ++i) {
 	    System.out.println();
 	}
@@ -67,8 +101,8 @@ public class Functions {
      * Display overhead infos of current game
      */
     public static void printInfos(Player player) {
-	printBlanks(LINES_SEP);
-	System.out.printf("Name: %-10s",player.getName());
+	printBlanks(2);
+	System.out.printf(SUBCENTER + "Name: %-10s",player.getName());
 	System.out.printf("Turn: %-10s",player.getRound());
 	System.out.printf("Last action of %s : %-10s", player.getName(), player.getLastMove());
 	printBlanks(2);
@@ -79,12 +113,12 @@ public class Functions {
      */
     public static void printOptions(Player p1, Player p2) {
 	System.out.println();
-	System.out.printf("1. Change the size of the Board (Curr : %d)", Game.boardSize);
+	System.out.printf(CENTER + "1. Change the size of the Board (Curr : %d)", Game.boardSize);
 	System.out.println();
-	System.out.printf("2. Change the starting player (Curr : %s)",p1.isStarting ? 
+	System.out.printf(CENTER + "2. Change the starting player (Curr : %s)",p1.isStarting ? 
 	Game.RED : Game.BLUE );
 	System.out.println();
-	System.out.println("3. Back");
+	System.out.println(CENTER + "3. Back");
 	printBlanks(2);
     }
 
@@ -96,7 +130,7 @@ public class Functions {
     public static int askBoardSize(Scanner s) {
 	int boardSize;
 
-	System.out.print("Board size: ");
+	System.out.print(CENTER + "Board size: ");
 	boardSize = s.nextInt();
 	
 	return boardSize;
@@ -111,7 +145,7 @@ public class Functions {
     public static String askPlayerName(int num, Scanner s) {
 	String playerName;
 
-	System.out.print("Player " + num + " name : ");
+	System.out.print(CENTER + "Player " + num + " name : ");
 	playerName = s.next();
 
 	return playerName;
@@ -122,8 +156,10 @@ public class Functions {
      * @param size, the size of the board
      */
     public static void displayBoard(Player p1, Player p2, int size) {
+	System.out.print(MIDCENTER);
 	display_edges(p1,p2,size);
 	for (int i = 0; i < size; i++) {
+	    System.out.print(MIDCENTER);
 	    for (int j =0; j <= i; j++)
 		System.out.print(" ");
 
@@ -136,6 +172,7 @@ public class Functions {
 	    System.out.println();
 	}
 
+	System.out.print(MIDCENTER);
 	for (int i = 0; i <= size; i++) {
 	    System.out.print(" ");
 	}

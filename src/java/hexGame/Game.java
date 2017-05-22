@@ -109,7 +109,8 @@ public abstract class Game {
      * @param s, the scanner for I/O
      */
     private static void loadGame(Player p1, Player p2,AI comp,Scanner s) {
-	System.out.print("Name of file to load : ");
+	Functions.printBlanks(1);
+	System.out.print(Functions.CENTER + "Name of file to load : ");
 	String filename = s.nextLine();
 
 	String[] lines = new String[SAVEFILE_NUMBER];
@@ -124,7 +125,6 @@ public abstract class Game {
 
 	    int i = 0;
 	    for (char c : buffer) {
-		System.out.println(c);
 		if (c != '\n') {
 		    lines[i] = lines[i] + c;
 		}
@@ -133,15 +133,10 @@ public abstract class Game {
 		}
 	    }
 
-	    for (String debug : lines) {
-		System.out.println(debug);
-	    }
-
 	    Game.boardSize = Integer.parseInt(lines[0]);
 	    int gameId = Integer.parseInt(lines[1]);
 	    System.out.println(gameId);
 	    Player challenger = loadInfos(p1,p2,comp,lines);
-	    System.out.println("Restoring " + filename + SAVEG);
 	    InterfaceAvecC.restoreGame(gameId,"file/saves/" + filename+SAVEG);
 	    r.close();
 	    resumeGame(p1,challenger,s);
@@ -202,20 +197,30 @@ public abstract class Game {
 
 
 	while (!wantsToQuit) {
+	    Functions.clearScreen();
+	    Functions.printBanner();
 	    Functions.printMenu();
 	    switch ( scan.nextInt() ) {
 		case 1:
 		    InterfaceAvecC.newGame(boardSize);
+		    Functions.clearScreen();
+		    Functions.printBanner();
 		    Functions.printSubMenu();
 		    switch ( scan.nextInt() ) {
 			case 1:
-			    System.out.println("Human vs AI ! ");
+			    Functions.clearScreen();
+			    Functions.printBanner();
+			    Functions.printBlanks(1);
+			    System.out.println(Functions.CENTER + "Human vs AI ! ");
 			    p1.setName(Functions.askPlayerName(1,scan));
 			    startGameC(p1,comp,scan);
 			    InterfaceAvecC.endGame();
 			    break;
 			case 2:
-			    System.out.println("Human vs Human ! ");
+			    Functions.clearScreen();
+			    Functions.printBanner();
+			    Functions.printBlanks(1);
+			    System.out.println(Functions.CENTER + "Human vs Human ! ");
 			    p1.setName(Functions.askPlayerName(1,scan));
 			    p2.setName(Functions.askPlayerName(2,scan));
 			    startGameC(p1,p2,scan);
@@ -224,42 +229,60 @@ public abstract class Game {
 			case 3:
 			    break; 
 			default:
-			    System.out.println("Invalid choice ");
+			    Functions.clearScreen();
+			    Functions.printBanner();
+			    System.out.println(Functions.CENTER + "Invalid choice ");
 			    break;
 		    }
 		    break;
 		case 2:
+		    Functions.clearScreen();
+		    Functions.printBanner();
 		    scan.nextLine();
 		    loadGame(p1,p2,comp,scan);
 		    break;
 		case 3:
-		    System.out.println("Options");
+		    Functions.clearScreen();
+		    Functions.printBanner();
+		    Functions.printBlanks(1);
+		    System.out.println(Functions.CENTER + "Options");
 		    Functions.printOptions(p1,p2);
 		    switch ( scan.nextInt() ) {
 			case 1:
 			    boardSize = Functions.askBoardSize(scan);
-			    System.out.println("Creating new board...");
 			    InterfaceAvecC.newGame(boardSize);
-			    System.out.println("Success !");
+			    Functions.clearScreen();
+			    Functions.printBanner();
+			    Functions.printBlanks(2);
+			    System.out.println("Change Successfull !");
 			    break;
 			case 2:
 			    p1.switchStarting();
-			    System.out.println("Changing starting player...");
-			    System.out.println("Success !");
+			    Functions.clearScreen();
+			    Functions.printBanner();
+			    Functions.printBlanks(2);
+			    System.out.println("Change Successfull !");
 			    break;
 			case 3:
 			    break; 
 			default:
+			    Functions.clearScreen();
+			    Functions.printBanner();
+			    Functions.printBlanks(2);
 			    System.out.println("Invalid choice");
 			    break;
 		    }
 		    break;
 		case 4:
-		    System.out.println("Goodbye !");
+		    Functions.clearScreen();
+		    Functions.printBanner();
+		    System.out.println(Functions.CENTER + "Goodbye !");
 		    wantsToQuit = true;
 		    break;
 		default:
-		    System.out.println("Invalid choice");
+		    Functions.clearScreen();
+		    Functions.printBanner();
+		    System.out.println(Functions.CENTER + "Invalid choice");
 		    break;
 	    }
 	}

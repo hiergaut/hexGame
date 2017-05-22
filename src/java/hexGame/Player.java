@@ -187,6 +187,7 @@ class Player {
 	setPlaying(true);
 	while (getPlaying()) {
 	    Functions.clearScreen();
+	    Functions.printBanner();
 	    Functions.printInfos(this);
 	    Functions.displayBoard(p1,p2,size);
 	    Functions.printActionMenu();
