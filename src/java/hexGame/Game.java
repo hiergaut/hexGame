@@ -1,12 +1,22 @@
+
+/*****************************************************************/
+/*								 */
+/*			HexGame - Projet			 */
+/*			   Game Class   			 */
+/*			Jonathan Lao-Kan			 */
+/*			   22 mai 2017				 */
+/*								 */
+/*****************************************************************/
+
 import java.util.*;
 import java.io.*;
 
 public abstract class Game {
 
     protected static int boardSize = 4;
-    protected static final String RED = "\u001b[41m \u001b[0m";
-    protected static final String BLUE = "\u001b[44m \u001b[0m";
-    protected static final String WHITE = "\u001b[47m \u001b[0m";
+    protected static final String RED = "\u001b[41m  \u001b[0m";
+    protected static final String BLUE = "\u001b[44m  \u001b[0m";
+    protected static final String WHITE = "\u001b[47m  \u001b[0m";
     private static final int SAVEFILE_NUMBER = 19;
     private static final int BUF_SIZ = 256;
     protected static final String SAVEJ = ".hex";
@@ -22,16 +32,16 @@ public abstract class Game {
 	starting = p1.getStartingStatus() ? p1 : p2;
 	challenger = p1.getStartingStatus() ? p2 : p1;
 
-	System.out.println(starting.getName() + " starts the game !");
+	System.out.println(starting.getName() + " starts the game!");
 	while (!gameover) {
 	    gameover = starting.play(p1,p2,boardSize,s);
 	    if (gameover) {
-		System.out.println(starting.getName() + "se rend!");
+		System.out.println(starting.getName() + " concedes!");
 		break;
 	    }
 	    
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
-		System.out.println( starting.getName() + " remporte la partie !" );
+		System.out.println( starting.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
 		break;
 	    }
@@ -39,12 +49,12 @@ public abstract class Game {
 
 	    gameover = challenger.play(p1,p2,boardSize,s);
 	    if (gameover) {
-		System.out.println(challenger.getName() +" se rend!");
+		System.out.println(challenger.getName() +" concedes!");
 		break;
 	    }
 
 	    if ( (gameStatus = InterfaceAvecC.hasAWinner()) != 0 ) {
-		System.out.println( challenger.getName() + " remporte la partie !" );
+		System.out.println( challenger.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
 		break;
 	    }
@@ -65,7 +75,7 @@ public abstract class Game {
 	starting = p1.getPlaying() ? p1 : p2;
 	challenger = (starting == p1) ? p2 : p1;
 
-	System.out.println(starting.getName() + " resumes the game !");
+	System.out.println(starting.getName() + " resumes the game!");
 	while (!gameover) {
 	    gameover = starting.play(p1,p2,boardSize,s);
 	    if (gameover) {
@@ -74,7 +84,7 @@ public abstract class Game {
 	    }
 	    
 	    if ( InterfaceAvecC.hasAWinner() != 0 ) {
-		System.out.println( starting.getName() + " wins !" );
+		System.out.println( starting.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
 		break;
 	    }
@@ -87,7 +97,7 @@ public abstract class Game {
 	    }
 
 	    if ( InterfaceAvecC.hasAWinner() != 0 ) {
-		System.out.println( challenger.getName() + " wins !" );
+		System.out.println( challenger.getName() + " wins!" );
 		Functions.displayBoard(p1,p2,boardSize);
 		break;
 	    }

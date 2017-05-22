@@ -1,3 +1,12 @@
+/*****************************************************************/
+/*								 */
+/*			HexGame - Projet			 */
+/*			 Interface Class   			 */
+/*	   	     BENZERGA Mohammed Amine			 */
+/*			   22 mai 2017				 */
+/*								 */
+/*****************************************************************/
+
 public class InterfaceAvecC {
     static {
         System.loadLibrary("InterfaceAvecC");

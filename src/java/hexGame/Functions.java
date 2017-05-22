@@ -1,3 +1,13 @@
+
+/*****************************************************************/
+/*								 */
+/*			HexGame - Projet			 */
+/*			 Functions Class 			 */
+/*			Jonathan Lao-Kan			 */
+/*			   22 mai 2017				 */
+/*								 */
+/*****************************************************************/
+
 import java.util.Scanner;
 
 public class Functions {
@@ -41,9 +51,9 @@ public class Functions {
      */
     public static void printInfos(Player player) {
 	System.out.println();
-	System.out.printf("Nom: %-10s",player.getName());
-	System.out.printf("Tour: %-10s",player.getRound());
-	System.out.printf("Derniere action de %s : %-10s", player.getName(), player.getLastMove());
+	System.out.printf("Name: %-10s",player.getName());
+	System.out.printf("Turn: %-10s",player.getRound());
+	System.out.printf("Last action of %s : %-10s", player.getName(), player.getLastMove());
 	System.out.println();
 	System.out.println();
     }
@@ -71,7 +81,7 @@ public class Functions {
     public static int askBoardSize(Scanner s) {
 	int boardSize;
 
-	System.out.println("Taille du plateau : ");
+	System.out.print("Board size: ");
 	boardSize = s.nextInt();
 	
 	return boardSize;
@@ -86,7 +96,7 @@ public class Functions {
     public static String askPlayerName(int num, Scanner s) {
 	String playerName;
 
-	System.out.println("Nom du joueur " + num + " ?");
+	System.out.println("Player " + num + " name ?");
 	playerName = s.next();
 
 	return playerName;

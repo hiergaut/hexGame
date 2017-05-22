@@ -1,3 +1,13 @@
+
+/*****************************************************************/
+/*								 */
+/*			HexGame - Projet			 */
+/*			  Player Class 	  			 */
+/*			Jonathan Lao-Kan			 */
+/*			   22 mai 2017				 */
+/*								 */
+/*****************************************************************/
+
 import java.util.*;
 import java.io.*;
 
@@ -196,7 +206,7 @@ class Player {
 		    setPlaying(endTurn());
 		    break;
 		default:
-		    System.out.println("Choix invalide");
+		    System.out.println("Invalid choice");
 		    break;
 	    }
 	}
@@ -212,7 +222,7 @@ class Player {
     private void placeAPawn(Scanner s) {
 	boolean isPossible = false;
 	while (!isPossible) {
-	    System.out.println("Ou posez le pion ?");
+	    System.out.println("Where do you want to play ?");
 	    int i,j;
 	    i = (s.nextInt() - 1) % Game.boardSize ;
 	    j = (s.nextInt() - 1) % Game.boardSize;
@@ -235,7 +245,7 @@ class Player {
      * The player saves the current state of the game
      */
     private void saveGame(Player p1, Player p2, Scanner s) {
-	System.out.println("Entrez le nom de la sauvegarde:");
+	System.out.print("Name of savefile : ");
 	String saveName = s.nextLine();
 	try {
 	    FileWriter w = new FileWriter(saveName + Game.SAVEJ);
