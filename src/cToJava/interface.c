@@ -1364,7 +1364,7 @@ int interface_botTakePlace(interface i, int colorPawn) {
     int line;
     int column;
     int caseRemaining =side *side -(int)list_size(i->casePlayed);
-    if (caseRemaining >10) {
+    if (caseRemaining >8) {
         printf("Too leaf\n");
 
         /* do { */

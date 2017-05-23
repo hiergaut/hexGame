@@ -1393,7 +1393,7 @@ int interface_botTakePlace(interface i, int colorPawn) {
     int line;
     int column;
     int caseRemaining =side *side -(int)list_size(i->casePlayed);
-    if (caseRemaining >20) {
+    if (caseRemaining >8) {
         printf("Too leaf\n");
 
         /* do { */
@@ -1458,7 +1458,7 @@ int interface_botTakePlace(interface i, int colorPawn) {
             tree_mapLeaf(root, game_mergeValue);
             /* tree_widthBrowse(root, game_print); */
         }
-        /* tree_widthBrowse(root, game_print); */
+        tree_widthBrowse(root, game_print);
 
         /* tree_mapLeaf(root, game_mergeValue); */
         /* tree_mapLeaf(root, game_mergeValue); */
